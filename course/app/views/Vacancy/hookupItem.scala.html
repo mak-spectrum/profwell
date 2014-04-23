@@ -1,0 +1,154 @@
+@(hookup: org.profwell.vacancy.domain.HookupDTO)
+<div id="hookup-item:@hookup.getId()"
+    @if(hookup.isArchived()) {class="archived"}
+    >
+    <div class="hookup-info">
+        <span class="caption">@(utils.PersonUtils.getFullName(hookup))</span>
+        @if(hookup.isProfessionalInfoNotEmpty()) {
+        <div>
+            <span class="subline"><strong>@hookup.getPersonCurrentPosition()</strong></span>
+            @if(hookup.isCompanyInfoNotEmpty()) {
+                @if(hookup.isPositionInfoNotEmpty()) {
+            <span class="subline">at <strong>@hookup.getPersonCurrentCompany()</strong></span>
+                } else {
+            <span class="subline">works at <strong>@hookup.getPersonCurrentCompany()</strong></span>
+                }
+            }
+        </div>
+        }
+        <div>
+            <span class="subline">status: <strong class="status">@hookup.getStatus().getCaption()</strong></span>
+            <span class="subline">last update: <strong class="last-update">@hookup.getLastUpdateDateFormatted()</strong></span>
+        </div>
+        <div class="resumeBlock">
+        @if(hookup.getResume() != null) {
+        <div id="hookup-item:@(hookup.getId()):resume">
+            <span class="subline">resume:
+                <a href="/vacancyHookupFile?hookupId=@hookup.getId()&type=resume">
+                    <img src="@routes.Assets.at("images/icons/download.png")" alt="Download" /><strong>@hookup.getResume().getFileName()</strong>
+                </a>
+                <a
+                    class="hookup-delete-file"
+                    @if(hookup.isArchived()) { style="display: none;" }
+                    href="javascript:hookupDeleteFileAsync(@hookup.getId(), 'resume')">
+                    <img class="hookup-delete-file" src="@routes.Assets.at("images/icons/delete.png")" alt="Delete" />
+                </a>
+            </span>
+        </div>
+        }
+        </div>
+        <div class="testtaskBlock">
+        @if(hookup.getTesttask() != null) {
+        <div id="hookup-item:@(hookup.getId()):testtask">
+            <span class="subline">test task:
+                <a href="/vacancyHookupFile?hookupId=@hookup.getId()&type=testtask">
+                    <img src="@routes.Assets.at("images/icons/download.png")" alt="Download" /><strong>@hookup.getTesttask().getFileName()</strong>
+                </a>
+                <a
+                    class="hookup-delete-file"
+                    @if(hookup.isArchived()) { style="display: none;" }
+                    href="javascript:hookupDeleteFileAsync(@hookup.getId(), 'testtask')">
+                    <img class="hookup-delete-file" src="@routes.Assets.at("images/icons/delete.png")" alt="Delete" />
+                </a>
+            </span>
+        </div>
+        }
+        </div>
+        <div class="interviewBlock">
+        @if(!hookup.getInterviewFeedbacks().isEmpty()) {
+            @for(doc <- hookup.getInterviewFeedbacks()) {
+            <div id="hookup-item:@(hookup.getId()):interview:@(doc.getIndex())">
+                <span class="subline">interview feedback:
+                    <a href="/vacancyHookupFile?hookupId=@hookup.getId()&type=interview&index=@doc.getIndex()">
+                        <img src="@routes.Assets.at("images/icons/download.png")" alt="Download" /><strong>@doc.getFileName()</strong>
+                    </a>
+                    <a
+                        class="hookup-delete-file"
+                        @if(hookup.isArchived()) { style="display: none;" }
+                        href="javascript:hookupDeleteFileAsync(@hookup.getId(), 'interview', @doc.getIndex())">
+                        <img class="hookup-delete-file" src="@routes.Assets.at("images/icons/delete.png")" alt="Delete" />
+                    </a>
+                </span>
+            </div>
+            }
+        }
+        </div>
+        <div class="probationBlock">
+        @if(!hookup.getProbationFeedbacks().isEmpty()) {
+            @for(doc <- hookup.getProbationFeedbacks()) {
+            <div id="hookup-item:@(hookup.getId()):probation:@(doc.getIndex())">
+                <span class="subline">probation feedback:
+                    <a href="/vacancyHookupFile?hookupId=@hookup.getId()&type=probation&index=@doc.getIndex()">
+                        <img src="@routes.Assets.at("images/icons/download.png")" alt="Download" /><strong>@doc.getFileName()</strong>
+                    </a>
+                    <a
+                        class="hookup-delete-file"
+                        @if(hookup.isArchived()) { style="display: none;" }
+                        href="javascript:hookupDeleteFileAsync(@hookup.getId(), 'probation', @doc.getIndex())">
+                        <img class="hookup-delete-file" src="@routes.Assets.at("images/icons/delete.png")" alt="Delete" />
+                    </a>
+                </span>
+            </div>
+            }
+        }
+        </div>
+    </div>
+
+    <div class="hookup-control">
+
+        <div class="statuses-group">
+        @if(!hookup.isArchived()) {
+        @for(control <- hookup.getStatusMoves()) {
+            <a href="javascript:moveHookupToStatus(@hookup.getId(), '@control.getToStatus()')" title="@control.getActionDescription()">
+                <img src="@routes.Assets.at("images/icons/h-status/" + control.getStatusImage() + "-status.png")" alt="@control.getStatusImageAlt()" />
+            </a>
+        }
+        }
+        </div>
+
+        <div class="group">
+            <a class="edit-record"
+                href="/vacancyHookupEdit?id=@hookup.getId()"
+                @if(hookup.isArchived()) {
+                    style="display: none;"
+                }
+                title="Edit Hookup">
+                <img src="@routes.Assets.at("images/icons/edit-record.png")" alt="Edit" />
+            </a>
+            <a class="attach-to-record"
+                href="javascript:hookupAttachFile(@hookup.getId(), '@hookup.getAttachableDocumentTitle()')"
+                @if(hookup.isArchived() || !hookup.isDocumentAttachable()) {
+                    style="display: none;"
+                }
+                title="@hookup.getAttachableDocumentTitle()">
+                <img src="@routes.Assets.at("images/icons/attach-to-record.png")" alt="Attach" />
+            </a>
+            <a class="archive-record"
+                href="javascript:hookupArchiveAsync(@hookup.getId())"
+                @if(hookup.isArchived() || !hookup.isCanBeArchived()) {
+                    style="display: none;"
+                }
+                title="Archive Hookup">
+                <img src="@routes.Assets.at("images/icons/archive-record.png")" alt="Archive" />
+            </a>
+            <a class="unarchive-record"
+                href="javascript:hookupUnarchiveAsync(@hookup.getId())"
+                @if(!hookup.isArchived()) {
+                    style="display: none;"
+                }
+                title="Unarchive Hookup">
+                <img src="@routes.Assets.at("images/icons/unarchive-record.png")" alt="Unarchive" />
+            </a>
+            <a class="delete-record"
+                href="javascript:hookupDeleteAsync(@hookup.getId())"
+                @if(hookup.isArchived()) {
+                    style="display: none;"
+                }
+                title="Delete Hookup">
+                <img src="@routes.Assets.at("images/icons/delete-record.png")" alt="Delete" />
+            </a>
+        </div>
+
+    </div>
+
+</div>

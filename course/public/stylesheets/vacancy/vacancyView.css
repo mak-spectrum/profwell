@@ -1,0 +1,137 @@
+select#countryId, input#cityId {
+    width: 11em;
+}
+
+input#salaryFrom, input#salaryTill {
+    width: 6.5em;
+}
+
+span#salaryDelimiter {
+    padding-top: 0.25em;
+    float: left;
+}
+
+select#salaryCurrency {
+    width: 5.6em;
+    margin-left: 0.5em
+}
+
+a#requiredSkillsHref {
+    display: block;
+    font-weight: bold;
+    float: left;
+}
+
+input#requiredSkillsInplace {
+    width: 30%;
+}
+
+div.skills-list {
+    clear: both;
+    padding-left: 20%;
+    display: block;
+    position: relative;
+}
+
+div.skills-list.readonly {
+    clear: none;
+}
+
+ul.connectedSortable {
+    list-style-type: none;
+
+    float: left;
+
+    margin: 0;
+    margin-bottom: 1em;
+    margin-right: 2.5em;
+
+    min-width: 15em;
+    width: auto;
+
+    -webkit-border-radius: 0.2em;
+    -moz-border-radius: 0.2em;
+    -ms-border-radius: 0.2em;
+    -khtml-border-radius: 0.2em;
+    border-radius: 0.2em;
+    border: 1px solid #E8EBE8;
+    background: #FBFBFB;
+}
+
+ul.connectedSortable lh {
+    font-weight: bold;
+    font-size: 1.1em;
+    padding: 0.5em
+}
+
+ul.connectedSortable li.skill-item {
+    margin: 0 0.5em 0.5em 0.5em;
+
+    width: auto;
+
+    padding: 0.25em;
+
+    border: 1px solid #D8DBDF;
+    background: linear-gradient(to bottom, #F6F6F6 0%, #EFEFEF 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    -webkit-border-radius: 0.33em;
+    -moz-border-radius: 0.33em;
+    -ms-border-radius: 0.33em;
+    -khtml-border-radius: 0.33em;
+    border-radius: 0.33em;
+
+    cursor: move;
+}
+
+ul.connectedSortable li.skill-item.readonly {
+    cursor: auto;
+}
+
+ul.connectedSortable li.skill-item > span {
+    width: auto;
+}
+
+ul.connectedSortable .skill-item-placeholder {
+    background: linear-gradient(to bottom, #F6F6F6 0%, #CFCFCF 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    padding: 2px;
+}
+
+a.list-item-control {
+    position: relative;
+    display: block;
+    float: right;
+
+    width: 14px;
+    height: 14px;
+
+    margin-top: 0.25em;
+    margin-left: 0.25em;
+
+    -webkit-border-radius: 0.1em;
+    -moz-border-radius: 0.1em;
+    -ms-border-radius: 0.1em;
+    -khtml-border-radius: 0.1em;
+    border-radius: 0.1em;
+    background: linear-gradient(to bottom, #eee 0%, #bbb 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
+}
+
+a.list-item-control.left {
+    left: -1.25em;
+}
+
+a.list-item-control.right {
+    left: 1.25em;
+}
+
+a.list-item-control > img {
+    display: block;
+
+    padding: 1px;
+
+    width: 12px;
+    height: 12px;
+}
+
+a.list-item-control:hover, a.list-item-control:focus {
+    cursor: pointer;
+    background: linear-gradient(to bottom, #bbb 0%, #999 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
+}

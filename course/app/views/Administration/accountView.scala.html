@@ -1,0 +1,62 @@
+@(menuConfiguration: org.profwell.ui.menu.MenuConfiguration,
+form: org.profwell.security.domain.UserForm)
+
+@main(menuConfiguration) {
+    <!-- no additional styles -->
+} {
+    <script src="@routes.Assets.at("javascripts/utils/modalUtils.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.at("javascripts/user/passwordChangeModal.js")" type="text/javascript"></script>
+} {
+
+<div class="main">
+    <section class="grid-wrap">
+        <header class="grid col-full">
+            <hr>
+            <h2 class="fleft" style="width: 50%">Administration - Account Info</h2>
+        </header>
+
+        @tags.forms.messages("message", form.getVc(), "indent5Percent")
+
+        <div class="grid">
+
+            <ul class="toggle-view">
+
+                <li>
+                    @tags.blocks.toggleBlock("Account info ", "- User account information", true) {
+                        @tags.forms.outputSimple("Username", form.getUsername())
+                        @tags.forms.outputSimple("Name", form.getFirstName())
+                        @tags.forms.outputSimple("Surname", form.getLastName())
+                        @tags.forms.outputSimple("Email", form.getEmail())
+                        @tags.forms.outputSimple("UUID", form.getUuid())
+                    }
+                </li>
+
+            </ul>
+
+            <div class="button-panel">
+                <a href="/administration" class="button">Back</a>
+                <a href="/accountEdit?id=@form.getId()" class="button">Edit Account Info</a>
+                <a id="userPasswordChange" class="button">Change Password</a>
+            </div>
+        </div>
+
+        <div id="userPasswordChangeDialogForm" title="Password Change">
+            <form>
+                @tags.forms.inputHidden("idValue", "idValue", form.getIdValue())
+
+                <p id="generalMessage" class="info"></p>
+
+                <div class="grid">
+
+                    <div class="grid-wrap">
+                        @tags.forms.inputPassword("currentPasswordId", "currentPassword", "Current Password", "", form.getVc(), true)
+                        @tags.forms.inputPassword("passwordId", "password", "New Password", "", form.getVc(), true)
+                        @tags.forms.inputPassword("confirmPasswordId", "confirmPassword", "Confirm Password", "", form.getVc(), true)
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+</div>
+
+}

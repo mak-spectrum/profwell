@@ -1,0 +1,238 @@
+@(menuConfiguration: org.profwell.ui.menu.MenuConfiguration,
+actualPartnerList: List[org.profwell.collaboration.domain.PartnerDTO],
+myPRList: List[org.profwell.collaboration.domain.PartnershipRequestDTO],
+inPRList: List[org.profwell.collaboration.domain.PartnershipRequestDTO])
+
+@main(menuConfiguration) {
+    <link rel="stylesheet" href="@routes.Assets.at("stylesheets/tabs.css")"></link>
+    <link rel="stylesheet" href="@routes.Assets.at("stylesheets/collaboration/collaboration.css")"></link>
+} {
+    <script src="@routes.Assets.at("javascripts/tabs.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.at("javascripts/collaboration/collaboration.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.at("javascripts/utils/modalUtils.js")" type="text/javascript"></script>
+} {
+
+<div class="main">
+    <section class="grid-wrap">
+        <header class="grid col-full">
+            <hr>
+            <h2 class="fleft" style="width: 50%">Collaboration</h2>
+        </header>
+
+        <div class="grid">
+            <ul class="tabs clearfix">
+                <li class="active">
+                    <a href="#partnersTab">Partners</a>
+                </li>
+                <li>
+                    <a href="#requestsTab">Partnership requests</a>
+                </li>
+            </ul>
+
+            <div class="tab-container">
+                <div id="partnersTab" class="tab-content active">
+                    <h3>Actual Partners</h3>
+                    <ul class="partners-list">
+                        <li class="partner-item-empty">
+                            <div>
+                                - No partner registered -
+                            </div>
+                        </li>
+                        @for(partner <- actualPartnerList) {
+                        <li class="partner-item">
+                            <div>
+                                <div class="partner-name">@partner.getPartnerFullName() <span class="uuid">(@partner.getPartnerUuid())</span></div>
+
+                                <div class="category">
+                                    <span class="bold">@partner.getPartnershipDescription()</span>
+                                    <span>@partner.getPartnershipDescriptionPostfix()</span>
+                                </div>
+
+                                <div class="action-icon">
+                                    <a class="break-partnership" href="/partnershipBreak?id=@partner.getRecordId()" title="Break partnership">
+                                        <img src="@routes.Assets.at("images/icons/partnership-break.png")" alt="Break" />
+                                    </a>
+                                </div>
+                            </div>
+                        </li>
+                        }
+                        <li class="partner-item-add">
+                            <div class="break">
+                                <a href="javascript:requestPartnership();" title="Request partnership">
+                                    <img src="@routes.Assets.at("images/icons/request-partnership.png")" alt="Request Partnership" />
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+
+                <div id="requestsTab" class="tab-content">
+                    <h3>Incomming Partnership Requests</h3>
+                    <ul class="partners-list">
+                        <li class="inPR-item-empty">
+                            <div>
+                                - No requests registered -
+                            </div>
+                        </li>
+                        @for(partner <- inPRList) {
+                        <li class="inPR-item">
+                            <div>
+                                <div class="partner-name">@partner.getPartnerFullName() <span class="uuid">(@partner.getPartnerUuid())</span></div>
+
+                                <div class="category">
+                                    <span class="bold">@partner.getPartnershipDescription()</span>
+                                </div>
+
+                                <div class="action-icon">
+                                    <a class="decline-partnership-request" href="/partnershipDecline?id=@partner.getRecordId()" title="Decline partnership">
+                                        <img src="@routes.Assets.at("images/icons/decline.png")" alt="Decline" />
+                                    </a>
+                                </div>
+                                <div class="action-icon">
+                                    <a class="accept-partnership-request" href="/partnershipAccept?id=@partner.getRecordId()" title="Accept partnership">
+                                        <img src="@routes.Assets.at("images/icons/accept.png")" alt="Accept" />
+                                    </a>
+                                </div>
+                            </div>
+                        </li>
+                        }
+                    </ul>
+                
+                    <br />
+                    <h3>Partnership Requests</h3>
+                    <ul class="partners-list">
+                        <li class="myPR-item-empty">
+                            <div>
+                                - No requests registered -
+                            </div>
+                        </li>
+                        @for(partner <- myPRList) {
+                        <li class="myPR-item">
+                            <div>
+                                <div class="partner-name">@partner.getPartnerFullName() <span class="uuid">(@partner.getPartnerUuid())</span></div>
+
+                                <div class="category">
+                                    <span class="bold">@partner.getPartnershipDescription()</span>
+                                </div>
+
+                                <div class="action-icon">
+                                    <a class="cancel-partnership-request" href="/partnershipDecline?id=@partner.getRecordId()" title="Cancel partnership">
+                                        <img src="@routes.Assets.at("images/icons/delete2.png")" alt="Cancel" />
+                                    </a>
+                                </div>
+                            </div>
+                        </li>
+                        }
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+
+    </section>
+</div>
+
+<div id="modalContainer" title="Request collaboration">
+    <div class="grid">
+
+        <p id="infoMessage" class="info"></p>
+        <p id="errorMessage" class="error"></p>
+
+        <div class="field-cell">
+            <label for="partnerUuidId">Partner UUID:</label>
+            <input id="partnerUuidId" type="text" name="partnerUuid" />
+            <div class="uuid-help tooltip-help"
+                title="Because of security policies we can't use login, email, or any other private information, to build relationships.
+                Alternatively any user can be identified with his personal UUID that is used for establishing relationships only.
+                Ask your partner to provide you with his UUID that he can be found in his account setting.">
+            </div>
+        </div>
+        <div class="field-cell">
+            <label>Invite to join as:</label>
+            <div>
+                <div>
+                    <input id="partneshipTypeCompanion"
+                        type="radio"
+                        name="partnershipType"
+                        value="@org.profwell.collaboration.model.CollaborationRequestType.COMPANION.name()"
+                        checked="checked"/>
+                    <label for="partneshipTypeCompanion">@org.profwell.collaboration.model.CollaborationRequestType.COMPANION.getCaption()</label>
+                    <div class="tooltip-help"
+                        title="Offer your partner to be a @(org.profwell.collaboration.model.CollaborationRequestType.COMPANION.getCaption()).
+                        @(org.profwell.collaboration.model.CollaborationRequestType.COMPANION.getDescription())">
+                    </div>
+                </div>
+                <div>
+                    <input id="partneshipTypeFreelancer"
+                        type="radio"
+                        name="partnershipType"
+                        value="@org.profwell.collaboration.model.CollaborationRequestType.FREELANCER_RECRUITER.name()" />
+                    <label for="partneshipTypeFreelancer">@org.profwell.collaboration.model.CollaborationRequestType.FREELANCER_RECRUITER.getCaption()</label>
+                    <div class="tooltip-help"
+                        title="Offer your partner to be a @(org.profwell.collaboration.model.CollaborationRequestType.FREELANCER_RECRUITER.getCaption()).
+                        @(org.profwell.collaboration.model.CollaborationRequestType.FREELANCER_RECRUITER.getDescription())">
+                     </div>
+                </div>
+                <div>
+                    <input id="partneshipTypeHirer"
+                        type="radio"
+                        name="partnershipType"
+                        value="@org.profwell.collaboration.model.CollaborationRequestType.CLIENT_HIRER.name()" />
+                    <label for="partneshipTypeHirer">@org.profwell.collaboration.model.CollaborationRequestType.CLIENT_HIRER.getCaption()</label>
+                    <div class="tooltip-help"
+                        title="Offer your partner to be a @(org.profwell.collaboration.model.CollaborationRequestType.CLIENT_HIRER.getCaption()).
+                        @(org.profwell.collaboration.model.CollaborationRequestType.CLIENT_HIRER.getDescription())">
+                     </div>
+                </div>
+                <div>
+                    <input id="partneshipTypeRecruiter"
+                        type="radio"
+                        name="partnershipType"
+                        value="@org.profwell.collaboration.model.CollaborationRequestType.STAFF_RECRUITER.name()" />
+                    <label for="partneshipTypeRecruiter">@org.profwell.collaboration.model.CollaborationRequestType.STAFF_RECRUITER.getCaption()</label>
+                    <div class="tooltip-help"
+                        title="Offer your partner to be a @(org.profwell.collaboration.model.CollaborationRequestType.STAFF_RECRUITER.getCaption()).
+                        @(org.profwell.collaboration.model.CollaborationRequestType.STAFF_RECRUITER.getDescription())">
+                     </div>
+                </div>
+                <div>
+                    <input id="partneshipTypeEmployer"
+                        type="radio"
+                        name="partnershipType"
+                        value="@org.profwell.collaboration.model.CollaborationRequestType.CLIENT_EMPLOYER.name()" />
+                    <label for="partneshipTypeEmployer">@org.profwell.collaboration.model.CollaborationRequestType.CLIENT_EMPLOYER.getCaption()</label>
+                    <div class="tooltip-help"
+                        title="Offer your partner to be a @(org.profwell.collaboration.model.CollaborationRequestType.CLIENT_EMPLOYER.getCaption()).
+                        @(org.profwell.collaboration.model.CollaborationRequestType.CLIENT_EMPLOYER.getDescription())">
+                     </div>
+                </div>
+                <div>
+                    <input id="partneshipTypeRa"
+                        type="radio"
+                        name="partnershipType"
+                        value="@org.profwell.collaboration.model.CollaborationRequestType.RECRUITMENT_AGENCY.name()" />
+                    <label for="partneshipTypeRa">@org.profwell.collaboration.model.CollaborationRequestType.RECRUITMENT_AGENCY.getCaption()</label>
+                    <div class="tooltip-help"
+                        title="Offer your partner to be a @(org.profwell.collaboration.model.CollaborationRequestType.RECRUITMENT_AGENCY.getCaption()).
+                        @(org.profwell.collaboration.model.CollaborationRequestType.RECRUITMENT_AGENCY.getDescription())">
+                     </div>
+                </div>
+                <div>
+                    <input id="partneshipTypeClient"
+                        type="radio"
+                        name="partnershipType"
+                        value="@org.profwell.collaboration.model.CollaborationRequestType.CLIENT.name()" />
+                    <label for="partneshipTypeClient">@org.profwell.collaboration.model.CollaborationRequestType.CLIENT.getCaption()</label>
+                    <div class="tooltip-help"
+                        title="Offer your partner to be a @(org.profwell.collaboration.model.CollaborationRequestType.CLIENT.getCaption()).
+                        @(org.profwell.collaboration.model.CollaborationRequestType.CLIENT.getDescription())">
+                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+}

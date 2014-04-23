@@ -1,0 +1,33 @@
+@(filter: org.profwell.generic.auxiliary.GenericFilter)
+@if(filter.isSinglePage()) {
+    <div class="grid-table-footer">
+        <div class="grid-table-cell align-right">
+            <span>1</span>
+            <span>of</span>
+            <span>1</span>
+        </div>
+    </div>
+} else {
+    <div class="grid-table-footer">
+        <div class="grid-table-cell align-right">
+            @if(filter.hasPrev()) {
+                <a id="toTop" href="#">&lt;&lt;&nbsp;</a>
+                <a id="prev" href="#">&lt;&nbsp;</a>
+            } else {
+                <span>&lt;&lt;&nbsp;</span>
+                <span>&lt;&nbsp;</span>
+            }
+            <input id="gotoPageId" name="@org.profwell.generic.web.FilterUtility.FILTER_GOTO_PAGE" type="text" value="@filter.getCurrentPage()" />
+            <span>of</span>
+            <span>@filter.getMaxPage()</span>
+            <a id="goto" class="button" href="#">&nbsp;Go</a>
+            @if(filter.hasNext()) {
+                <a id="next" href="#">&nbsp;&gt;</a>
+                <a id="toEnd" href="#">&nbsp;&gt;&gt;</a>
+            } else {
+                <span>&nbsp;&gt;</span>
+                <span>&nbsp;&gt;&gt;</span>
+            }
+        </div>
+    </div>
+}

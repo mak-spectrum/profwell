@@ -1,0 +1,114 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Application pages
+GET     /                                   controllers.Application.index()
+GET     /login                              controllers.Application.login()
+POST    /login                              controllers.Application.authenticate()
+GET     /logout                             controllers.Application.logout()
+
+# Application pages
+GET     /dashboard                          controllers.DashboardController.open()
+
+# Contact Book pages
+GET     /personList                         controllers.PersonController.personList()
+POST    /personList                         controllers.PersonController.personList()
+GET     /personCreate                       controllers.PersonController.personCreate()
+GET     /personView                         controllers.PersonController.personView(id: String)
+GET     /personEdit                         controllers.PersonController.personEdit(id: String)
+GET     /personDelete                       controllers.PersonController.personDelete(id: String)
+POST    /personEditSubmit                   controllers.PersonController.personEditSubmit()
+POST    /personEditSubmitAsync              controllers.PersonController.personEditSubmitAsync()
+
+# Administration pages
+GET     /administration                     controllers.Routings.administration()
+
+GET     /userList                           controllers.UserController.userList()
+POST    /userList                           controllers.UserController.userList()
+GET     /userCreate                         controllers.UserController.userCreate()
+GET     /userView                           controllers.UserController.userView(id: String)
+GET     /userDelete                         controllers.UserController.userDelete(id: String)
+GET     /userEdit                           controllers.UserController.userEdit(id: String)
+POST    /userEditSubmit                     controllers.UserController.userEditSubmit()
+POST    /userPasswordChangeSubmitAsync      controllers.UserController.userPasswordChangeSubmitAsync()
+GET     /unblockTimeoutedUser               controllers.UserController.unblockTimeouted(id: String)
+
+GET     /accountView                        controllers.UserController.accountView()
+GET     /accountEdit                        controllers.UserController.accountEdit()
+POST    /accountEditSubmit                  controllers.UserController.accountEditSubmit()
+
+#Dictionaries
+GET     /collaboration                      controllers.CollaborationController.partnerList()
+GET     /partnershipBreak                   controllers.CollaborationController.partnershipBreak(id: Long)
+GET     /partnershipAccept                  controllers.CollaborationController.partnershipAccept(id: Long)
+GET     /partnershipDecline                 controllers.CollaborationController.partnershipDecline(id: Long)
+GET     /partnershipRequestSendAsync        controllers.CollaborationController.partnershipRequestSendAsync(uuid: String, relationshipType: String)
+
+#Dictionaries
+GET     /dictionaries                       controllers.Routings.dictionaries()
+
+GET     /companyList                        controllers.CompanyDictController.companyList()
+POST    /companyList                        controllers.CompanyDictController.companyList()
+GET     /companyCreate                      controllers.CompanyDictController.companyCreate()
+GET     /companyView                        controllers.CompanyDictController.companyView(id: String)
+GET     /companyDelete                      controllers.CompanyDictController.companyDelete(id: String)
+GET     /companyEdit                        controllers.CompanyDictController.companyEdit(id: String)
+POST    /companyEditSubmit                  controllers.CompanyDictController.companyEditSubmit()
+
+GET     /cityList                           controllers.CityDictController.cityList()
+POST    /cityList                           controllers.CityDictController.cityList()
+GET     /cityCreate                         controllers.CityDictController.cityCreate()
+GET     /cityView                           controllers.CityDictController.cityView(id: String)
+GET     /cityDelete                         controllers.CityDictController.cityDelete(id: String)
+GET     /cityEdit                           controllers.CityDictController.cityEdit(id: String)
+POST    /cityEditSubmit                     controllers.CityDictController.cityEditSubmit()
+
+GET     /skillList                          controllers.SkillDictController.skillList()
+POST    /skillList                          controllers.SkillDictController.skillList()
+GET     /skillCreate                        controllers.SkillDictController.skillCreate()
+GET     /skillView                          controllers.SkillDictController.skillView(id: String)
+GET     /skillDelete                        controllers.SkillDictController.skillDelete(id: String)
+GET     /skillEdit                          controllers.SkillDictController.skillEdit(id: String)
+POST    /skillEditSubmit                    controllers.SkillDictController.skillEditSubmit()
+
+GET     /positionList                       controllers.PositionDictController.positionList()
+POST    /positionList                       controllers.PositionDictController.positionList()
+GET     /positionCreate                     controllers.PositionDictController.positionCreate()
+GET     /positionView                       controllers.PositionDictController.positionView(id: String)
+GET     /positionDelete                     controllers.PositionDictController.positionDelete(id: String)
+GET     /positionEdit                       controllers.PositionDictController.positionEdit(id: String)
+POST    /positionEditSubmit                 controllers.PositionDictController.positionEditSubmit()
+
+# Vacancy pages
+GET     /vacancyArchiveList                 controllers.VacancyController.vacancyArchiveList()
+GET     /vacancyCreate                      controllers.VacancyController.vacancyCreate()
+POST    /vacancyEditSubmit                  controllers.VacancyController.vacancyEditSubmit()
+GET     /vacancyView                        controllers.VacancyController.vacancyView(id: Long, tab: String ?= "vacancyInfoTab", archived: Boolean ?= false)
+GET     /vacancyEdit                        controllers.VacancyController.vacancyEdit(id: Long)
+GET     /vacancyDelete                      controllers.VacancyController.vacancyDelete(id: Long)
+GET     /vacancyOpen                        controllers.VacancyController.vacancyOpen(id: Long)
+GET     /vacancySuspend                     controllers.VacancyController.vacancySuspend(id: Long)
+GET     /vacancyClose                       controllers.VacancyController.vacancyClose(id: Long)
+GET     /vacancyHookups                     controllers.VacancyController.vacancyHookups(vacancyId: Long, archived: Boolean ?= false)
+GET     /vacancyStaffPerson                 controllers.VacancyController.vacancyStaffPerson(id: Long)
+POST    /vacancyHookupSubmit                controllers.VacancyController.hookupSubmit()
+GET     /vacancyHookupEdit                  controllers.VacancyController.hookupEdit(id: Long)
+GET     /vacancyHookupFile                  controllers.VacancyController.hookupFile(hookupId: Long, type: String, index: String ?= "")
+GET     /vacancyHookupDeleteAsync           controllers.VacancyController.hookupDeleteAsync(hookupId: Long)
+GET     /vacancyHookupToStatusAsync         controllers.VacancyController.hookupToStatusAsync(hookupId: Long, status: String)
+GET     /vacancyHookupArchiveAsync          controllers.VacancyController.hookupArchiveAsync(hookupId: Long)
+GET     /vacancyHookupUnarchiveAsync        controllers.VacancyController.hookupUnarchiveAsync(hookupId: Long)
+POST    /vacancyHookupFileUploadAsync       controllers.VacancyController.hookupFileUploadAsync()
+GET     /vacancyHookupFileDeleteAsync       controllers.VacancyController.hookupFileDeleteAsync(hookupId: Long, type: String, index: String ?= "")
+
+# Markers autocompletion
+GET     /autocompleteContactName            controllers.MarkerController.autocompleteContactMarkers(term: String)
+GET     /autocompletePosition               controllers.MarkerController.autocompletePosition(term: String)
+GET     /autocompleteCompany                controllers.MarkerController.autocompleteCompany(term: String)
+GET     /autocompleteSkill                  controllers.MarkerController.autocompleteSkill(term: String)
+GET     /autocompleteCity                   controllers.MarkerController.autocompleteCity(country: String, term: String)
+GET     /autocompletePerson                 controllers.MarkerController.autocompletePerson(term: String)
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file                       controllers.Assets.at(path="/public", file)

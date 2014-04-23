@@ -1,0 +1,102 @@
+ul.partners-list {
+    margin-top: 2em;
+    margin-left: 4em;
+    list-style: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3QsDChoQpxxUxwAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAB2klEQVQ4y52TT4tScRSGn5/Xkasi6hXxzyp0AiEJNyK0kGgIkTYFbSIhF04Y9CXcGX0BV21dzMI2ghTMruGC0SqHMVq0MHFhGjh0HfTe08ZgqimceeFwVu/D4Zz3aMA74OumbK6gI0A2oHuAcVnAXU3TFpqmyQbUAx4Doa0JSrleRKNR8fv9opQSYAkcAk8B9zYMdyAQ+JjL5SSZTIqu67+mOQU+AJV/GbVNd5RSh6FQ6HkqlcLj8aBcLtarlce27QTwALgPfAK+XATAtu1vO+6ds93ru3vRaBSf7kX36iilWK1WynGcOPAEuA0cA1PA0c7TFqeLk1gsdiebzSb9fj8+rxevz4eu64gI6/Uax3GuAfvADeD9XwtKJBI/0uk0i8WCacTAiESIbGo2mzGZTJjP5ysRcQPh3wD5fP5ZtVothsNhJpMJhmFgGFPi8Tij0Yh+v4/jOAdKqVciYgLfz/tvtlotERGZzWYyHA7FNE3pdrtSr9cllUq9DQaDt4Dghecol8uf5Q/1ej0pFArHwN5/QxAIBF6Ox2MREbEsSwaDwbJSqZwAj7YJUbHdbi8tyxLTNM8ajcYRUN86xrVard/pdKTZbL7JZDL7l36mYrH4ulQqPQQSV3nln76nxAIaWo9nAAAAAElFTkSuQmCC);
+}
+
+ul.partners-list > li {
+    width: 80%;
+    padding: 0.25em
+}
+
+ul.partners-list > li > div {
+    width: 100%;
+    margin-top: -0.125em;
+    vertical-align: top;
+    display: inline-block;
+}
+
+ul.partners-list > li.partner-item-add {
+    margin-top: 0.5em;
+    margin-left: 1.5em;
+    list-style: none;
+}
+
+div.partner-name {
+    font-weight: bold;
+    width: 60%;
+    overflow: hidden;
+    display: inline-block;
+}
+
+div.action-icon {
+    width: 3.5%;
+    float: right;
+    display: inline;
+}
+
+div.category {
+    width: 35%;
+    display: inline;
+}
+
+span.bold {
+    font-weight: bold;
+}
+
+span.uuid {
+    font-weight: normal;
+    font-size: 0.8em;
+    vertical-align: text-top;
+    color: #888;
+}
+
+
+div#modalContainer div.grid {
+    padding: 1em 0 1em 3em;
+}
+
+div#modalContainer div.field-cell > label {
+    width: 30%;
+    display: inline-block;
+}
+
+div#modalContainer div.field-cell > input,
+div#modalContainer div.field-cell > div {
+    float: left;
+    display: inline-block;
+}
+
+div#modalContainer div.field-cell > input {
+    width: 50%;
+}
+
+div#modalContainer div.field-cell > div {
+    width: 55%;
+}
+
+
+div#modalContainer div.field-cell > div > * {
+    float: none;
+    padding: 0.4em 0;
+}
+
+div#modalContainer div.field-cell div.tooltip-help {
+    margin-top: -0.2em;
+}
+
+div#modalContainer div.field-cell div.uuid-help.tooltip-help {
+    width: 24px;
+    height: 24px;
+    margin-top: 0.15em;
+    margin-left: 0.5em;
+}
+
+div#modalContainer p {
+    padding-left: 2.5%;
+    font-weight: 700;
+}
+
+.ui-tooltip {
+    font-size: 0.9em;
+}

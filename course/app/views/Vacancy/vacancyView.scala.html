@@ -1,0 +1,211 @@
+@(menuConfiguration: org.profwell.ui.menu.MenuConfiguration,
+form: org.profwell.vacancy.domain.VacancyViewForm)
+
+@main(menuConfiguration) {
+    <link rel="stylesheet" href="@routes.Assets.at("stylesheets/vacancy/vacancyView.css")"></link>
+    <link rel="stylesheet" href="@routes.Assets.at("stylesheets/vacancy/vacancyHookups.css")"></link>
+    <link rel="stylesheet" href="@routes.Assets.at("stylesheets/tabs.css")"></link>
+} {
+    <script src="@routes.Assets.at("javascripts/jquery-form.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.at("javascripts/vacancy/vacancyView.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.at("javascripts/vacancy/vacancyViewHookupFile.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.at("javascripts/tabs.js")" type="text/javascript"></script>
+} {
+
+<div class="main">
+    <section class="grid-wrap">
+        <header class="grid col-full">
+            <hr>
+            <h2 class="fleft" style="width: 50%">Vacancies - View Vacancy</h2>
+        </header>
+
+        @tags.forms.inputHidden("idValue", "idValue", form.getIdValue())
+
+        @tags.forms.messages("message", form.getVc(), "indent5Percent")
+
+        <div class="grid">
+            <ul class="tabs clearfix">
+                <li class="@form.getVacancyInfoTabActivity()">
+                    <a href="#vacancyInfoTab">Vacancy Info</a>
+                </li>
+                <li class="@form.getHookupsTabActivity()">
+                    <a id="hookupsTabToggle" href="#hookupsTab">Hookups</a>
+                </li>
+            </ul>
+            <div class="tab-container">
+
+
+
+
+
+                <div id="vacancyInfoTab" class="tab-content @form.getVacancyInfoTabActivity()">
+                    <ul class="toggle-view">
+                        <li>
+                            @tags.blocks.toggleBlock("General info", "- common vacancy information", true) {
+                                @tags.forms.outputSimple("Priority", form.getPriority().getCaption())
+                                @if(form.getDueDate() != null) {
+                                    @tags.forms.outputSimple("Due Date", form.getDueDateFormatted())
+                                } else {
+                                    @tags.forms.outputSimple("Due Date", "-not specified-")
+                                }
+                                @tags.forms.outputSimple("Status", form.getStatus().getCaption())
+                                @tags.forms.outputSimple("Opening Date", form.getOpeningDatetimeFormatted())
+                                @if(form.isVacancyClosed()) {
+                                    @tags.forms.outputSimple("Closing Date", form.getClosingDatetimeFormatted())
+                                }
+                            }
+                        </li>
+
+                        <li>
+                            @tags.blocks.toggleBlock("Position", "- main information about position", true) {
+                                @tags.forms.outputSimple("Position Caption", form.getPositionCaption())
+                                @tags.forms.outputSimple("Position Details", form.getPositionDetails())
+                                @tags.forms.outputSimple("Project Name",     form.getPositionProjectName())
+                                @tags.forms.outputSimple("Project Details",  form.getPositionProjectDetails())
+                                <div class="field-cell">
+                                    <label for="requiredSkillsInplace">Required Skills:</label>
+                                    <div class="skills-list readonly">
+                                        @if(!form.getMandatorySkills().isEmpty()) {
+                                            <ul id="mandatorySkills" class="connectedSortable">
+                                                <lh>Mandatory Skills</lh>
+                                                @for(skill <- form.getMandatorySkills()) {
+                                                <li class="skill-item readonly">
+                                                    <span>@skill.getName()</span>
+                                                </li>
+                                                }
+                                            </ul>
+                                        }
+                                        @if(!form.getOptionalSkills().isEmpty()) {
+                                            <ul id="optionalSkills" class="connectedSortable">
+                                                <lh>Will Be a Plus</lh>
+                                                @for(skill <- form.getOptionalSkills()) {
+                                                <li class="skill-item readonly">
+                                                    <span>@skill.getName()</span>
+                                                </li>
+                                                }
+                                            </ul>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </li>
+
+                        <li>
+                            @tags.blocks.toggleBlock("Company", "- information about company", true) {
+                                @tags.forms.outputSimple("Company Name", form.getCompanyName())
+                                @tags.forms.outputSimple("Company Details", form.getCompanyDetails())
+                                @tags.forms.outputSimple("Social Benefits", form.getCompanySocialBenefits())
+                            }
+                        </li>
+
+                        <li>
+                            @tags.blocks.toggleBlock("Other Info", "- additional information about vacancy", true) {
+                                @if(form.getCountry() != null) {
+                                    @tags.forms.outputSimple("Country", form.getCountry().getCaption())
+                                } else {
+                                    @tags.forms.outputSimple("Country", "")
+                                }
+                                @tags.forms.outputSimple("City", form.getCity())
+                                @tags.forms.outputSimple("Salary", utils.VacancyUtils.getSalaryValue(form))
+                            }
+                        </li>
+                    </ul>
+                </div>
+
+
+
+
+
+                <div id="hookupsTab" class="tab-content @form.getHookupsTabActivity()">
+                    <h6>List of the registered hookups on the vacancy</h6>
+
+                    <input type="checkbox" id="show-archived-checkbox">
+                    <label class="gray-check-red" for="show-archived-checkbox">show archived</label>
+
+                    <ul class="hookups-list @(if(form.isHookupsTabActive()){"loaded"})">
+                        @if(form.isHookupsTabActive()) {
+                            @Vacancy.listHookupItems(form.getHookups())
+                            <li class="hookups-loading" style="display: none;">
+                                <img src="@routes.Assets.at("images/gif/loading-bright.gif")" alt="Loading" title="Please wait, loading is in process." />
+                            </li>
+                        } else {
+                            <li class="hookups-loading">
+                                <img src="@routes.Assets.at("images/gif/loading-bright.gif")" alt="Loading" title="Please wait, loading is in process." />
+                            </li>
+                        }
+                        <li class="hookups-empty">
+                            - No person staffed -
+                        </li>
+                        <li class="hookups-error">
+                        </li>
+                        @if(form.isVacancyOpen()) {
+                        <li class="add-hookup">
+                            <a href="/vacancyStaffPerson?id=@form.getId()" class="staff-person" title="Staff person">
+                                <img src="@routes.Assets.at("images/icons/staff-person.png")" alt="Staff" />
+                                <span>Staff person</span>
+                            </a>
+                        </li>
+                        }
+                    </ul>
+                </div>
+
+
+
+
+
+            </div>
+
+            <div class="button-panel">
+                @if(false) {
+                    <a href="/dashboard" class="button">Back</a>
+                } else {
+                    <a href="/vacancyArchiveList" class="button">Back</a>
+                }
+                <a href="/vacancyEdit?id=@form.getId()" class="button">Edit Vacancy</a>
+                @if(form.isVacancyOpen()) {
+                <a id="vacancySuspendLink" href="/vacancySuspend?id=@form.getId()" class="button">Suspend Acquisition</a>
+                }
+                @if(form.isVacancySuspended()) {
+                <a href="/vacancyOpen?id=@form.getId()" class="button">Open Acquisition</a>
+                }
+                @if(form.isVacancyActive()) {
+                <a id="vacancyCloseLink" href="javascript:vacancyClose(@form.getId(), false);" class="button">Close Vacancy</a>
+                }
+                <a id="deleteButton" href="/vacancyDelete?id=@form.getId()" class="button">Delete Vacancy</a>
+            </div>
+        </div>
+
+
+    </section>
+</div>
+
+<div id="fileUploadModalContainer" title="Upload File">
+    <div class="grid">
+
+        <form id="fileUploadForm" action="/vacancyHookupFileUploadAsync" method="post" enctype="multipart/form-data">
+            @tags.forms.inputHidden("fileUploadHookupId", "hookupIdValue", "")
+            
+            <input id="fileUploadFileValueId" type="file" name="fileUploadFileValue" />
+            <input id="fileUploadFormSubmitId" type="submit" value="Upload Document" />
+        </form>
+
+        <div id="fileUploadProgress">
+            <div id="fileUploadBar">
+                <div id="fileUploadPercent">0%</div>
+            </div>
+        </div>
+        <br/>
+
+        <div id="fileUploadMessage"></div>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+    document.loadingImageUrl = '@routes.Assets.at("images/gif/loading-bright.gif")';
+    document.downloadImageUrl = '@routes.Assets.at("images/icons/download.png")';
+    document.deleteImageUrl = '@routes.Assets.at("images/icons/delete.png")';
+//]]>
+</script>
+}

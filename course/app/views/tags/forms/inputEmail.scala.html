@@ -1,0 +1,14 @@
+@(id: String,
+name: String,
+label: String,
+value: String,
+validationContext: org.profwell.generic.validation.ValidationContext = null,
+required: Boolean = false)
+<div class="field-cell">
+    <label for="@id">@label:</label>
+    <input id="@id" name="@name" placeholder="Email" type="email" value="@value" maxlength="128"/>
+    @requiredIcon(required)
+    @if(validationContext != null) {
+        @tags.forms.messages(name, validationContext)
+    }
+</div>

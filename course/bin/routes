@@ -1,0 +1,41 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Application pages
+GET     /                                   controllers.Application.index()
+GET     /login                              controllers.Application.login()
+POST    /login                              controllers.Application.authenticate()
+GET     /logout                             controllers.Application.logout()
+
+# Contact-list pages
+GET     /personList                         controllers.PersonController.personList()
+POST    /personList                         controllers.PersonController.personList()
+GET     /personCreate                       controllers.PersonController.personCreate()
+GET     /personView                         controllers.PersonController.personView(id: String)
+GET     /personEdit                         controllers.PersonController.personEdit(id: String)
+GET     /personDelete                       controllers.PersonController.personDelete(id: String)
+POST    /personEditSubmit                   controllers.PersonController.personEditSubmit()
+
+# Administration pages
+GET     /administration                     controllers.Administration.index()
+GET     /userList                           controllers.UserController.userList()
+POST    /userList                           controllers.UserController.userList()
+GET     /userCreate                         controllers.UserController.userCreate()
+GET     /userView                           controllers.UserController.userView(id: String)
+GET     /userEdit                           controllers.UserController.userEdit(id: String)
+GET     /userDelete                         controllers.UserController.userDelete(id: String)
+POST    /userEditSubmit                     controllers.UserController.userEditSubmit()
+POST    /userPasswordChangeSubmitAsync      controllers.UserController.userPasswordChangeSubmitAsync()
+GET     /unblockTimeoutedUser               controllers.UserController.unblockTimeouted(id: String)
+
+GET     /accountView                        controllers.UserController.accountView()
+GET     /accountEdit                        controllers.UserController.accountEdit()
+POST    /accountEditSubmit                  controllers.UserController.accountEditSubmit()
+
+
+# Markers
+GET     /contactMarkerComplete              controllers.MarkerController.autocompleteContactMarkers(term: String)
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file                       controllers.Assets.at(path="/public", file)

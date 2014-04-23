@@ -1,0 +1,170 @@
+h6 {
+    width: 40%;
+    display: inline-block;
+}
+
+ul.hookups-list {
+    margin-top: 2em;
+    margin-left: 2em;
+
+    list-style: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3QsDChoQpxxUxwAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAB2klEQVQ4y52TT4tScRSGn5/Xkasi6hXxzyp0AiEJNyK0kGgIkTYFbSIhF04Y9CXcGX0BV21dzMI2ghTMruGC0SqHMVq0MHFhGjh0HfTe08ZgqimceeFwVu/D4Zz3aMA74OumbK6gI0A2oHuAcVnAXU3TFpqmyQbUAx4Doa0JSrleRKNR8fv9opQSYAkcAk8B9zYMdyAQ+JjL5SSZTIqu67+mOQU+AJV/GbVNd5RSh6FQ6HkqlcLj8aBcLtarlce27QTwALgPfAK+XATAtu1vO+6ds93ru3vRaBSf7kX36iilWK1WynGcOPAEuA0cA1PA0c7TFqeLk1gsdiebzSb9fj8+rxevz4eu64gI6/Uax3GuAfvADeD9XwtKJBI/0uk0i8WCacTAiESIbGo2mzGZTJjP5ysRcQPh3wD5fP5ZtVothsNhJpMJhmFgGFPi8Tij0Yh+v4/jOAdKqVciYgLfz/tvtlotERGZzWYyHA7FNE3pdrtSr9cllUq9DQaDt4Dghecol8uf5Q/1ej0pFArHwN5/QxAIBF6Ox2MREbEsSwaDwbJSqZwAj7YJUbHdbi8tyxLTNM8ajcYRUN86xrVard/pdKTZbL7JZDL7l36mYrH4ulQqPQQSV3nln76nxAIaWo9nAAAAAElFTkSuQmCC);
+}
+
+ul.hookups-list > li {
+    margin-bottom: 1em;
+    width: 80%;
+    padding: 0.75em
+}
+
+ul.hookups-list > li > div {
+    width: 100%;
+    margin-top: -1.125em;
+    vertical-align: top;
+    display: inline-block;
+    padding: 0.75em 0 0.75em 0.75em;
+}
+
+ul.hookups-list > li.hookup-item > div:hover {
+    background-color: #f4f4f4;
+}
+
+ul.hookups-list > li.hookup-item > div.archived {
+    background-position: 4%;
+    background-image: url("/assets/images/back/archived-hookup.png");
+    background-repeat: no-repeat;
+}
+
+ul.hookups-list > li div.hookup-info {
+    display: block;
+    float: left;
+
+    width: 75%;
+    overflow: hidden;
+}
+
+ul.hookups-list > li div.hookup-info span.subline {
+    color: #666;
+    font-size: 0.8em;
+}
+
+ul.hookups-list > li div.hookup-info span.caption {
+    display: block;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+ul.hookups-list > li div.hookup-control {
+    display: block;
+    float: left;
+
+    width: 25%;
+    overflow: hidden;
+}
+
+ul.hookups-list > li div.hookup-control * {
+    display: block;
+}
+
+ul.hookups-list > li div.hookup-control a {
+    text-decoration: none;
+    margin: 0.25em;
+    display: inline-block;
+}
+
+ul.hookups-list > li div.hookup-control div.statuses-group {
+    height: 36px;
+}
+
+ul.hookups-list > li div.hookup-control div.statuses-group img.loading {
+    padding-top: 0.75em;
+}
+
+ul.hookups-list > li div.hookup-control a > * {
+    display: inline-block;
+}
+
+li.hookups-loading, li.hookups-empty, li.add-hookup {
+    list-style: none;
+    margin-left: 1em;
+    margin-top: 0.5em;
+}
+
+li.add-hookup {
+    margin-left: 2em;
+}
+
+a.staff-person {
+    display: block;
+    vertical-align: middle;
+    width: 12em;
+}
+
+a.staff-person:hover {
+    text-decoration: none;
+}
+
+a.staff-person span {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 0.5em;
+}
+
+a.staff-person img {
+    display: inline-block;
+}
+
+
+
+form#fileUploadForm input[type="file"] {
+    width: 55%;
+    margin-left: 7.5%;
+}
+
+form#fileUploadForm input[type="submit"] {
+    width: 27%;
+    margin-left: 3%;
+}
+
+div#fileUploadModalContainer div.grid {
+    margin: 0;
+    padding: 0;
+}
+
+#fileUploadProgress {
+    position: relative;
+    margin-left: 7.5%;
+    width: 85%;
+    border: 1px solid #ddd;
+    margin-top: 0.25em;
+    padding: 0.125em;
+    border-radius: 0.5em;
+}
+
+#fileUploadBar {
+    background-color: #EF1C40;
+    width: 0%;
+    height: 1.5em;
+    border-radius: 0.5em;
+}
+
+#fileUploadPercent {
+    position: absolute;
+    display: inline-block;
+    left: 48%;
+    top: 0.125em;
+}
+
+#fileUploadMessage {
+    width: 99%;
+    display: inline-block;
+    text-align: center;
+}
+
+a.hookup-delete-file {
+    margin-left: 1em;
+}
+
+img.hookup-delete-file {
+    width: 12px;
+    height: 12px;
+}

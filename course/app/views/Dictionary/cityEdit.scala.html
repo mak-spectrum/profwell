@@ -1,0 +1,63 @@
+@(menuConfiguration: org.profwell.ui.menu.MenuConfiguration,
+form: org.profwell.common.domain.CityForm)
+
+@main(menuConfiguration) {
+    <!-- no additional styles -->
+} {
+    <!-- no additional scripts -->
+} {
+
+<div class="main">
+    <section class="grid-wrap">
+        <header class="grid col-full">
+            <hr>
+            <h2 class="fleft" style="width: 50%">Companies Dictionary @(if (form.isNew()) (" - Add City") else ( "- Edit City"))</h2>
+        </header>
+
+        <form action="/cityEditSubmit" method="post">
+            @tags.forms.inputHidden("idValue", "idValue", form.getIdValue())
+
+            <div class="grid">
+
+                <ul class="toggle-view">
+                    <li>
+                        @tags.blocks.toggleBlock("City info ", "- city information", true) {
+                            @tags.forms.inputText("nameId", "name", "Name", form.getName(), form.getVc(), true)
+                            @tags.forms.inputSelect("countryId",
+                                    "countryValue",
+                                    "Country",
+                                    form.getCountryValue(),
+                                    org.profwell.ui.select.DictionaryConversionUtils
+                                            .convertDictionary(
+                                                    org.profwell.common.model.Country.getValues(),
+                                                    "-select country-"),
+                                    form.getVc(),
+                                    true)
+                        }
+                    </li>
+                </ul>
+
+                <div class="button-panel">
+                    @if(form.isNew()) {
+                        <a href="/cityList" class="button">Cancel</a>
+                    } else {
+                        <a href="/cityView?id=@form.getId()" class="button">Cancel</a>
+                    }
+                    <input type="submit" class="button" value="Save City" />
+                </div>
+            </div>
+        </form>
+
+
+    </section>
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+    document.contact = {};
+    document.contact.imageMark = '@routes.Assets.at("images/icons/mark.png")';
+    document.contact.imageRequired = '@routes.Assets.at("images/icons/required.png")';
+    document.contact.imageDelete = '@routes.Assets.at("images/icons/delete.png")';
+//]]>
+</script>
+}

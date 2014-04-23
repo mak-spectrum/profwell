@@ -1,0 +1,5 @@
+@(supportsMarks: Boolean,
+styleClass: String = "requiredIcon")
+@if(supportsMarks) {
+    <img class="@styleClass image-mark" src="@routes.Assets.at("images/icons/mark.png")" alt="Field supports marks" title="Field supports marks" />
+}

@@ -1,0 +1,53 @@
+@(menuConfiguration: org.profwell.ui.menu.MenuConfiguration,
+form: org.profwell.common.domain.SkillForm)
+
+@main(menuConfiguration) {
+    <!-- no additional styles -->
+} {
+    <!-- no additional scripts -->
+} {
+
+<div class="main">
+    <section class="grid-wrap">
+        <header class="grid col-full">
+            <hr>
+            <h2 class="fleft" style="width: 50%">Companies Dictionary @(if (form.isNew()) (" - Add Skill") else ( "- Edit Skill"))</h2>
+        </header>
+
+        <form action="/skillEditSubmit" method="post">
+            @tags.forms.inputHidden("idValue", "idValue", form.getIdValue())
+
+            <div class="grid">
+
+                <ul class="toggle-view">
+                    <li>
+                        @tags.blocks.toggleBlock("Skill info ", "- skill information", true) {
+                            @tags.forms.inputText("nameId", "name", "Name", form.getName(), form.getVc(), true)
+                        }
+                    </li>
+                </ul>
+
+                <div class="button-panel">
+                    @if(form.isNew()) {
+                        <a href="/skillList" class="button">Cancel</a>
+                    } else {
+                        <a href="/skillView?id=@form.getId()" class="button">Cancel</a>
+                    }
+                    <input type="submit" class="button" value="Save Skill" />
+                </div>
+            </div>
+        </form>
+
+
+    </section>
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+    document.contact = {};
+    document.contact.imageMark = '@routes.Assets.at("images/icons/mark.png")';
+    document.contact.imageRequired = '@routes.Assets.at("images/icons/required.png")';
+    document.contact.imageDelete = '@routes.Assets.at("images/icons/delete.png")';
+//]]>
+</script>
+}

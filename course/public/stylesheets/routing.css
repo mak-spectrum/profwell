@@ -1,0 +1,53 @@
+ul.item-list {
+    list-style: none;
+    list-style-image: inherit;
+    margin-left: 2em;
+}
+
+ul.item-list > li > a {
+    display: inline-block;
+    padding: 1em 0;
+}
+
+ul.item-list > li > a > img {
+    display: block;
+    float: left;
+}
+
+ul.item-list > li > a > span.text {
+    display: block;
+    float: left;
+    padding-top: 0.5em;
+    padding-left: 0.5em;
+}
+
+ul.item-list > li > a > span.text > span.header {
+    display: block;
+    float: top;
+    font-size: 2em;
+}
+
+ul.item-list > li > a > span.text > span.info {
+    display: block;
+    padding-left: 0.5em;
+    float: bottom;
+    color: #bbb;
+}
+
+ul.item-list > li > a:hover {
+    color: #EF1C40;
+    text-decoration: none;
+    background: rgba(0, 0, 0, 0);
+}
+
+ul.item-list > li > a:hover > span.text > span.header {
+    color: #000;
+    text-decoration: underline;
+}
+
+ul.item-list > li > a:hover > img {
+    *zoom: 1;
+    opacity: 0.7;
+    -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity = 70);
+    filter: alpha(opacity = 70);
+}

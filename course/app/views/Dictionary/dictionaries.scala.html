@@ -1,0 +1,60 @@
+@(menuConfiguration: org.profwell.ui.menu.MenuConfiguration)
+
+@main(menuConfiguration) {
+    <link rel="stylesheet" href="@routes.Assets.at("stylesheets/routing.css")"></link>
+} {
+    <!-- no additional scripts -->
+} {
+
+<div class="main">
+    <section class="grid-wrap">
+        <header class="grid col-full">
+            <hr>
+            <h2 class="fleft" style="width: 50%">Dictionaries</h2>
+        </header>
+
+        <div class="grid">
+            <ul class="item-list">
+                <li>
+                    <a href="/companyList">
+                        <img src="@routes.Assets.at("images/icons/companies2.png")" alt="Companies" />
+                        <span class="text">
+                            <span class="header">Companies</span>
+                            <span class="info">manage dictionary of companies and their descriptions</span>
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/cityList">
+                        <img src="@routes.Assets.at("images/icons/cities.png")" alt="Cities" />
+                        <span class="text">
+                            <span class="header">Cities</span>
+                            <span class="info">manage cities dictionary</span>
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/positionList">
+                        <img src="@routes.Assets.at("images/icons/position.png")" alt="Skills" />
+                        <span class="text">
+                            <span class="header">Positions</span>
+                            <span class="info">manage predefined positions dictionary</span>
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/skillList">
+                        <img src="@routes.Assets.at("images/icons/skills.png")" alt="Skills" />
+                        <span class="text">
+                            <span class="header">Skills</span>
+                            <span class="info">manage skills dictionary</span>
+                        </span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+    </section>
+</div>
+
+}

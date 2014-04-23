@@ -1,0 +1,44 @@
+@(menuConfiguration: org.profwell.ui.menu.MenuConfiguration)
+
+@main(menuConfiguration) {
+    <link rel="stylesheet" href="@routes.Assets.at("stylesheets/routing.css")"></link>
+} {
+    <!-- no additional scripts -->
+} {
+
+<div class="main">
+    <section class="grid-wrap">
+        <header class="grid col-full">
+            <hr>
+            <h2 class="fleft" style="width: 50%">Administration</h2>
+        </header>
+
+        <div class="grid">
+            <ul class="item-list">
+                <li>
+                    <a href="/accountView">
+                        <img src="@routes.Assets.at("images/icons/account.png")" alt="Account management" />
+                        <span class="text">
+                            <span class="header">My Account</span>
+                            <span class="info">edit your own account information</span>
+                        </span>
+                    </a>
+                </li>
+                @if(utils.SecurityControl.admin()) {
+                    <li>
+                        <a href="/userList">
+                            <img src="@routes.Assets.at("images/icons/users.png")" alt="Users management" />
+                            <span class="text">
+                                <span class="header">Users management</span>
+                                <span class="info">administrate other users accounts</span>
+                            </span>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
+
+    </section>
+</div>
+
+}

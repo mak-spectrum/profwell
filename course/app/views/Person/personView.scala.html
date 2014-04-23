@@ -1,0 +1,73 @@
+@(menuConfiguration: org.profwell.ui.menu.MenuConfiguration,
+form: org.profwell.person.domain.PersonForm)
+
+@main(menuConfiguration) {
+    <!-- no additional styles -->
+} {
+    <!-- no additional scripts -->
+} {
+
+<div class="main">
+    <section class="grid-wrap">
+        <header class="grid col-full">
+            <hr>
+            <h2 class="fleft" style="width: 50%">Contact Book - View Person</h2>
+        </header>
+
+        @tags.forms.messages("message", form.getVc(), "indent5Percent")
+
+        <div class="grid">
+
+            <ul class="toggle-view">
+                <li>
+                    @tags.blocks.toggleBlock("General ", "- Main information", true) {
+                        @tags.forms.outputSimple("Name", form.getFirstName())
+                        @tags.forms.outputSimple("Second Name", form.getSecondName())
+                        @tags.forms.outputSimple("Surname", form.getLastName())
+                        @tags.forms.outputSimple("Short Note", form.getShortNote())
+                    }
+                </li>
+
+                <li>
+                    @tags.blocks.toggleBlock("Profession", "- profession info", true) {
+                        @tags.forms.outputSimple("General Profession", form.getProfessionGeneralType().getCaption())
+                        @tags.forms.outputSimple("Profession Details", form.getProfessionDetails())
+                    }
+                </li>
+
+                <li>
+                    @tags.blocks.toggleBlock("Contact Data ", "- skype, email, phone, etc.", true) {
+                        @if(form.getContacts().isEmpty()) {
+                            <div class="contact-line">
+                                <span>-nothing to display-</span>
+                            </div>
+                        } else {
+                            @for(contact <- form.getContacts()) {
+                                <div class="contact-line">
+                                    @if(contact.isPrimary()) {
+                                        <strong>
+                                    }
+                                    <span>@(contact.getContactType()) - </span>
+                                    <span>@(contact.getValue())</span>
+                                    @if(contact.isPrimary()) {
+                                        </strong>
+                                    }
+                                </div>
+                            }
+                        }
+                    }
+                </li>
+            </ul>
+
+            <div class="button-panel">
+                <a href="/personList" class="button">Back</a>
+                <a href="/personEdit?id=@form.getId()" class="button">Edit Person</a>
+                <a id="deleteButton" href="/personDelete?id=@form.getId()" class="button">Delete Person</a>
+            </div>
+        </div>
+
+
+    </section>
+</div>
+
+}

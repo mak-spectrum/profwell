@@ -1,0 +1,25 @@
+div.singleBlock form {
+    margin-left: 4em;
+}
+
+div.singleBlock section header div {
+    margin-left: 4em;
+    width: 50%
+}
+
+div.singleBlock section {
+    margin: 0;
+}
+
+div.singleBlock input[type="text"] {
+    width: 20em;
+}
+
+div.singleBlock input[type="password"] {
+    width: 20em;
+}
+
+div.note {
+    margin-top: 4em;
+    margin-left: 4em;
+}

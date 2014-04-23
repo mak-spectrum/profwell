@@ -1,0 +1,59 @@
+.select-controls {
+    display: block;
+    font-weight: bold;
+    float: left;
+    margin-right: 0.5em;
+}
+
+input#candidateSelectInplace, input#recommenderSelectInplace {
+    width: 30%;
+}
+
+span#candidateName, span#recommenderName {
+    margin-right: 4em;
+}
+
+div.grid {
+    margin-top: 1em;
+}
+
+div.contact-header {
+    clear: both;
+    font-weight: bold;
+}
+
+div.contact-line .separator {
+    margin-right: 1.5em;
+}
+
+a#addContactButton {
+    display: inline-block;
+    color: #666666;
+    font-size: 1em;
+    font-family: "Open sans";
+    font-weight: 400;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.004);
+}
+
+.no-close .ui-dialog-titlebar-close {
+    display: none;
+}
+
+#personModalSaving {
+    overflow: hidden;
+}
+
+#personModalSaving img {
+    width: 70%;
+    margin: 0 15%;
+}
+
+#personModalSaving p.info {
+    padding-left: 8%;
+}
+
+#personModalSaving a {
+    width: 8%;
+    margin: 0 44%;
+    padding: 0.25em 0.5em;
+}

@@ -1,0 +1,26 @@
+@(contact: org.profwell.person.domain.ContactForm,
+validationContext: org.profwell.generic.validation.ValidationContext)
+<div class="contact-line contact-item">
+    <input id="contact:id:@contact.getIndex()" name="contact:id:@contact.getIndex()" type="hidden" value="@contact.getIdValue()" />
+
+    <label for="contact:type:@contact.getIndex()">Type:</label>
+    <input id="contact:type:@contact.getIndex()" name="contact:type:@contact.getIndex()" type="text" value="@contact.getContactType()" maxlength="16" />
+    <img src="@routes.Assets.at("images/icons/mark.png")" class="image-mark" alt="Field supports marks" title="Field supports marks" />
+    <img src="@routes.Assets.at("images/icons/required.png")" class="image-mark separator" alt="Required field" title="Required field" />
+
+    <label for="contact:value:@contact.getIndex()">Value:</label>
+    <input id="contact:value:@contact.getIndex()" class="contact-value" name="contact:value:@contact.getIndex()" type="text" value="@contact.getValue()" maxlength="128" />
+    <img src="@routes.Assets.at("images/icons/required.png")" class="image-mark separator" alt="Required field" title="Required field" />
+
+    @if(contact.isPrimary()) {
+        <input id="contact:primary:@contact.getIndex()" name="contact:primary:@contact.getIndex()" type="checkbox" checked />
+    } else {
+        <input id="contact:primary:@contact.getIndex()" name="contact:primary:@contact.getIndex()" type="checkbox" />
+    }
+    <label class="gray-check-red separator" for="contact:primary:@contact.getIndex()">primary</label>
+
+    <a id="contact:remove:@contact.getIndex()" href="#" class="image-mark">
+        <img src="@routes.Assets.at("images/icons/delete.png")" alt="Remove contact" title="Remove contact" />
+    </a>
+    @tags.forms.messages("contact:" + contact.getIndex(), validationContext, "indent10Percent")
+</div>

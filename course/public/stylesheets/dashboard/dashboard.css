@@ -1,0 +1,176 @@
+div.grid > div.col-half {
+    display: inline-block;
+    float: left;
+}
+
+ul.vacancies {
+    display: block;
+    margin-left: 1em;
+}
+
+ul.vacancies > lh {
+    display: inline-block;
+    font-weight: bold;
+    font-size: 1.33em;
+    padding: 0.5em;
+}
+
+ul.vacancies > lh > a {
+    margin-left: 1em;
+}
+
+ul.vacancies > li > span {
+    display: block;
+    margin: 0 auto;
+    width: 95%;
+    height: auto;
+}
+
+li.vacancy > div {
+    display: inline-block;
+    margin: 0 auto;
+    width: 95%;
+    height: auto;
+    border: 2px solid #ddd;
+
+    padding: 1%;
+
+    -webkit-border-radius: 0.66em;
+    -moz-border-radius: 0.66em;
+    -ms-border-radius: 0.66em;
+    -khtml-border-radius: 0.66em;
+    border-radius: 0.66em;
+}
+
+li.vacancy > div > span {
+    display: block;
+}
+
+div.caption {
+    display: block;
+    float: left;
+    width: 45%;
+    overflow: hidden;
+}
+
+div.caption > img.priority-icon {
+    display: block;
+    float: right;
+}
+
+span.subcaption {
+    display: block;
+    color: #666;
+    font-size: 0.8em;
+}
+
+div.hookups {
+    display: block;
+    float: left;
+    position: relative;
+    height: 100%;
+    width: 52%;
+
+    overflow-x: hidden;
+    overflow-y: hidden;
+
+    margin-left: 2%;
+
+    border: 1px dashed #ddd;
+
+    -webkit-border-radius: 0.33em;
+    -moz-border-radius: 0.33em;
+    -ms-border-radius: 0.33em;
+    -khtml-border-radius: 0.33em;
+    border-radius: 0.33em;
+}
+
+div.collapsed {
+    max-height: 7em;
+}
+
+div.hookups > div.icon-holder {
+    display: block;
+    height: 2.5em;
+}
+
+div.hookups > div.icon-holder > a {
+    float: right;
+    margin-right: 0.25em;
+}
+
+div.hookups > div.person {
+    border: 1px solid #ddd;
+
+    margin: 0 0.25em 0.25em;
+
+    padding: 0.33em 0.33em 0.33em;
+
+    -webkit-border-radius: 0.33em;
+    -moz-border-radius: 0.33em;
+    -ms-border-radius: 0.33em;
+    -khtml-border-radius: 0.33em;
+    border-radius: 0.33em;
+
+    overflow-x: hidden;
+}
+
+div.hookups > div.person.empty {
+    text-align: center;
+}
+
+a.expand-hookups {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 1em;
+    height: 1em;
+    background-color: #eee;
+    border: 1px solid #ddd;
+
+    background-size: 100%;
+
+    -webkit-border-radius: 0.5em;
+    -moz-border-radius: 0.5em;
+    -ms-border-radius: 0.5em;
+    -khtml-border-radius: 0.5em;
+    border-radius: 0.5em;
+
+    opacity: 0.3;
+}
+
+a.expand-hookups:hover {
+    opacity: 1;
+}
+
+a.expand-hookups:active {
+    opacity: 1;
+    border: 1px solid #333;
+}
+
+div.hookups-count {
+    position: absolute;
+    top: 0.33em;
+    right: 3.25em;
+    width: 1.6em;
+    height: 1.6em;
+
+    text-align: center;
+    vertical-align: middle;
+
+    color: #ccc;
+    font-weight: bold;
+
+    border: 1px solid #ddd;
+
+    -webkit-border-radius: 0.8em;
+    -moz-border-radius: 0.8em;
+    -ms-border-radius: 0.8em;
+    -khtml-border-radius: 0.8em;
+    border-radius: 0.8em;
+}
+
+div#calendar {
+    margin-top: 3.5em;
+    margin-left: 10em;
+}

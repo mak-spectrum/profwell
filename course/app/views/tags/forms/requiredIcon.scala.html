@@ -1,0 +1,5 @@
+@(required: Boolean,
+styleClass: String = "requiredIcon")
+@if(required) {
+    <img class="@styleClass image-mark" src="@routes.Assets.at("images/icons/required.png")" alt="Required field" title="Required field" />
+}

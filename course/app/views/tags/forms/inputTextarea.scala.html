@@ -1,0 +1,12 @@
+@(id: String,
+name: String,
+label: String,
+value: String,
+validationContext: org.profwell.generic.validation.ValidationContext,
+required: Boolean = false)
+<div class="field-cell">
+    <label for="@id">@label:</label>
+    <textarea id="@id" name="@name" maxlength="2000">@value</textarea>
+    @requiredIcon(required)
+    @tags.forms.messages(name, validationContext)
+</div>

@@ -1,0 +1,12 @@
+@(label: String, info: String, expanded: Boolean = false)(content: Html)
+@if(expanded) {
+    <h5 class="toggle-title tactive">@label<span class="toggle-title-detail">@info</span></h5>
+    <div class="toggle grid-wrap" style="display:block;">
+        @content
+    </div>
+} else {
+    <h5 class="toggle-title">@label<span class="toggle-title-detail">@info</span></h5>
+    <div class="toggle grid-wrap">
+        @content
+    </div>
+}

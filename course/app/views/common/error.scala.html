@@ -1,0 +1,51 @@
+@(title: String, message: String)
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+
+        <meta charset="UTF-8"></meta>
+
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"></meta>
+
+        <title>@title</title>
+
+        <link rel="stylesheet" href="@routes.Assets.at("stylesheets/main.css")"></link>
+        <link rel="stylesheet" href="@routes.Assets.at("stylesheets/single.css")"></link>
+
+        <link rel="shortcut icon" type="image/x-icon" href="@routes.Assets.at("images/favicon.ico")"></link>
+        <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")"></link>
+
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,700' rel='stylesheet' type='text/css'>
+
+    </head>
+    <body>
+        <div class="container">
+
+            <header id="navtop">
+                <img src="@routes.Assets.at("images/logo.png")" alt="Professionals"></img>
+            </header>
+
+
+
+            <div class="singleBlock">
+
+                <section class="grid-wrap">
+                    <header>
+                        <hr>
+                    </header>
+                </section>
+
+                <h3>@message</h3>
+
+                <a href="/">&lt;&lt; Back home</a>
+            </div>
+
+            <div class="divide-top">
+                <footer class="grid-wrap">
+                </footer>
+            </div>
+        </div>
+    </body>
+</html>

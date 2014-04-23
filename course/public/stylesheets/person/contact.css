@@ -1,0 +1,40 @@
+div.contact-line {
+    clear: both;
+}
+
+div.contact-line label {
+    float: left;
+    width: 4em;
+}
+
+div.contact-line input[type="text"] {
+    float: left;
+    width: 9em;
+}
+
+div.contact-line input[type="text"].contact-value {
+    width: 14em;
+}
+
+div.contact-line .separator {
+    margin-right: 9em;
+}
+
+div.contact-line .image-mark {
+    float: left;
+    margin-top: 0.33em;
+    margin-left: 0.5em;
+}
+
+div.contact-line a.image-mark {
+    margin-top: 0.1em;
+}
+
+div.contact-line span {
+    display: inline-block;
+    margin-bottom: 0.5em;
+}
+
+div.contact-line.control {
+    margin-left: 2em;
+}

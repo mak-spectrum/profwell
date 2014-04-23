@@ -1,0 +1,6 @@
+@(list: List[org.profwell.vacancy.domain.HookupDTO])
+@for(hookup <- list) {
+    <li class="hookup-item">
+        @hookupItem(hookup)
+    </li>
+}

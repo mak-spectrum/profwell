@@ -1,0 +1,7 @@
+@(filter: org.profwell.generic.auxiliary.GenericFilter)
+
+@tags.forms.inputHidden("filter:actionId", org.profwell.generic.web.FilterUtility.FILTER_ACTION, "GOTO")
+@tags.forms.inputHidden("filter:currentPageId", org.profwell.generic.web.FilterUtility.FILTER_CURRENT_PAGE, filter.getCurrentPageValue())
+@tags.forms.inputHidden("filter:orderById", org.profwell.generic.web.FilterUtility.FILTER_ORDER_BY, filter.getOrderBy())
+@tags.forms.inputHidden("filter:orderAscId", org.profwell.generic.web.FilterUtility.FILTER_ORDER_ASC, filter.getOrderAscValue())
+@tags.forms.inputHidden("filter:resultsCountId", org.profwell.generic.web.FilterUtility.FILTER_RESULTS_COUNT, filter.getResultsCountValue())

@@ -1,0 +1,22 @@
+@(filter: org.profwell.generic.auxiliary.GenericFilter,
+columnName: String,
+width: String,
+orderBy: String = null)
+@if(orderBy == null) {
+    <div class="grid-table-cell" style="width: @width">
+        <span>@columnName</span>
+    </div>
+} else {
+    <div class="grid-table-cell sortable" style="width: @width" onclick="javascript:orderBy('@orderBy');">
+        <span>@columnName</span>
+        @if(orderBy.equals(filter.getOrderBy())) {
+            @if(filter.isOrderAsc()) {
+                <div class="order-element asc-order"></div>
+            } else {
+                <div class="order-element desc-order"></div>
+            }
+        } else {
+            <div class="order-element no-order"></div>
+        }
+    </div>
+}

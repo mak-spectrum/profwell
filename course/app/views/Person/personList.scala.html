@@ -1,0 +1,98 @@
+@(menuConfiguration: org.profwell.ui.menu.MenuConfiguration,
+filter: org.profwell.person.auxiliary.PersonFilter,
+list: List[org.profwell.person.model.Person])
+
+@main(menuConfiguration) {
+    <link rel="stylesheet" href="@routes.Assets.at("stylesheets/tableList.css")"></link>
+} {
+    <script src="@routes.Assets.at("javascripts/tableList.js")" type="text/javascript"></script>
+} {
+
+<div class="main">
+    <section class="grid-wrap">
+        <header class="grid col-full">
+            <hr>
+            <h2 class="fleft" style="width: 50%">Contact Book</h2>
+        </header>
+
+        <form id="listForm" action="/personList" method="POST">
+            @tags.lists.filterHeader(filter)
+
+            <div class="grid">
+                <div class="grid-table">
+                    <div class="grid-table-header">
+                        <div class="grid-table-cell table-wide">
+                            &nbsp;
+                        </div>
+                    </div>
+                    <div class="grid-table-entry first-child">
+                        <div class="grid-table-cell table-wide">
+                            @tags.forms.inputText("nameId", "name", "Name", filter.getName())
+                        </div>
+                    </div>
+                    <div class="grid-table-entry">
+                        <div class="grid-table-cell table-wide">
+                            @tags.forms.inputSelect("professionId",
+                                    "professionValue",
+                                    "General Profession",
+                                    filter.getProfessionValue(),
+                                    org.profwell.ui.select.DictionaryConversionUtils
+                                            .convertDictionary(
+                                                    org.profwell.person.model.ProfessionGeneralType.getValues(),
+                                                    "-any-"))
+                        </div>
+                    </div>
+                    <div class="grid-table-footer table-wide">
+                        <div class="grid-table-cell">
+                            <a id="search" href="#">Search</a>
+                        </div>
+                    </div>
+                </div>
+
+                <br />
+
+                <div class="grid-table">
+                    <div class="grid-table-header">
+                        @tags.lists.header(filter, "Name",         "35%", "firstName, secondName, lastName")
+                        @tags.lists.header(filter, "General Profession",   "30%", "profession.generalType")
+                        @tags.lists.header(filter, "Contact Data", "35%")
+                    </div>
+                    @if(list.isEmpty()) {
+                        <div class="grid-table-line">
+                            <div class="grid-table-cell" style="width: 100%">
+                                <span>Nothing to display</span>
+                            </div>
+                        </div>
+                    } else {
+                        @for(o <- list) {
+                        <div class="grid-table-line" onclick="window.location = '/personView?id=@o.getId()'">
+                            <div class="grid-table-cell" style="width: 35%">
+                                <span>@(utils.PersonUtils.getFullName(o))</span>
+                            </div>
+                            <div class="grid-table-cell" style="width: 30%">
+                                <span>@(o.getProfession().getGeneralType().getCaption())</span>
+                            </div>
+                            <div class="grid-table-cell" style="width: 35%">
+                                <span>
+                                    @(utils.PersonUtils.getFirstPrimaryContact(o))
+                                    @if(utils.PersonUtils.isSecondPrimaryContactExists(o)) {
+                                        <br/>
+                                        @(utils.PersonUtils.getSecondPrimaryContact(o))
+                                    }
+                                </span>
+                            </div>
+                        </div>
+                        }
+                    }
+                    @tags.lists.footer(filter)
+                </div>
+                <div class="button-panel">
+                    <a class="button" href="/personCreate">Create Person</a>
+                </div>
+            </div>
+        </form>
+
+    </section>
+</div>
+
+}

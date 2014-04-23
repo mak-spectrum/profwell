@@ -1,0 +1,35 @@
+@(name: String,
+validationContext: org.profwell.generic.validation.ValidationContext,
+indentClass: String = "indent20Percent")
+
+<div class="messages">
+@if(validationContext.existForSource(name)) {
+    <div class="@indentClass">&nbsp;</div>
+
+    <ul>
+        @for(m <- validationContext.getForSource(name)) {
+            @m.getSeverity().name() match {
+
+                case "INFO" => {
+                    <li class="info">
+                        @m.getMessage()
+                    </li>
+                }
+
+                case "WARNING" => {
+                    <li class="warning">
+                        @m.getMessage()
+                    </li>
+                }
+
+                case "ERROR" => {
+                    <li class="error">
+                        @m.getMessage()
+                    </li>
+                }
+
+            }
+        }
+    </ul>
+}
+</div>

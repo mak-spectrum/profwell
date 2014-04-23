@@ -1,0 +1,80 @@
+@(menuConfiguration: org.profwell.ui.menu.MenuConfiguration,
+form: org.profwell.security.domain.UserForm,
+ownAccount: Boolean)
+
+@main(menuConfiguration) {
+<!-- no additional styles -->
+} {
+    <script src="@routes.Assets.at("javascripts/utils/modalUtils.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.at("javascripts/user/passwordChangeModal.js")" type="text/javascript"></script>
+} {
+
+<div class="main">
+    <section class="grid-wrap">
+        <header class="grid col-full">
+            <hr>
+            <h2 class="fleft" style="width: 50%">Administration - View User</h2>
+        </header>
+
+        @tags.forms.messages("message", form.getVc(), "indent5Percent")
+
+        <div class="grid">
+
+            <ul class="toggle-view">
+
+                <li>
+                    @tags.blocks.toggleBlock("User info ", "- System user related information", true) {
+                        <div class="field-cell">
+                            <label>Username:</label>
+                            <span>@form.getUsername()</span>
+                            @if(form.isTimeouted()) {
+                                <span class="importantInfo">(Blocked till @form.getTimeoutStampTo())</span>
+                                <a href="/unblockTimeoutedUser?id=@form.getId()">Unblock now</a>
+                            }
+                        </div>
+                        @tags.forms.outputSimple("Email", form.getEmail())
+                        @tags.forms.outputSimple("Role", form.getRole().getCaption())
+                        @tags.forms.outputSimple("UUID", form.getUuid())
+                    }
+                </li>
+
+                <li>
+                    @tags.blocks.toggleBlock("Person info ", "- Person related information", true) {
+                        @tags.forms.outputSimple("Name", form.getFirstName())
+                        @tags.forms.outputSimple("Surname", form.getLastName())
+                    }
+                </li>
+
+            </ul>
+
+            <div class="button-panel">
+                <a href="/userList" class="button">Back</a>
+                <a href="/userEdit?id=@form.getId()" class="button">Edit User</a>
+                <a id="deleteButton" href="/userDelete?id=@form.getId()" class="button">Delete User</a>
+                <a id="userPasswordChange" class="button">Change Password</a>
+            </div>
+        </div>
+
+        <div id="userPasswordChangeDialogForm" title="Password Change">
+            <form>
+                @tags.forms.inputHidden("idValue", "idValue", form.getIdValue())
+
+                <p id="generalMessage" class="info"></p>
+
+                <div class="grid">
+
+                    <div class="grid-wrap">
+                        @tags.forms.outputSimple("User", form.getUsername())
+                        @if(ownAccount) {
+                            @tags.forms.inputPassword("currentPasswordId", "currentPassword", "Current Password", "", form.getVc(), true)
+                        }
+                        @tags.forms.inputPassword("passwordId", "password", "New Password", "", form.getVc(), true)
+                        @tags.forms.inputPassword("confirmPasswordId", "confirmPassword", "Confirm Password", "", form.getVc(), true)
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+</div>
+
+}

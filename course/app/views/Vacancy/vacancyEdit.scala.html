@@ -1,0 +1,161 @@
+@(menuConfiguration: org.profwell.ui.menu.MenuConfiguration,
+form: org.profwell.vacancy.domain.VacancyEditForm)
+
+@main(menuConfiguration) {
+    <link rel="stylesheet" href="@routes.Assets.at("stylesheets/vacancy/vacancy.css")"></link>
+} {
+    <script src="@routes.Assets.at("javascripts/vacancy/vacancyEdit.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.at("javascripts/vacancy/vacancySkills.js")" type="text/javascript"></script>
+} {
+
+<div class="main">
+    <section class="grid-wrap">
+        <header class="grid col-full">
+            <hr>
+            <h2 class="fleft" style="width: 50%">Vacancies @(if (form.isNew()) (" - Add Vacancy") else ( "- Edit Vacancy"))</h2>
+        </header>
+
+
+        <form action="/vacancyEditSubmit" method="post">
+            @tags.forms.inputHidden("idValue", "idValue", form.getIdValue())
+
+            <div class="grid">
+
+                <ul class="toggle-view">
+                    @if(!form.isNew()) {
+                        <li>
+                            @tags.blocks.toggleBlock("General info", "- common vacancy information", form.isGeneralSectionExpanded()) {
+                                @tags.forms.inputSelect("priorityId",
+                                    "priorityValue",
+                                    "Vacancy Priority",
+                                    form.getPriorityValue(),
+                                    form.getPrioritySelectItems())
+                                @tags.forms.inputDate("dueDateId", "dueDateValue", "Due Date", form.getDueDateValue(), form.getVc())
+                                @tags.forms.outputSimple("Status", form.getStatus().getCaption())
+                                @tags.forms.outputSimple("Opening Date", form.getOpeningDatetimeFormatted())
+                                @if(form.isVacancyClosed()) {
+                                    @tags.forms.outputSimple("Closing Date", form.getClosingDatetimeFormatted())
+                                }
+                            }
+                        </li>
+                    }
+
+                    <li>
+                        @tags.blocks.toggleBlock("Position", "- main information about position", form.isCompanyInfoSectionExpanded()) {
+                            @tags.forms.inputText("positionCaptionId", "positionCaption", "Position Caption", form.getPositionCaption(), form.getVc(), true, true)
+                            @tags.forms.inputTextarea("positionDetailsId", "positionDetails", "Position Details", form.getPositionDetails(), form.getVc(), false)
+                            @tags.forms.inputText("positionProjectNameId", "positionProjectName", "Project Name", form.getPositionProjectName(), form.getVc(), false)
+                            @tags.forms.inputTextarea("positionProjectDetailsId", "positionProjectDetails", "Project Details", form.getPositionProjectDetails(), form.getVc(), false)
+                            <div class="field-cell">
+                                <label for="requiredSkillsInplace">Required Skills:</label>
+                                <input id="requiredSkillsInplace" type="text" />
+                                <a id="requiredSkillsHref" href="#">Add Skills</a>
+                                @tags.forms.markIcon(true)
+                                <div class="skills-list">
+                                    <ul id="mandatorySkills" class="connectedSortable">
+                                        <lh>Mandatory Skills</lh>
+                                        @for(skill <- form.getMandatorySkills()) {
+                                        <li class="skill-item">
+                                            <span>@skill.getName()</span>
+                                            <a href="#" class="list-item-control left">
+                                                <img class="image-mark" src="@routes.Assets.at("images/icons/edit.png")" alt="Edit Record" title="Edit Record" />
+                                            </a>
+                                            <a href="#" class="list-item-control right">
+                                                <img class="image-mark" src="@routes.Assets.at("images/icons/delete.png")" alt="Delete Record" title="Delete Record" />
+                                            </a>
+                                            <input type="hidden" name="skill:m" value="@skill.getName()" />
+                                        </li>
+                                        }
+                                    </ul>
+                                    <ul id="optionalSkills" class="connectedSortable">
+                                        <lh>Will Be a Plus</lh>
+                                        @for(skill <- form.getOptionalSkills()) {
+                                        <li class="skill-item">
+                                            <span>@skill.getName()</span>
+                                            <a href="#" class="list-item-control left">
+                                                <img class="image-mark" src="@routes.Assets.at("images/icons/edit.png")" alt="Edit Record" title="Edit Record" />
+                                            </a>
+                                            <a href="#" class="list-item-control right">
+                                                <img class="image-mark" src="@routes.Assets.at("images/icons/delete.png")" alt="Delete Record" title="Delete Record" />
+                                            </a>
+                                            <input type="hidden" name="skill:o" value="@skill.getName()" />
+                                        </li>
+                                        }
+                                    </ul>
+                                    @tags.forms.messages("skills", form.getVc())
+                                </div>
+                            </div>
+                        }
+                    </li>
+
+                    <li>
+                        @tags.blocks.toggleBlock("Company", "- information about company", form.isCompanyInfoSectionExpanded()) {
+                            @tags.forms.inputText("companyNameId", "companyName", "Company Name", form.getCompanyName(), form.getVc(), true, true)
+                            @tags.forms.inputTextarea("companyDetailsId", "companyDetails", "Company Details", form.getCompanyDetails(), form.getVc(), false)
+                            @tags.forms.inputTextarea("companySocialBenefitsId", "companySocialBenefits", "Social Benefits", form.getCompanySocialBenefits(), form.getVc(), false)
+                        }
+                    </li>
+
+                    <li>
+                        @tags.blocks.toggleBlock("Other Info", "- additional information about vacancy", form.isOtherInfoSectionExpanded()) {
+                            @if(form.isNew()) {
+                                @tags.forms.inputSelect("priorityId",
+                                    "priorityValue",
+                                    "Vacancy Priority",
+                                    form.getPriorityValue(),
+                                    form.getPrioritySelectItems())
+                            }
+                            @tags.forms.inputSelect("countryId",
+                                "countryValue",
+                                "Country",
+                                form.getCountryValue(),
+                                form.getCountrySelectItems())
+                            @tags.forms.inputDate("dueDateId", "dueDateValue", "Due Date", form.getDueDateValue(), form.getVc())
+                            @tags.forms.inputText("cityId", "city", "City", form.getCity(), form.getVc(), false, true)
+                            <div class="field-cell">
+                                <label for="salaryFrom">Salary Range:</label>
+                                <input id="salaryFrom" name="salaryFromValue" type="text" value="@form.getSalaryFromValue()" maxlength="10"/>
+                                <span id="salaryDelimiter">&nbsp;-&nbsp;</span>
+                                <input id="salaryTill" name="salaryTillValue" type="text" value="@form.getSalaryTillValue()" maxlength="10"/>
+                                <select id="salaryCurrency" name="salaryCurrencyValue">
+                                    @for(si <- form.getCurrencySelectItems()) {
+                                        @if(si.getValue().equals(form.getSalaryCurrencyValue())) {
+                                            <option value="@(si.getValue())" selected="selected">@(si.getLabel())</option>
+                                        } else {
+                                            <option value="@(si.getValue())">@(si.getLabel())</option>
+                                        }
+                                    }
+                                </select>
+                                @tags.forms.messages("salaryRange", form.getVc())
+                            </div>
+                        }
+                    </li>
+                </ul>
+
+                <div class="button-panel">
+                    @if(form.isNew()) {
+                        @if(false) {
+                            <a href="/dashboard" class="button">Cancel</a>
+                        } else {
+                            <a href="/vacancyArchiveList" class="button">Cancel</a>
+                        }
+                    } else {
+                        <a href="/vacancyView?id=@form.getId()" class="button">Cancel</a>
+                    }
+                    <input type="submit" class="button" value="Save Vacancy" />
+                </div>
+            </div>
+        </form>
+
+
+    </section>
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+    document.skill = {};
+    document.skill.imageEditIcon = '@routes.Assets.at("images/icons/edit.png")';
+    document.skill.imageDeleteIcon = '@routes.Assets.at("images/icons/delete.png")';
+//]]>
+</script>
+}

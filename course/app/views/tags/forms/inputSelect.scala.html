@@ -1,0 +1,23 @@
+@(id: String,
+name: String,
+label: String,
+value: String,
+selectItems: java.util.List[org.profwell.ui.select.SelectItem],
+validationContext: org.profwell.generic.validation.ValidationContext = null,
+required: Boolean = false)
+<div class="field-cell">
+    <label for="@id">@label:</label>
+    <select id="@id" name="@name">
+        @for(si <- selectItems) {
+            @if(si.getValue().equals(value)) {
+                <option value="@(si.getValue())" selected="selected">@(si.getLabel())</option>
+            } else {
+                <option value="@(si.getValue())">@(si.getLabel())</option>
+            }
+        }
+    </select>
+    @requiredIcon(required)
+    @if(validationContext != null) {
+        @tags.forms.messages(name, validationContext)
+    }
+</div>
