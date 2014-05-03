@@ -53,7 +53,7 @@ form: org.profwell.vacancy.domain.VacancyEditForm)
                                 @tags.forms.markIcon(true)
                                 <div class="skills-list">
                                     <ul id="mandatorySkills" class="connectedSortable">
-                                        <lh>Mandatory Skills</lh>
+                                        <lh>Required Skills</lh>
                                         @for(skill <- form.getMandatorySkills()) {
                                         <li class="skill-item">
                                             <span>@skill.getName()</span>

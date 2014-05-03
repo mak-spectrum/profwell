@@ -12,7 +12,7 @@ import org.profwell.common.service.SkillService;
 import org.profwell.conf.di.ServiceHolder;
 import org.profwell.generic.service.GenericServiceImpl;
 import org.profwell.security.model.Workspace;
-import org.profwell.vacancy.auxiliary.VacancyArchiveFilter;
+import org.profwell.vacancy.auxiliary.VacancyFilter;
 import org.profwell.vacancy.dao.VacancyDAO;
 import org.profwell.vacancy.domain.HookupDTO;
 import org.profwell.vacancy.model.Hookup;
@@ -80,19 +80,19 @@ public class VacancyServiceImpl extends GenericServiceImpl<VacancyDAO, Vacancy>
                     workspace);
         }
 
-        dao.save(object);
+        this.dao.save(object);
     }
 
     @Override
     public Hookup loadHookup(long hookupId, long workspaceId) {
-        return dao.loadHookup(hookupId, workspaceId);
+        return this.dao.loadHookup(hookupId, workspaceId);
     }
 
     @Override
     public List<HookupDTO> loadHookupsForVacancy(
             long vacancyId, long workspaceId, boolean includeArchived) {
 
-        return dao.loadHookupsForVacancy(vacancyId, workspaceId,
+        return this.dao.loadHookupsForVacancy(vacancyId, workspaceId,
                 includeArchived);
     }
 
@@ -135,22 +135,22 @@ public class VacancyServiceImpl extends GenericServiceImpl<VacancyDAO, Vacancy>
         if (hookup.getStatus() == HookupStatus.SENT_TEST_TASK) {
             hookup.setPassedTestTaskStatus(true);
         }
-        dao.saveHookup(hookup);
+        this.dao.saveHookup(hookup);
     }
 
     @Override
-    public List<Vacancy> listArchivedVacancies(VacancyArchiveFilter filter) {
-        return dao.listArchivedVacancies(filter);
+    public List<Vacancy> listArchivedVacancies(VacancyFilter filter) {
+        return this.dao.listVacancies(filter);
     }
 
     @Override
     public boolean checkVacancyAccessible(long vacancyId, long workspaceId) {
-        return dao.checkVacancyAccessible(vacancyId, workspaceId);
+        return this.dao.checkVacancyAccessible(vacancyId, workspaceId);
     }
 
     @Override
     public void deleteHookup(Hookup hookup) {
-        dao.deleteHookup(hookup);
+        this.dao.deleteHookup(hookup);
     }
 
 }

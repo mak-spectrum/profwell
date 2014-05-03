@@ -3,14 +3,14 @@ package org.profwell.vacancy.dao;
 import java.util.List;
 
 import org.profwell.generic.dao.GenericDAO;
-import org.profwell.vacancy.auxiliary.VacancyArchiveFilter;
+import org.profwell.vacancy.auxiliary.VacancyFilter;
 import org.profwell.vacancy.domain.HookupDTO;
 import org.profwell.vacancy.model.Hookup;
 import org.profwell.vacancy.model.Vacancy;
 
 public interface VacancyDAO extends GenericDAO<Vacancy> {
 
-    List<Vacancy> listArchivedVacancies(VacancyArchiveFilter filter);
+    List<Vacancy> listVacancies(VacancyFilter filter);
 
     Hookup loadHookup(long hookupId, long workspaceId);
 

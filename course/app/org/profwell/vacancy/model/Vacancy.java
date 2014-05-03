@@ -92,7 +92,6 @@ public class Vacancy implements Identifiable {
             targetEntity = Hookup.class)
     private Set<Hookup> hookups = new HashSet<>();
 
-
     @Override
     public boolean isNew() {
         return this.id == DEFAULT_UNINITIALIZED_ID_VALUE;
@@ -201,6 +200,14 @@ public class Vacancy implements Identifiable {
 
     public void setResponsible(User responsible) {
         this.responsible = responsible;
+    }
+
+    public Set<Hookup> getHookups() {
+        return hookups;
+    }
+
+    public void setHookups(Set<Hookup> hookups) {
+        this.hookups = hookups;
     }
 
 }

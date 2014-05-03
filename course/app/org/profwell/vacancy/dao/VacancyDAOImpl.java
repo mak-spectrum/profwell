@@ -6,18 +6,22 @@ import java.util.List;
 
 import javax.persistence.Tuple;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.AbstractQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Subquery;
 
 import org.apache.commons.lang3.StringUtils;
+import org.profwell.collaboration.model.CollaborationAgreement;
+import org.profwell.collaboration.model.ConnectionType;
 import org.profwell.common.model.Country;
 import org.profwell.generic.dao.GenericDAOImpl;
 import org.profwell.security.model.User;
 import org.profwell.security.model.Workspace;
-import org.profwell.vacancy.auxiliary.VacancyArchiveFilter;
+import org.profwell.vacancy.auxiliary.VacancyFilter;
 import org.profwell.vacancy.domain.HookupDTO;
 import org.profwell.vacancy.domain.HookupDocumentDTO;
 import org.profwell.vacancy.model.Hookup;
@@ -28,17 +32,73 @@ import org.profwell.vacancy.model.VacancyStatus;
 public class VacancyDAOImpl extends GenericDAOImpl<Vacancy> implements VacancyDAO {
 
     @Override
-    public List<Vacancy> listArchivedVacancies(VacancyArchiveFilter filter) {
+    public List<Vacancy> listVacancies(VacancyFilter filter) {
+        CriteriaBuilder cb = this.getEM().getCriteriaBuilder();
+
+        CriteriaQuery<Vacancy> criteria = cb.createQuery(this.getEntityClass());
+        Root<Vacancy> root = criteria.from(this.getEntityClass());
+
+        criteria.where(
+                cb.or(
+                        cb.in(root).value(this.listOwnVacancies(criteria, filter)),
+                        cb.in(root).value(this.listSharedVacancies(criteria, filter))
+                        ));
+
+        return this.listPage(criteria, filter);
+    }
+
+    private Subquery<Vacancy> listOwnVacancies(CriteriaQuery<Vacancy> criteriaQuery, VacancyFilter filter) {
         CriteriaBuilder cb = this.getEM().getCriteriaBuilder();
         List<Predicate> criterions = new ArrayList<>();
 
-        CriteriaQuery<Vacancy> criteria = cb.createQuery(getEntityClass());
-        Root<Vacancy> root = criteria.from(getEntityClass());
+        Subquery<Vacancy> criteria = criteriaQuery.subquery(this.getEntityClass());
+        Root<Vacancy> root = criteria.from(this.getEntityClass());
 
         Join<Vacancy, Workspace> workspace = root.join("workspace");
 
         criteria.select(root);
 
+        this.applyVacancyCommonFiltering(filter, cb, criterions, root);
+
+        criterions.add(cb.equal(workspace.<Long>get("id"),
+                filter.getWorkspaceId()));
+
+        if (criterions.size() > 0) {
+            criteria.where(cb.and(criterions.toArray(new Predicate[0])));
+        }
+
+        return criteria;
+    }
+
+    private Subquery<Vacancy> listSharedVacancies(CriteriaQuery<Vacancy> criteriaQuery, VacancyFilter filter) {
+        CriteriaBuilder cb = this.getEM().getCriteriaBuilder();
+        List<Predicate> criterions = new ArrayList<>();
+
+        Subquery<Vacancy> criteria = criteriaQuery.subquery(this.getEntityClass());
+        Root<Vacancy> root = criteria.from(this.getEntityClass());
+
+        Join<Vacancy, Workspace> workspace = root.join("workspace");
+        Join<Workspace, User> user = workspace.join("owner");
+
+        criteria.select(root);
+
+        this.applyVacancyCommonFiltering(filter, cb, criterions, root);
+
+        criterions.add(cb.in(user).value(
+                this.getSharedVacanciesOwnerSubquery(criteria, filter.getWorkspaceId())));
+
+        criterions.add(cb.equal(workspace.<Long>get("id"),
+                filter.getWorkspaceId()));
+
+        if (criterions.size() > 0) {
+            criteria.where(cb.and(criterions.toArray(new Predicate[0])));
+        }
+
+        return criteria;
+    }
+
+    private void applyVacancyCommonFiltering(VacancyFilter filter,
+            CriteriaBuilder cb, List<Predicate> criterions, Root<Vacancy> root) {
         if (filter.getAssigneeId() != null) {
             Join<Vacancy, User> user = root.join("assignee");
             criterions.add(cb.equal(user.<Long>get("id"),
@@ -74,15 +134,32 @@ public class VacancyDAOImpl extends GenericDAOImpl<Vacancy> implements VacancyDA
             criterions.add(cb.equal(root.<VacancyStatus>get("status"),
                     filter.getStatus()));
         }
+    }
 
-        criterions.add(cb.equal(workspace.<Long>get("id"),
-                filter.getWorkspaceId()));
+    private Subquery<User> getSharedVacanciesOwnerSubquery(AbstractQuery<Vacancy> criteriaQuery, Long currentUserId) {
+        CriteriaBuilder cb = this.getEM().getCriteriaBuilder();
+        List<Predicate> criterions = new ArrayList<>();
+
+        Subquery<User> subquery = criteriaQuery.subquery(User.class);
+
+        Root<CollaborationAgreement> root = subquery.from(CollaborationAgreement.class);
+
+        Join<CollaborationAgreement, User> owner = root.join("owner");
+        Join<CollaborationAgreement, User> partner = root.join("partner");
+
+        subquery.select(owner);
+
+        // TODO: make id IN OR id IN
+        criterions.add(cb.in(root.<ConnectionType>get("type"))
+                .in(ConnectionType.FREELANCER_RECRUITER, ConnectionType.STAFF_RECRUITER));
+
+        criterions.add(cb.equal(partner.<Long>get("id"), currentUserId));
 
         if (criterions.size() > 0) {
-            criteria.where(cb.and(criterions.toArray(new Predicate[0])));
+            subquery.where(cb.and(criterions.toArray(new Predicate[0])));
         }
 
-        return this.listPage(criteria, filter);
+        return subquery;
     }
 
     @Override
@@ -112,7 +189,7 @@ public class VacancyDAOImpl extends GenericDAOImpl<Vacancy> implements VacancyDA
 
         TypedQuery<Hookup> resultQuery = this.getEM().createQuery(criteria);
 
-        return extractSingleFromList(resultQuery.getResultList());
+        return this.extractSingleFromList(resultQuery.getResultList());
     }
 
     @Override
@@ -126,7 +203,7 @@ public class VacancyDAOImpl extends GenericDAOImpl<Vacancy> implements VacancyDA
         List<Predicate> criterions = new ArrayList<>();
 
         CriteriaQuery<Long> criteria = cb.createQuery(Long.class);
-        Root<Vacancy> vacancy = criteria.from(getEntityClass());
+        Root<Vacancy> vacancy = criteria.from(this.getEntityClass());
         Join<Vacancy, Workspace> workspace = vacancy.join("workspace");
 
         criteria.select(cb.count(vacancy.get("id")));
@@ -267,20 +344,20 @@ public class VacancyDAOImpl extends GenericDAOImpl<Vacancy> implements VacancyDA
             hdto.setContactedOn(            (Date)          tuple.get("contactedOn"));
             hdto.setLastUpdateDate(         (Date)          tuple.get("lastActivityOn"));
 
-            hdto.setResume(extractDocument(tuple, "resume", ""));
-            hdto.setTesttask(extractDocument(tuple, "testtask", ""));
+            hdto.setResume(this.extractDocument(tuple, "resume", ""));
+            hdto.setTesttask(this.extractDocument(tuple, "testtask", ""));
 
-            addIfExists(hdto.getInterviewFeedbacks(), extractDocument(tuple, "interviewFeedback", "0"));
-            addIfExists(hdto.getInterviewFeedbacks(), extractDocument(tuple, "interviewFeedback", "1"));
-            addIfExists(hdto.getInterviewFeedbacks(), extractDocument(tuple, "interviewFeedback", "2"));
-            addIfExists(hdto.getInterviewFeedbacks(), extractDocument(tuple, "interviewFeedback", "3"));
-            addIfExists(hdto.getInterviewFeedbacks(), extractDocument(tuple, "interviewFeedback", "4"));
-            addIfExists(hdto.getInterviewFeedbacks(), extractDocument(tuple, "interviewFeedback", "5"));
-            addIfExists(hdto.getInterviewFeedbacks(), extractDocument(tuple, "interviewFeedback", "6"));
+            this.addIfExists(hdto.getInterviewFeedbacks(), this.extractDocument(tuple, "interviewFeedback", "0"));
+            this.addIfExists(hdto.getInterviewFeedbacks(), this.extractDocument(tuple, "interviewFeedback", "1"));
+            this.addIfExists(hdto.getInterviewFeedbacks(), this.extractDocument(tuple, "interviewFeedback", "2"));
+            this.addIfExists(hdto.getInterviewFeedbacks(), this.extractDocument(tuple, "interviewFeedback", "3"));
+            this.addIfExists(hdto.getInterviewFeedbacks(), this.extractDocument(tuple, "interviewFeedback", "4"));
+            this.addIfExists(hdto.getInterviewFeedbacks(), this.extractDocument(tuple, "interviewFeedback", "5"));
+            this.addIfExists(hdto.getInterviewFeedbacks(), this.extractDocument(tuple, "interviewFeedback", "6"));
 
-            addIfExists(hdto.getProbationFeedbacks(), extractDocument(tuple, "probationFeedback", "0"));
-            addIfExists(hdto.getProbationFeedbacks(), extractDocument(tuple, "probationFeedback", "1"));
-            addIfExists(hdto.getProbationFeedbacks(), extractDocument(tuple, "probationFeedback", "2"));
+            this.addIfExists(hdto.getProbationFeedbacks(), this.extractDocument(tuple, "probationFeedback", "0"));
+            this.addIfExists(hdto.getProbationFeedbacks(), this.extractDocument(tuple, "probationFeedback", "1"));
+            this.addIfExists(hdto.getProbationFeedbacks(), this.extractDocument(tuple, "probationFeedback", "2"));
 
             result.add(hdto);
         }
