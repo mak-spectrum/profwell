@@ -157,7 +157,6 @@ class TestVacancyCRUD implements Runnable {
         Vacancy v = list.get(0);
         assertThat(v).isNotEqualTo(vacancy);
         assertThat(v.getId()).isEqualTo(vacancy.getId());
-        assertThat(v.getResponsible()).isNull();
         assertThat(v.getCity()).isEqualTo(city.getName());
         assertThat(v.getClosingDatetime()).isNull();
         assertThat(v.getCompany().getName()).isEqualTo("TestCompany");

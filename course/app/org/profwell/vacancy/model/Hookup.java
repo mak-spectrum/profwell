@@ -42,6 +42,7 @@ public class Hookup implements Identifiable, HookupData {
     @Column(name="CONTACTED_ON", nullable = false)
     private Date contactedOn;
 
+    // TODO : it is necessary to edit person inplace on hookup
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CANDIDATE_ID",
             referencedColumnName = "ID",
