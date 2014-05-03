@@ -4,14 +4,14 @@ import java.util.List;
 
 import org.profwell.generic.service.GenericService;
 import org.profwell.security.model.Workspace;
-import org.profwell.vacancy.auxiliary.VacancyArchiveFilter;
+import org.profwell.vacancy.auxiliary.VacancyFilter;
 import org.profwell.vacancy.domain.HookupDTO;
 import org.profwell.vacancy.model.Hookup;
 import org.profwell.vacancy.model.Vacancy;
 
 public interface VacancyService extends GenericService<Vacancy> {
 
-    List<Vacancy> listArchivedVacancies(VacancyArchiveFilter filter);
+    List<Vacancy> listArchivedVacancies(VacancyFilter filter);
 
     void saveVacancyWithDictValues(Vacancy object, Workspace workspace);
 

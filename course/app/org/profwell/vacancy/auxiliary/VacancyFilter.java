@@ -5,7 +5,7 @@ import org.profwell.generic.auxiliary.GenericFilter;
 import org.profwell.ui.select.DictionaryConversionUtils;
 import org.profwell.vacancy.model.VacancyStatus;
 
-public class VacancyArchiveFilter extends GenericFilter {
+public class VacancyFilter extends GenericFilter {
 
     private String company;
 

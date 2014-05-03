@@ -187,4 +187,12 @@ public class Vacancy implements Identifiable {
         this.dueDate = dueDate;
     }
 
+    public Set<Hookup> getHookups() {
+        return hookups;
+    }
+
+    public void setHookups(Set<Hookup> hookups) {
+        this.hookups = hookups;
+    }
+
 }

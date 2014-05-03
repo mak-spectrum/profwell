@@ -23,7 +23,7 @@ import org.profwell.security.model.Workspace;
 import org.profwell.security.service.UserService;
 import org.profwell.security.web.SessionUtility;
 import org.profwell.ui.menu.MenuConfiguration;
-import org.profwell.vacancy.auxiliary.VacancyArchiveFilter;
+import org.profwell.vacancy.auxiliary.VacancyFilter;
 import org.profwell.vacancy.domain.HookupDTO;
 import org.profwell.vacancy.domain.HookupForm;
 import org.profwell.vacancy.domain.RequiredSkillForm;
@@ -71,7 +71,7 @@ public class VacancyController extends Controller {
     @play.db.jpa.Transactional(readOnly = true)
     public static Result vacancyArchiveList() {
 
-        VacancyArchiveFilter filter = prepareFilter();
+        VacancyFilter filter = prepareFilter();
         List<Vacancy> vacancies = service.listArchivedVacancies(filter);
 
         Content html = views.html.Vacancy.vacancyArchiveList.render(
@@ -82,14 +82,14 @@ public class VacancyController extends Controller {
         return ok(html);
     }
 
-    private static VacancyArchiveFilter prepareFilter() {
+    private static VacancyFilter prepareFilter() {
         Map<String, String[]> requestParams =
                 request().body().asFormUrlEncoded();
 
-        VacancyArchiveFilter filter;
+        VacancyFilter filter;
         if (requestParams != null) {
             filter = FilterUtility.createListFilter(requestParams,
-                    VacancyArchiveFilter.class);
+                    VacancyFilter.class);
 
             filter.setCompany(requestParams.get("company")[0]);
             filter.setPosition(requestParams.get("position")[0]);
@@ -101,7 +101,7 @@ public class VacancyController extends Controller {
             filter.setAssigneeIdValue(requestParams.get("assigneeId")[0]);
 
         } else {
-            filter = new VacancyArchiveFilter();
+            filter = new VacancyFilter();
         }
 
         filter.setWorkspaceId(SessionUtility.getCurrentUserId());
