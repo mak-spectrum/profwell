@@ -11,6 +11,8 @@ public class DashboardForm {
 
     private List<DashboardVacancyDTO> vacancyData = new ArrayList<>();
 
+    private List<String> messages = new ArrayList<>();
+
     public List<DashboardVacancyDTO> getVacancyData() {
         vacancyData.clear();
 
@@ -125,5 +127,13 @@ public class DashboardForm {
     public void setVacancyData(List<DashboardVacancyDTO> vacancyData) {
         this.vacancyData = vacancyData;
     }
+
+	public List<String> getMessages() {
+		return messages;
+	}
+
+	public void setMessages(List<String> messages) {
+		this.messages = messages;
+	}
 
 }
