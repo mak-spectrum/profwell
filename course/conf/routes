@@ -90,7 +90,7 @@ GET     /vacancyDelete                      controllers.VacancyController.vacanc
 GET     /vacancyOpen                        controllers.VacancyController.vacancyOpen(id: Long)
 GET     /vacancySuspend                     controllers.VacancyController.vacancySuspend(id: Long)
 GET     /vacancyClose                       controllers.VacancyController.vacancyClose(id: Long)
-GET     /vacancyHookups                     controllers.VacancyController.vacancyHookups(vacancyId: Long, archived: Boolean ?= false)
+GET     /vacancyHookupsAsync                controllers.VacancyController.vacancyHookupsAsync(vacancyId: Long, archived: Boolean ?= false)
 GET     /vacancyStaffPerson                 controllers.VacancyController.vacancyStaffPerson(id: Long)
 POST    /vacancyHookupSubmit                controllers.VacancyController.hookupSubmit()
 GET     /vacancyHookupEdit                  controllers.VacancyController.hookupEdit(id: Long)
@@ -101,6 +101,7 @@ GET     /vacancyHookupArchiveAsync          controllers.VacancyController.hookup
 GET     /vacancyHookupUnarchiveAsync        controllers.VacancyController.hookupUnarchiveAsync(hookupId: Long)
 POST    /vacancyHookupFileUploadAsync       controllers.VacancyController.hookupFileUploadAsync()
 GET     /vacancyHookupFileDeleteAsync       controllers.VacancyController.hookupFileDeleteAsync(hookupId: Long, type: String, index: String ?= "")
+GET     /vacancyPartnersAsync               controllers.VacancyController.vacancyPartnersAsync(vacancyId: Long)
 
 # Markers autocompletion
 GET     /autocompleteContactName            controllers.MarkerController.autocompleteContactMarkers(term: String)

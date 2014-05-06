@@ -2,9 +2,10 @@ jQuery(document).ready(function() {
 
     /* HOOKUPS : START */
     var archCheckbox = jQuery("#show-archived-checkbox");
-    
-    var hookupsRequestAllowed = true;
-    
+
+    // disable requesting, while a request is in progress
+    var requestAllowed = true;
+
     var idValueField = jQuery("#idValue");
     var emptyListItem = jQuery("li.hookup-empty");
     var loadingListItem = jQuery("li.hookup-loading");
@@ -15,14 +16,14 @@ jQuery(document).ready(function() {
 
     function loadHookups() {
 
-        if (hookupsRequestAllowed) {
-            hookupsRequestAllowed = false;
+        if (requestAllowed) {
+            requestAllowed = false;
         } else {
             return;
         }
 
         if (hookupsList.hasClass("loaded")) {
-            hookupsRequestAllowed = true;
+            requestAllowed = true;
             return;
         }
 
@@ -55,14 +56,14 @@ jQuery(document).ready(function() {
 
                     loadingListItem.hide();
                     hookupsList.addClass("loaded");
-                    hookupsRequestAllowed = true;
+                    requestAllowed = true;
                 }
         ).fail(
                 function(response) {
                     loadingListItem.hide();
                     errorListItem.show();
                     errorListItem.text("Error on loading hookups from the server.");
-                    hookupsRequestAllowed = true;
+                    requestAllowed = true;
                 }
 
         );
