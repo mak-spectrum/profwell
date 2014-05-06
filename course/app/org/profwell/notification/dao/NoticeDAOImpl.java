@@ -4,11 +4,9 @@ package org.profwell.notification.dao;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Tuple;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.ParameterExpression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -23,7 +21,7 @@ public class NoticeDAOImpl extends GenericDAOImpl<Notice> implements NoticeDAO {
     protected Class<Notice> getEntityClass() {
         return Notice.class;
     }
-    
+
     @Override
     public List<Notice> loadMessages(User user) {
         CriteriaBuilder cb = getEM().getCriteriaBuilder();

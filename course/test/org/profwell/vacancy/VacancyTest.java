@@ -145,16 +145,9 @@ class TestVacancyCRUD extends TestScenario {
                 .getResultList();
 
         Vacancy v = list.get(0);
-<<<<<<< HEAD
-        assertThat(v).isNotEqualTo(vacancy);
-        assertThat(v.getId()).isEqualTo(vacancy.getId());
-        assertThat(v.getCity()).isEqualTo(city.getName());
-=======
         assertThat(v).isNotEqualTo(this.vacancy);
         assertThat(v.getId()).isEqualTo(this.vacancy.getId());
-        assertThat(v.getResponsible()).isNull();
         assertThat(v.getCity()).isEqualTo(this.city.getName());
->>>>>>> branch 'master' of https://github.com/mak-spectrum/profwell.git
         assertThat(v.getClosingDatetime()).isNull();
         assertThat(v.getCompany().getName()).isEqualTo("TestCompany");
         assertThat(v.getCompany().getDetails()).isEqualTo("MyTest");

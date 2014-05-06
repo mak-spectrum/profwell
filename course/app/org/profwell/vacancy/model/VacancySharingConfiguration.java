@@ -67,4 +67,28 @@ public class VacancySharingConfiguration implements Identifiable {
     public void setId(long id) {
         this.id = id;
     }
+
+    public Vacancy getVacancy() {
+        return vacancy;
+    }
+
+    public void setVacancy(Vacancy vacancy) {
+        this.vacancy = vacancy;
+    }
+
+    public User getResponsible() {
+        return responsible;
+    }
+
+    public void setResponsible(User responsible) {
+        this.responsible = responsible;
+    }
+
+    public Set<VacancySharingRecord> getRecords() {
+        return records;
+    }
+
+    public void setRecords(Set<VacancySharingRecord> records) {
+        this.records = records;
+    }
 }
