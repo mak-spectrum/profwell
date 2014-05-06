@@ -8,12 +8,16 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.node.ArrayNode;
 import org.codehaus.jackson.node.JsonNodeFactory;
 import org.codehaus.jackson.node.ObjectNode;
+import org.profwell.collaboration.domain.PartnerDTO;
+import org.profwell.collaboration.service.CollaborationService;
 import org.profwell.conf.di.ServiceHolder;
 import org.profwell.file.service.FileService;
 import org.profwell.file.service.FileStorageCallback;
@@ -33,6 +37,7 @@ import org.profwell.vacancy.model.Hookup;
 import org.profwell.vacancy.model.HookupDocuments;
 import org.profwell.vacancy.model.HookupStatus;
 import org.profwell.vacancy.model.Vacancy;
+import org.profwell.vacancy.model.VacancySharingRecord;
 import org.profwell.vacancy.model.VacancyStatus;
 import org.profwell.vacancy.service.HookupLifecycle;
 import org.profwell.vacancy.service.HookupValidator;
@@ -65,6 +70,8 @@ public class VacancyController extends Controller {
     private static UserService userService = ServiceHolder.getService(UserService.class);
 
     private static VacancyService service = ServiceHolder.getService(VacancyService.class);
+
+    private static CollaborationService collaborationService = ServiceHolder.getService(CollaborationService.class);
 
     private static VacancyValidator validator = ServiceHolder.getService(VacancyValidator.class);
 
@@ -309,7 +316,7 @@ public class VacancyController extends Controller {
     }
 
     @play.db.jpa.Transactional(readOnly = true)
-    public static Result vacancyHookups(Long vacancyId, Boolean archived) {
+    public static Result vacancyHookupsAsync(Long vacancyId, Boolean archived) {
         boolean includeArchived = (archived == null || archived);
 
         List<HookupDTO> list = service.loadHookupsForVacancy(
@@ -494,11 +501,12 @@ public class VacancyController extends Controller {
 
         SecurityControl.checkObjectExists(hookup, "Hookup");
 
-        if (!hookup.isArchived()) {
-            service.deleteHookup(hookup);
-        }
+        // TODO: delete only new hookups
+//        if (!hookup.isArchived()) {
+//            service.deleteHookup(hookup);
+//        }
 
-        return ok();
+        return badRequest();
     }
 
     @play.db.jpa.Transactional()
@@ -823,6 +831,58 @@ public class VacancyController extends Controller {
         hookup.getDocuments().setFileName(key, null);
         hookup.getDocuments().setFileMimeType(key, null);
         hookup.getDocuments().setFileLength(key, null);
+    }
+
+    @play.db.jpa.Transactional(readOnly = true)
+    public static Result vacancyPartnersAsync(Long vacancyId) {
+
+        List<PartnerDTO> partners = collaborationService
+                .getMyPartners(SessionUtility.getCurrentUserId());
+
+        Set<VacancySharingRecord> sharingRecords = service
+                .getVacancySharingConfiguration(vacancyId).getRecords();
+
+        List<Long> hookupsWspsIds = service.listHookupsOwnersIds(vacancyId);
+
+        ArrayNode result = new ArrayNode(JsonNodeFactory.instance);
+
+        for (PartnerDTO p : partners) {
+            ObjectNode partner = result.addObject();
+
+            String name = p.getPartnerFullName();
+
+            if (StringUtils.isBlank(name)) {
+                partner.put("name", p.getPartnerUuid());
+            } else {
+                partner.put("name", name.toString());
+            }
+
+            partner.put("enabled", checkIfPartnerEnabled(sharingRecords, p.getPartnerId()));
+
+            partner.put("canBeDisabled", !checkIfThereIsHookup(hookupsWspsIds, p.getPartnerId()));
+        }
+
+        return ok(result);
+    }
+
+    private static boolean checkIfPartnerEnabled(Set<VacancySharingRecord> sharingRecords, Long partnerId) {
+        for (VacancySharingRecord rec : sharingRecords) {
+            if (rec.getPartner().getId() == partnerId.longValue()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static boolean checkIfThereIsHookup(List<Long> workspaceIds, Long partnerId) {
+        for (Long id : workspaceIds) {
+            if (id == partnerId) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     static MenuConfiguration getMenuConfiguration() {

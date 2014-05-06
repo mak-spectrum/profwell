@@ -18,6 +18,7 @@ import org.profwell.conf.di.ServiceHolder;
 import org.profwell.generic.exception.ObjectNotFoundException;
 import org.profwell.generic.validation.ValidationContext;
 import org.profwell.json.ConvertionUtils;
+import org.profwell.notification.service.NoticeService;
 import org.profwell.security.model.User;
 import org.profwell.security.service.UserService;
 import org.profwell.security.web.SessionUtility;
@@ -33,6 +34,8 @@ public class CollaborationController extends Controller {
     private static final String OBJECT_NAME = "Partner";
 
     private static final CollaborationService service = ServiceHolder.getService(CollaborationService.class);
+
+    private static final NoticeService noticeService = ServiceHolder.getService(NoticeService.class);
 
     private static final UserService userService = ServiceHolder.getService(UserService.class);
 
@@ -321,6 +324,7 @@ public class CollaborationController extends Controller {
             request.setPartner(coworker);
             request.setType(connectionType);
             service.saveCollaborationRequest(request);
+            noticeService.addNewNotice("Test message", coworker, SessionUtility.getCurrentUser());
 
             context.add("message", "The request has been created successfully.");
         }
