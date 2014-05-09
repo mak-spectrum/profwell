@@ -147,7 +147,6 @@ class TestVacancyCRUD extends TestScenario {
         Vacancy v = list.get(0);
         assertThat(v).isNotEqualTo(this.vacancy);
         assertThat(v.getId()).isEqualTo(this.vacancy.getId());
-        assertThat(v.getResponsible()).isNull();
         assertThat(v.getCity()).isEqualTo(this.city.getName());
         assertThat(v.getClosingDatetime()).isNull();
         assertThat(v.getCompany().getName()).isEqualTo("TestCompany");

@@ -26,6 +26,10 @@ input#requiredSkillsInplace {
     width: 30%;
 }
 
+div#requiredSkillsIcon {
+    display: inline-block;
+}
+
 div.skills-list {
     clear: both;
     padding-left: 20%;

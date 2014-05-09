@@ -27,6 +27,7 @@ import org.profwell.vacancy.domain.HookupDocumentDTO;
 import org.profwell.vacancy.model.Hookup;
 import org.profwell.vacancy.model.HookupStatus;
 import org.profwell.vacancy.model.Vacancy;
+import org.profwell.vacancy.model.VacancySharingConfiguration;
 import org.profwell.vacancy.model.VacancyStatus;
 
 public class VacancyDAOImpl extends GenericDAOImpl<Vacancy> implements VacancyDAO {
@@ -38,11 +39,7 @@ public class VacancyDAOImpl extends GenericDAOImpl<Vacancy> implements VacancyDA
         CriteriaQuery<Vacancy> criteria = cb.createQuery(this.getEntityClass());
         Root<Vacancy> root = criteria.from(this.getEntityClass());
 
-        criteria.where(
-                cb.or(
-                        cb.in(root).value(this.listOwnVacancies(criteria, filter)),
-                        cb.in(root).value(this.listSharedVacancies(criteria, filter))
-                        ));
+        criteria.where(cb.in(root).value(this.listOwnVacancies(criteria, filter)));
 
         return this.listPage(criteria, filter);
     }
@@ -149,9 +146,8 @@ public class VacancyDAOImpl extends GenericDAOImpl<Vacancy> implements VacancyDA
 
         subquery.select(owner);
 
-        // TODO: make id IN OR id IN
         criterions.add(cb.in(root.<ConnectionType>get("type"))
-                .in(ConnectionType.FREELANCER_RECRUITER, ConnectionType.STAFF_RECRUITER));
+                .value(ConnectionType.FREELANCER_RECRUITER).value(ConnectionType.STAFF_RECRUITER));
 
         criterions.add(cb.equal(partner.<Long>get("id"), currentUserId));
 
@@ -313,6 +309,7 @@ public class VacancyDAOImpl extends GenericDAOImpl<Vacancy> implements VacancyDA
 
         criterions.add(cb.equal(vacancy.<Long>get("id"), vacancyId));
 
+        // it is required for security
         criterions.add(
                 cb.or(
                         cb.equal(workspace.<Long>get("id"), workspaceId),
@@ -395,6 +392,31 @@ public class VacancyDAOImpl extends GenericDAOImpl<Vacancy> implements VacancyDA
     @Override
     public void deleteHookup(Hookup hookup) {
         this.getEM().remove(hookup);
+    }
+
+    @Override
+    public List<Long> listHookupsOwnersIds(long vacancyId) {
+        CriteriaBuilder cb = this.getEM().getCriteriaBuilder();
+
+        CriteriaQuery<Long> criteria = cb.createQuery(Long.class);
+        Root<Hookup> root = criteria.from(Hookup.class);
+
+        Join<Hookup, Workspace> workspace = root.join("workspace");
+        Join<Hookup, Vacancy> vacancy = root.join("vacancy");
+
+        criteria.distinct(true);
+        criteria.multiselect(workspace.get("id"));
+
+        criteria.where(cb.equal(vacancy.<Long>get("id"), vacancyId));
+
+        TypedQuery<Long> resultQuery = this.getEM().createQuery(criteria);
+
+        return resultQuery.getResultList();
+    }
+
+    @Override
+    public VacancySharingConfiguration getVacancySharingConfiguration(Long id) {
+        return this.getEM().find(VacancySharingConfiguration.class, id);
     }
 
     @Override

@@ -1,6 +1,7 @@
 jQuery(document).ready(function() {
 
     var skillsInplace = jQuery("#requiredSkillsInplace");
+    var skillsIcon = jQuery("#requiredSkillsIcon");
     var skillsHref = jQuery("#requiredSkillsHref");
 
     var skillsBlock = jQuery("div.skills-list");
@@ -10,10 +11,12 @@ jQuery(document).ready(function() {
     var wscrolltop;
 
     skillsInplace.hide();
+    skillsIcon.hide();
     skillsInplace.blur(function() {
         consumeCurrentSkill();
         skillsHref.show();
         skillsInplace.hide();
+        skillsIcon.hide();
     });
     skillsInplace.keypress(function(event) {
         if (event.which == 13) {
@@ -36,6 +39,7 @@ jQuery(document).ready(function() {
         skillsHref.hide();
         skillsInplace.show();
         skillsInplace.focus();
+        skillsIcon.show();
         event.preventDefault();
     }
 
@@ -102,6 +106,7 @@ jQuery(document).ready(function() {
             var innerValue = newSpan.text();
             newLi.remove();
             skillsHref.hide();
+            skillsIcon.show();
             skillsInplace.show();
             skillsInplace.val(innerValue);
             skillsInplace.focus();
@@ -184,6 +189,7 @@ jQuery(document).ready(function() {
         var innerValue = self.children("span").text();
         self.parent().remove();
         skillsHref.hide();
+        skillsIcon.show();
         skillsInplace.show();
         skillsInplace.val(innerValue);
         skillsInplace.focus();

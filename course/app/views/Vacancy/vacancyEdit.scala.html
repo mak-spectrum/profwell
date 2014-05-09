@@ -5,7 +5,7 @@ form: org.profwell.vacancy.domain.VacancyEditForm)
     <link rel="stylesheet" href="@routes.Assets.at("stylesheets/vacancy/vacancy.css")"></link>
 } {
     <script src="@routes.Assets.at("javascripts/vacancy/vacancyEdit.js")" type="text/javascript"></script>
-    <script src="@routes.Assets.at("javascripts/vacancy/vacancySkills.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.at("javascripts/vacancy/vacancyEditSkills.js")" type="text/javascript"></script>
 } {
 
 <div class="main">
@@ -50,7 +50,9 @@ form: org.profwell.vacancy.domain.VacancyEditForm)
                                 <label for="requiredSkillsInplace">Required Skills:</label>
                                 <input id="requiredSkillsInplace" type="text" />
                                 <a id="requiredSkillsHref" href="#">Add Skills</a>
-                                @tags.forms.markIcon(true)
+                                <div id="requiredSkillsIcon">
+                                    @tags.forms.markIcon(true)
+                                </div>
                                 <div class="skills-list">
                                     <ul id="mandatorySkills" class="connectedSortable">
                                         <lh>Required Skills</lh>

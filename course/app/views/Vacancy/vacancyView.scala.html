@@ -9,13 +9,15 @@ form: org.profwell.vacancy.domain.VacancyViewForm)
     <script src="@routes.Assets.at("javascripts/jquery-form.js")" type="text/javascript"></script>
     <script src="@routes.Assets.at("javascripts/vacancy/vacancyView.js")" type="text/javascript"></script>
     <script src="@routes.Assets.at("javascripts/vacancy/vacancyViewHookupFile.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.at("javascripts/vacancy/vacancyViewHookupsList.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.at("javascripts/vacancy/vacancyViewPartnersList.js")" type="text/javascript"></script>
     <script src="@routes.Assets.at("javascripts/tabs.js")" type="text/javascript"></script>
 } {
 
 <div class="main">
     <section class="grid-wrap">
         <header class="grid col-full">
-            <hr>
+            <hr />
             <h2 class="fleft" style="width: 50%">Vacancies - View Vacancy</h2>
         </header>
 
@@ -26,10 +28,13 @@ form: org.profwell.vacancy.domain.VacancyViewForm)
         <div class="grid">
             <ul class="tabs clearfix">
                 <li class="@form.getVacancyInfoTabActivity()">
-                    <a href="#vacancyInfoTab">Vacancy Info</a>
+                    <a id="vacancyInfoTabToggle" href="#vacancyInfoTab">Vacancy Info</a>
                 </li>
                 <li class="@form.getHookupsTabActivity()">
                     <a id="hookupsTabToggle" href="#hookupsTab">Hookups</a>
+                </li>
+                <li class="@form.getVacancySharingTabActivity()">
+                    <a id="vacancySharingTabToggle" href="#vacancySharingTab">Sharing Configuration</a>
                 </li>
             </ul>
             <div class="tab-container">
@@ -125,18 +130,18 @@ form: org.profwell.vacancy.domain.VacancyViewForm)
                     <ul class="hookups-list @(if(form.isHookupsTabActive()){"loaded"})">
                         @if(form.isHookupsTabActive()) {
                             @Vacancy.listHookupItems(form.getHookups())
-                            <li class="hookups-loading" style="display: none;">
+                            <li class="hookup-loading" style="display: none;">
                                 <img src="@routes.Assets.at("images/gif/loading-bright.gif")" alt="Loading" title="Please wait, loading is in process." />
                             </li>
                         } else {
-                            <li class="hookups-loading">
+                            <li class="hookup-loading">
                                 <img src="@routes.Assets.at("images/gif/loading-bright.gif")" alt="Loading" title="Please wait, loading is in process." />
                             </li>
                         }
-                        <li class="hookups-empty">
+                        <li class="hookup-empty">
                             - No person staffed -
                         </li>
-                        <li class="hookups-error">
+                        <li class="hookup-error">
                         </li>
                         @if(form.isVacancyOpen()) {
                         <li class="add-hookup">
@@ -146,6 +151,25 @@ form: org.profwell.vacancy.domain.VacancyViewForm)
                             </a>
                         </li>
                         }
+                    </ul>
+                </div>
+
+
+
+
+
+                <div id="vacancySharingTab" class="tab-content @form.getVacancySharingTabActivity()">
+                    <h6>List of partners, whom the vacancy is shared to</h6>
+
+                    <ul class="partners-list">
+                        <li class="partners-loading">
+                            <img src="@routes.Assets.at("images/gif/loading-bright.gif")" alt="Loading" title="Please wait, loading is in process." />
+                        </li>
+                        <li class="partners-empty">
+                            - No partners -
+                        </li>
+                        <li class="partners-error">
+                        </li>
                     </ul>
                 </div>
 
