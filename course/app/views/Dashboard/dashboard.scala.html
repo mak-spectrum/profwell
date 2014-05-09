@@ -88,6 +88,11 @@ form: org.profwell.dashboard.domain.DashboardForm)
             </div>
             <div class="col-half">
                 <div id="calendar" title="Sorry, this functionality has not been implemented yet."></div>
+                <ul id="messanger">
+                    @for(m <- form.getMessages()) {
+	                    <li>@m</li>
+                    }
+                </ul>
             </div>
         </div>
 

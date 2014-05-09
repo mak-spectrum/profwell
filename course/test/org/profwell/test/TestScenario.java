@@ -14,6 +14,7 @@ public abstract class TestScenario implements Runnable {
         JPA.withTransaction(new Callback0() {
             @Override
             public void invoke() throws Throwable {
+<<<<<<< HEAD
                 TestScenario.this.given();
             }
         });
@@ -21,6 +22,15 @@ public abstract class TestScenario implements Runnable {
             @Override
             public void invoke() throws Throwable {
                 TestScenario.this.test();
+=======
+                given();
+            }
+        });
+        JPA.withTransaction(new Callback0() {
+            @Override
+            public void invoke() throws Throwable {
+                test();
+>>>>>>> refs/remotes/origin/master
             }
         });
     }

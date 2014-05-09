@@ -25,7 +25,6 @@ import javax.persistence.TemporalType;
 import org.profwell.common.model.Country;
 import org.profwell.generic.model.Identifiable;
 import org.profwell.generic.model.ModelConstants;
-import org.profwell.security.model.User;
 import org.profwell.security.model.Workspace;
 
 @Entity
@@ -79,12 +78,6 @@ public class Vacancy implements Identifiable {
             referencedColumnName = "ID",
             nullable = false)
     private Workspace workspace;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "RESPONSIBLE_ID",
-            referencedColumnName = "ID",
-            nullable = true)
-    private User responsible;
 
     @OneToMany(
             orphanRemoval = true,
@@ -192,14 +185,6 @@ public class Vacancy implements Identifiable {
 
     public void setDueDate(Date dueDate) {
         this.dueDate = dueDate;
-    }
-
-    public User getResponsible() {
-        return responsible;
-    }
-
-    public void setResponsible(User responsible) {
-        this.responsible = responsible;
     }
 
     public Set<Hookup> getHookups() {

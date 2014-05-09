@@ -8,6 +8,7 @@ import org.profwell.vacancy.auxiliary.VacancyFilter;
 import org.profwell.vacancy.domain.HookupDTO;
 import org.profwell.vacancy.model.Hookup;
 import org.profwell.vacancy.model.Vacancy;
+import org.profwell.vacancy.model.VacancySharingConfiguration;
 
 public interface VacancyService extends GenericService<Vacancy> {
 
@@ -28,4 +29,7 @@ public interface VacancyService extends GenericService<Vacancy> {
 
     void deleteHookup(Hookup hookup);
 
+    List<Long> listHookupsOwnersIds(long vacancyId);
+
+    VacancySharingConfiguration getVacancySharingConfiguration(Long id);
 }

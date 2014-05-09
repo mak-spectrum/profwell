@@ -174,3 +174,20 @@ div#calendar {
     margin-top: 3.5em;
     margin-left: 10em;
 }
+
+ul#messanger {
+    margin-top: 2em;
+    margin-left: 10em;
+    padding: 0.5em;
+    padding-left: 1.75em;
+
+    border: 1px solid #ddd;
+
+    -webkit-border-radius: 0.8em;
+    -moz-border-radius: 0.8em;
+    -ms-border-radius: 0.8em;
+    -khtml-border-radius: 0.8em;
+    border-radius: 0.8em;
+
+    list-style-type: disc;
+}

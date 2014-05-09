@@ -7,6 +7,7 @@ import org.profwell.vacancy.auxiliary.VacancyFilter;
 import org.profwell.vacancy.domain.HookupDTO;
 import org.profwell.vacancy.model.Hookup;
 import org.profwell.vacancy.model.Vacancy;
+import org.profwell.vacancy.model.VacancySharingConfiguration;
 
 public interface VacancyDAO extends GenericDAO<Vacancy> {
 
@@ -22,4 +23,9 @@ public interface VacancyDAO extends GenericDAO<Vacancy> {
             boolean includeArchived);
 
     void deleteHookup(Hookup hookup);
+
+    List<Long> listHookupsOwnersIds(long vacancyId);
+
+    VacancySharingConfiguration getVacancySharingConfiguration(Long id);
+
 }

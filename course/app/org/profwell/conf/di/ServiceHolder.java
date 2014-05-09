@@ -33,6 +33,9 @@ import org.profwell.file.service.FileService;
 import org.profwell.file.service.FileServiceImpl;
 import org.profwell.marker.service.MarkerService;
 import org.profwell.marker.service.MarkerServiceImpl;
+import org.profwell.notification.dao.NoticeDAOImpl;
+import org.profwell.notification.service.NoticeService;
+import org.profwell.notification.service.NoticeServiceImpl;
 import org.profwell.person.dao.PersonDAO;
 import org.profwell.person.dao.PersonDAOImpl;
 import org.profwell.person.service.PersonService;
@@ -71,6 +74,11 @@ public final class ServiceHolder {
 
         MarkerServiceImpl markerService = new MarkerServiceImpl();
         this.services.put(MarkerService.class.getSimpleName(), markerService);
+
+        NoticeServiceImpl noticeService = new NoticeServiceImpl();
+        NoticeDAOImpl noticeDAO = new NoticeDAOImpl();
+        noticeService.setDao(noticeDAO);
+        this.services.put(NoticeService.class.getSimpleName(), noticeService);
 
         userRelated();
 

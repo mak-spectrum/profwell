@@ -39,6 +39,15 @@ public class VacancyDAOImpl extends GenericDAOImpl<Vacancy> implements VacancyDA
         CriteriaQuery<Vacancy> criteria = cb.createQuery(this.getEntityClass());
         Root<Vacancy> root = criteria.from(this.getEntityClass());
 
+<<<<<<< HEAD
+=======
+//        criteria.where(
+//                cb.or(
+//                        cb.in(root).value(this.listOwnVacancies(criteria, filter)),
+//                        cb.in(root).value(this.listSharedVacancies(criteria, filter))
+//                        ));
+
+>>>>>>> refs/remotes/origin/master
         criteria.where(cb.in(root).value(this.listOwnVacancies(criteria, filter)));
 
         return this.listPage(criteria, filter);

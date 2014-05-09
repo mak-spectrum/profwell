@@ -10,6 +10,8 @@ public class VacancyViewForm extends AbstractVacancyForm {
 
     public static final String HOOKUPS_TAB = "hookupsTab";
 
+    public static final String VACANCY_SHARING_TAB = "vacancySharingTab";
+
     /**
      * Active tab on UI. Manages content loading.
      */
@@ -27,6 +29,14 @@ public class VacancyViewForm extends AbstractVacancyForm {
 
     public String getHookupsTabActivity() {
         if (HOOKUPS_TAB.equals(this.activeTab)) {
+            return "active";
+        } else {
+            return "";
+        }
+    }
+
+    public String getVacancySharingTabActivity() {
+        if (VACANCY_SHARING_TAB.equals(this.activeTab)) {
             return "active";
         } else {
             return "";

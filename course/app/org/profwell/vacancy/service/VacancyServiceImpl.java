@@ -19,6 +19,7 @@ import org.profwell.vacancy.model.Hookup;
 import org.profwell.vacancy.model.HookupStatus;
 import org.profwell.vacancy.model.RequiredSkill;
 import org.profwell.vacancy.model.Vacancy;
+import org.profwell.vacancy.model.VacancySharingConfiguration;
 import org.profwell.vacancy.model.VacancyStatus;
 
 public class VacancyServiceImpl extends GenericServiceImpl<VacancyDAO, Vacancy>
@@ -151,6 +152,16 @@ public class VacancyServiceImpl extends GenericServiceImpl<VacancyDAO, Vacancy>
     @Override
     public void deleteHookup(Hookup hookup) {
         this.dao.deleteHookup(hookup);
+    }
+
+    @Override
+    public List<Long> listHookupsOwnersIds(long vacancyId) {
+        return this.dao.listHookupsOwnersIds(vacancyId);
+    }
+
+    @Override
+    public VacancySharingConfiguration getVacancySharingConfiguration(Long id) {
+        return this.dao.getVacancySharingConfiguration(id);
     }
 
 }
