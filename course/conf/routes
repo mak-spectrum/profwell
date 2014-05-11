@@ -10,6 +10,9 @@ GET     /logout                             controllers.Application.logout()
 
 # Application pages
 GET     /dashboard                          controllers.DashboardController.open()
+GET     /noticeList                         controllers.DashboardController.noticeList()
+POST    /noticeList                         controllers.DashboardController.noticeList()
+GET     /noticeReadAsync                    controllers.DashboardController.noticeReadAsync(noticeId: Long)
 
 # Contact Book pages
 GET     /personList                         controllers.PersonController.personList()

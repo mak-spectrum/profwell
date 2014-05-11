@@ -1,5 +1,6 @@
 package utils;
 
+import org.apache.commons.lang3.StringUtils;
 import org.profwell.security.model.User;
 
 public final class UserUtils {
@@ -29,4 +30,12 @@ public final class UserUtils {
         return firstName + " " + lastName;
     }
 
+    public static String getFullNameOrUUID(User user) {
+        String fullName = getFullName(user);
+        if (StringUtils.isBlank(fullName)) {
+            return user.getUuid();
+        } else {
+            return fullName;
+        }
+    }
 }

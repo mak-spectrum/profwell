@@ -191,3 +191,17 @@ ul#messanger {
 
     list-style-type: disc;
 }
+
+ul#messanger > lh > h5 {
+    width: 80%;
+    display: inline-block;
+}
+
+ul#messanger > lh > a {
+    float: right;
+    opacity: 0.3;
+}
+
+ul#messanger > lh > a:hover {
+    opacity: 1;
+}

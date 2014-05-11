@@ -12,6 +12,12 @@ public final class SessionUtility {
 
     private static final String CURRENT_USER_USERNAME = "current.user.username";
 
+    private static final String CURRENT_USER_FIRSTNAME = "current.user.firstname";
+
+    private static final String CURRENT_USER_LASTNAME = "current.user.lastname";
+
+    private static final String CURRENT_USER_UUID = "current.user.uuid";
+
     private static final String CURRENT_USER_ROLE = "current.user.role";
 
     private SessionUtility() {
@@ -22,6 +28,20 @@ public final class SessionUtility {
         Session session = Context.current().session();
         session.put(CURRENT_USER_ID, String.valueOf(user.getId()));
         session.put(CURRENT_USER_USERNAME, user.getUsername());
+        session.put(CURRENT_USER_UUID, user.getUuid());
+
+        if (user.getFirstName() == null) {
+            session.put(CURRENT_USER_FIRSTNAME, "");
+        } else {
+            session.put(CURRENT_USER_FIRSTNAME, user.getFirstName());
+        }
+
+        if (user.getLastName() == null) {
+            session.put(CURRENT_USER_LASTNAME, "");
+        } else {
+            session.put(CURRENT_USER_LASTNAME, user.getLastName());
+        }
+
         session.put(CURRENT_USER_ROLE, user.getRole().name());
     }
 
@@ -30,6 +50,9 @@ public final class SessionUtility {
         Session session = Context.current().session();
         user.setId(Long.valueOf(session.get(CURRENT_USER_ID)));
         user.setUsername(session.get(CURRENT_USER_USERNAME));
+        user.setUuid(session.get(CURRENT_USER_UUID));
+        user.setFirstName(session.get(CURRENT_USER_FIRSTNAME));
+        user.setLastName(session.get(CURRENT_USER_LASTNAME));
         user.setRole(Role.valueOf(session.get(CURRENT_USER_ROLE)));
         return user;
     }
