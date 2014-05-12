@@ -32,53 +32,58 @@ public class VacancyServiceImpl extends GenericServiceImpl<VacancyDAO, Vacancy>
             object.setOpeningDatetime(new Date());
             object.setStatus(VacancyStatus.OPENED);
             object.setWorkspace(workspace);
-        }
 
-        if (StringUtils.isNotBlank(object.getPosition().getCaption())) {
-            PositionService service = ServiceHolder
-                    .getService(PositionService.class);
-            service.addUniqueDictionaryValue(
-                    object.getPosition().getCaption(),
-                    workspace);
-        }
+            if (StringUtils.isNotBlank(object.getPosition().getCaption())) {
+                PositionService service = ServiceHolder
+                        .getService(PositionService.class);
+                service.addUniqueDictionaryValue(
+                        object.getPosition().getCaption(),
+                        workspace);
+            }
 
-        if (StringUtils.isNotBlank(object.getCompany().getName())) {
-            CompanyService service = ServiceHolder
-                    .getService(CompanyService.class);
-            service.addUniqueDictionaryValue(
-                    object.getCompany().getName(),
-                    object.getCompany().getDetails(),
-                    object.getCompany().getSocialBenefits(),
-                    workspace);
-        }
+            if (StringUtils.isNotBlank(object.getCompany().getName())) {
+                CompanyService service = ServiceHolder
+                        .getService(CompanyService.class);
+                service.addUniqueDictionaryValue(
+                        object.getCompany().getName(),
+                        object.getCompany().getDetails(),
+                        object.getCompany().getSocialBenefits(),
+                        workspace);
+            }
 
-        List<String> skillNames = new ArrayList<>();
-        for (RequiredSkill skill : object.getPosition().getRequiredSkills()) {
-            skillNames.add(skill.getName());
-        }
+            List<String> skillNames = new ArrayList<>();
+            for (RequiredSkill skill : object.getPosition().getRequiredSkills()) {
+                skillNames.add(skill.getName());
+            }
 
-        SkillService skillService = ServiceHolder
-                .getService(SkillService.class);
-        skillService.addUniqueDictionaryValues(skillNames, workspace);
+            SkillService skillService = ServiceHolder
+                    .getService(SkillService.class);
+            skillService.addUniqueDictionaryValues(skillNames, workspace);
 
-        if (StringUtils.isNotBlank(object.getCompany().getName())) {
-            CompanyService service = ServiceHolder
-                    .getService(CompanyService.class);
-            service.addUniqueDictionaryValue(
-                    object.getCompany().getName(),
-                    object.getCompany().getDetails(),
-                    object.getCompany().getSocialBenefits(),
-                    workspace);
-        }
+            if (StringUtils.isNotBlank(object.getCompany().getName())) {
+                CompanyService service = ServiceHolder
+                        .getService(CompanyService.class);
+                service.addUniqueDictionaryValue(
+                        object.getCompany().getName(),
+                        object.getCompany().getDetails(),
+                        object.getCompany().getSocialBenefits(),
+                        workspace);
+            }
 
-        if (StringUtils.isNotBlank(object.getCity())
-                && object.getCountry() != null) {
+            if (StringUtils.isNotBlank(object.getCity())
+                    && object.getCountry() != null) {
 
-            CityService service = ServiceHolder.getService(CityService.class);
-            service.addUniqueDictionaryValue(
-                    object.getCountry(),
-                    object.getCity(),
-                    workspace);
+                CityService service = ServiceHolder.getService(
+                        CityService.class);
+                service.addUniqueDictionaryValue(
+                        object.getCountry(),
+                        object.getCity(),
+                        workspace);
+            }
+
+            VacancySharingConfiguration configuration = new VacancySharingConfiguration();
+            configuration.setVacancy(object);
+            object.setSharingConfiguration(configuration);
         }
 
         this.dao.save(object);

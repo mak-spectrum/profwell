@@ -4,6 +4,7 @@ form: org.profwell.vacancy.domain.VacancyViewForm)
 @main(menuConfiguration) {
     <link rel="stylesheet" href="@routes.Assets.at("stylesheets/vacancy/vacancy.css")"></link>
     <link rel="stylesheet" href="@routes.Assets.at("stylesheets/vacancy/vacancyHookups.css")"></link>
+    <link rel="stylesheet" href="@routes.Assets.at("stylesheets/vacancy/vacancyPartners.css")"></link>
     <link rel="stylesheet" href="@routes.Assets.at("stylesheets/tabs.css")"></link>
 } {
     <script src="@routes.Assets.at("javascripts/jquery-form.js")" type="text/javascript"></script>
@@ -159,16 +160,24 @@ form: org.profwell.vacancy.domain.VacancyViewForm)
 
 
                 <div id="vacancySharingTab" class="tab-content @form.getVacancySharingTabActivity()">
-                    <h6>List of partners, whom the vacancy is shared to</h6>
+                    <h6>List of partners, whom the vacancy is shared to:</h6>
 
                     <ul class="partners-list">
-                        <li class="partners-loading">
+                        <li class="partner-loading">
                             <img src="@routes.Assets.at("images/gif/loading-bright.gif")" alt="Loading" title="Please wait, loading is in process." />
                         </li>
-                        <li class="partners-empty">
+                        <li class="partner-empty">
                             - No partners -
                         </li>
-                        <li class="partners-error">
+                        <li class="partner-error">
+                        </li>
+                        <li class="partner-save">
+                            <a href="javascript:void(0)" class="save-sharing">
+                                <img src="@routes.Assets.at("images/icons/save.png")" alt="Save" />
+                                <span>Save sharing configuration</span>
+                            </a>
+                            <div id="partner-save-success" title="Sharing configuration has been updated successfully." ></div>
+                            <div id="partner-save-error" title="Error occured on sharing configuration update." ></div>
                         </li>
                     </ul>
                 </div>

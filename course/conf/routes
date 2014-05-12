@@ -102,6 +102,7 @@ GET     /vacancyHookupUnarchiveAsync        controllers.VacancyController.hookup
 POST    /vacancyHookupFileUploadAsync       controllers.VacancyController.hookupFileUploadAsync()
 GET     /vacancyHookupFileDeleteAsync       controllers.VacancyController.hookupFileDeleteAsync(hookupId: Long, type: String, index: String ?= "")
 GET     /vacancyPartnersAsync               controllers.VacancyController.vacancyPartnersAsync(vacancyId: Long)
+POST    /vacancyPartnersSubmitAsync         controllers.VacancyController.vacancyPartnersSubmitAsync()
 
 # Markers autocompletion
 GET     /autocompleteContactName            controllers.MarkerController.autocompleteContactMarkers(term: String)

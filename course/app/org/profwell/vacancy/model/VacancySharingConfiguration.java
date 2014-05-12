@@ -5,6 +5,7 @@ import java.util.Set;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -50,18 +51,19 @@ public class VacancySharingConfiguration implements Identifiable {
 
     @OneToMany(
             orphanRemoval = true,
+            cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
             targetEntity = VacancySharingRecord.class)
     private Set<VacancySharingRecord> records = new HashSet<>();
 
     @Override
     public long getId() {
-        return id;
+        return this.id;
     }
 
     @Override
     public boolean isNew() {
-        return id == DEFAULT_UNINITIALIZED_ID_VALUE;
+        return this.id == DEFAULT_UNINITIALIZED_ID_VALUE;
     }
 
     public void setId(long id) {
@@ -69,7 +71,7 @@ public class VacancySharingConfiguration implements Identifiable {
     }
 
     public Vacancy getVacancy() {
-        return vacancy;
+        return this.vacancy;
     }
 
     public void setVacancy(Vacancy vacancy) {
@@ -77,7 +79,7 @@ public class VacancySharingConfiguration implements Identifiable {
     }
 
     public User getResponsible() {
-        return responsible;
+        return this.responsible;
     }
 
     public void setResponsible(User responsible) {
@@ -85,7 +87,7 @@ public class VacancySharingConfiguration implements Identifiable {
     }
 
     public Set<VacancySharingRecord> getRecords() {
-        return records;
+        return this.records;
     }
 
     public void setRecords(Set<VacancySharingRecord> records) {

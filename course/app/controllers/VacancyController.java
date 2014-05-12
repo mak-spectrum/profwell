@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -846,10 +847,13 @@ public class VacancyController extends Controller {
 
         ArrayNode result = new ArrayNode(JsonNodeFactory.instance);
 
+        int i = 0;
         for (PartnerDTO p : partners) {
             ObjectNode partner = result.addObject();
 
             String name = p.getPartnerFullName();
+
+            partner.put("partnerId", p.getPartnerId());
 
             if (StringUtils.isBlank(name)) {
                 partner.put("name", p.getPartnerUuid());
@@ -857,23 +861,38 @@ public class VacancyController extends Controller {
                 partner.put("name", name.toString());
             }
 
-            partner.put("enabled", checkIfPartnerEnabled(sharingRecords, p.getPartnerId()));
+            VacancySharingRecord rec = findPartnerSharingRecord(sharingRecords, p.getPartnerId());
 
-            partner.put("canBeDisabled", !checkIfThereIsHookup(hookupsWspsIds, p.getPartnerId()));
+//            if (i == 1) {
+//                partner.put("enabled", true);
+//                partner.put("readonly", false);
+//                partner.put("canBeDisabled", true);
+//            } else
+            if (rec != null) {
+                partner.put("enabled", !rec.isReadonly());
+                partner.put("readonly", rec.isReadonly());
+                partner.put("canBeDisabled", !checkIfThereIsHookup(hookupsWspsIds, p.getPartnerId()));
+            } else {
+                partner.put("enabled", false);
+                partner.put("readonly", false);
+                partner.put("canBeDisabled", true);
+            }
+            i++;
         }
 
         return ok(result);
     }
 
-    private static boolean checkIfPartnerEnabled(Set<VacancySharingRecord> sharingRecords, Long partnerId) {
+    private static VacancySharingRecord findPartnerSharingRecord(Set<VacancySharingRecord> sharingRecords, Long partnerId) {
         for (VacancySharingRecord rec : sharingRecords) {
             if (rec.getPartner().getId() == partnerId.longValue()) {
-                return true;
+                return rec;
             }
         }
 
-        return false;
+        return null;
     }
+
 
     private static boolean checkIfThereIsHookup(List<Long> workspaceIds, Long partnerId) {
         for (Long id : workspaceIds) {
@@ -883,6 +902,100 @@ public class VacancyController extends Controller {
         }
 
         return false;
+    }
+
+    @play.db.jpa.Transactional
+    public static Result vacancyPartnersSubmitAsync() {
+        Map<String, String[]> requestParams =
+                request().body().asFormUrlEncoded();
+
+        Long vacancyId = null;
+        for (Entry<String, String[]> ent : requestParams.entrySet()) {
+            if ("vacancyId".equals(ent.getKey())) {
+                vacancyId = Long.parseLong(ent.getValue()[0]);
+            }
+        }
+
+        Vacancy vacancy = service.get(vacancyId);
+        Workspace workspace = userService
+                .getWorkspace(SessionUtility.getCurrentUserId());
+
+        List<PartnerDTO> partners = collaborationService
+                .getMyPartners(SessionUtility.getCurrentUserId());
+
+        Set<VacancySharingRecord> sharingRecords =
+                vacancy.getSharingConfiguration().getRecords();
+
+        List<Long> hookupsWspsIds = service.listHookupsOwnersIds(vacancyId);
+
+        for (PartnerDTO p : partners) {
+            if (isSharedForPartner(requestParams, p.getPartnerId())) {
+                VacancySharingRecord rec =
+                        getRecordIfExists(sharingRecords, p.getPartnerId());
+
+                if (rec != null) {
+                    rec.setReadonly(false);
+                    rec.setChecked(true);
+                } else {
+                    rec = new VacancySharingRecord();
+                    rec.setPartner(userService.get(p.getPartnerId()));
+                    rec.setWorkspace(workspace);
+                    rec.setChecked(true);
+                    vacancy.getSharingConfiguration().getRecords().add(rec);
+                }
+            } else {
+
+                VacancySharingRecord rec =
+                        getRecordIfExists(sharingRecords, p.getPartnerId());
+
+                if (rec != null) {
+                    boolean readonly = checkIfThereIsHookup(hookupsWspsIds, p.getPartnerId());
+                    if (readonly) {
+                        rec.setReadonly(true);
+                        rec.setChecked(true);
+                    } else {
+                        vacancy.getSharingConfiguration().getRecords().remove(rec);
+                    }
+                }
+            }
+        }
+
+        // cleanup garbage records, which are not belongs to any partner
+        Iterator<VacancySharingRecord> it = vacancy.getSharingConfiguration()
+                .getRecords().iterator();
+        while (it.hasNext()) {
+            if (!it.next().isChecked()) {
+                it.remove();
+            }
+        }
+
+        service.save(vacancy);
+
+        return ok();
+    }
+
+    private static boolean isSharedForPartner(Map<String, String[]> requestParams, Long partnerId) {
+        for (Entry<String, String[]> ent : requestParams.entrySet()) {
+            if (ent.getKey().startsWith("partner-share:")
+                    && ent.getKey().substring("partner-share:".length()).equals(partnerId.toString())) {
+                return Boolean.valueOf(ent.getValue()[0]);
+            }
+        }
+
+        return false;
+    }
+
+    private static VacancySharingRecord getRecordIfExists(
+            Set<VacancySharingRecord> sharingRecords,
+            Long partnerId) {
+
+        for (VacancySharingRecord record : sharingRecords) {
+            if (record.getPartner().getId() == partnerId) {
+                return record;
+            }
+        }
+
+        return null;
     }
 
     static MenuConfiguration getMenuConfiguration() {

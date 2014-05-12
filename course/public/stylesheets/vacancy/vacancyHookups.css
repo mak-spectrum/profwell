@@ -1,8 +1,3 @@
-h6 {
-    width: 40%;
-    display: inline-block;
-}
-
 ul.hookups-list {
     margin-top: 2em;
     margin-left: 2em;
@@ -83,7 +78,7 @@ ul.hookups-list > li div.hookup-control a > * {
     display: inline-block;
 }
 
-li.hookups-loading, li.hookups-empty, li.add-hookup {
+li.hookup-loading, li.hookup-empty, li.add-hookup {
     list-style: none;
     margin-left: 1em;
     margin-top: 0.5em;

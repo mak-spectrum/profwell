@@ -40,7 +40,7 @@ jQuery(document).ready(function() {
 
         jQuery.ajax(
                 {
-                    url: "/vacancyHookups",
+                    url: "/vacancyHookupsAsync",
                     data: requestData
                 }
         ).done(

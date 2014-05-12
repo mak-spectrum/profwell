@@ -107,12 +107,14 @@ form: org.profwell.vacancy.domain.VacancyEditForm)
                                     form.getPriorityValue(),
                                     form.getPrioritySelectItems())
                             }
+                            @if(form.isNew()) {
+                                @tags.forms.inputDate("dueDateId", "dueDateValue", "Due Date", form.getDueDateValue(), form.getVc())
+                            }
                             @tags.forms.inputSelect("countryId",
                                 "countryValue",
                                 "Country",
                                 form.getCountryValue(),
                                 form.getCountrySelectItems())
-                            @tags.forms.inputDate("dueDateId", "dueDateValue", "Due Date", form.getDueDateValue(), form.getVc())
                             @tags.forms.inputText("cityId", "city", "City", form.getCity(), form.getVc(), false, true)
                             <div class="field-cell">
                                 <label for="salaryFrom">Salary Range:</label>

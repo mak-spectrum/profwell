@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -18,6 +19,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -85,6 +88,11 @@ public class Vacancy implements Identifiable {
             targetEntity = Hookup.class)
     private Set<Hookup> hookups = new HashSet<>();
 
+    @OneToOne(fetch = FetchType.EAGER,
+                cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    private VacancySharingConfiguration sharingConfiguration;
+
     @Override
     public boolean isNew() {
         return this.id == DEFAULT_UNINITIALIZED_ID_VALUE;
@@ -92,7 +100,7 @@ public class Vacancy implements Identifiable {
 
     @Override
     public long getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(long id) {
@@ -100,7 +108,7 @@ public class Vacancy implements Identifiable {
     }
 
     public VacancyCompany getCompany() {
-        return company;
+        return this.company;
     }
 
     public void setCompany(VacancyCompany company) {
@@ -108,7 +116,7 @@ public class Vacancy implements Identifiable {
     }
 
     public Date getOpeningDatetime() {
-        return openingDatetime;
+        return this.openingDatetime;
     }
 
     public void setOpeningDatetime(Date openingDatetime) {
@@ -116,7 +124,7 @@ public class Vacancy implements Identifiable {
     }
 
     public Date getClosingDatetime() {
-        return closingDatetime;
+        return this.closingDatetime;
     }
 
     public void setClosingDatetime(Date closingDatetime) {
@@ -124,7 +132,7 @@ public class Vacancy implements Identifiable {
     }
 
     public Country getCountry() {
-        return country;
+        return this.country;
     }
 
     public void setCountry(Country country) {
@@ -132,7 +140,7 @@ public class Vacancy implements Identifiable {
     }
 
     public String getCity() {
-        return city;
+        return this.city;
     }
 
     public void setCity(String city) {
@@ -140,7 +148,7 @@ public class Vacancy implements Identifiable {
     }
 
     public SalaryRange getSalaryRange() {
-        return salaryRange;
+        return this.salaryRange;
     }
 
     public void setSalaryRange(SalaryRange salaryRange) {
@@ -148,7 +156,7 @@ public class Vacancy implements Identifiable {
     }
 
     public Workspace getWorkspace() {
-        return workspace;
+        return this.workspace;
     }
 
     public void setWorkspace(Workspace workspace) {
@@ -156,7 +164,7 @@ public class Vacancy implements Identifiable {
     }
 
     public VacancyStatus getStatus() {
-        return status;
+        return this.status;
     }
 
     public void setStatus(VacancyStatus status) {
@@ -164,7 +172,7 @@ public class Vacancy implements Identifiable {
     }
 
     public VacancyPosition getPosition() {
-        return position;
+        return this.position;
     }
 
     public void setPosition(VacancyPosition position) {
@@ -172,7 +180,7 @@ public class Vacancy implements Identifiable {
     }
 
     public VacancyPriority getPriority() {
-        return priority;
+        return this.priority;
     }
 
     public void setPriority(VacancyPriority priority) {
@@ -180,7 +188,7 @@ public class Vacancy implements Identifiable {
     }
 
     public Date getDueDate() {
-        return dueDate;
+        return this.dueDate;
     }
 
     public void setDueDate(Date dueDate) {
@@ -188,11 +196,20 @@ public class Vacancy implements Identifiable {
     }
 
     public Set<Hookup> getHookups() {
-        return hookups;
+        return this.hookups;
     }
 
     public void setHookups(Set<Hookup> hookups) {
         this.hookups = hookups;
+    }
+
+    public VacancySharingConfiguration getSharingConfiguration() {
+        return this.sharingConfiguration;
+    }
+
+    public void setSharingConfiguration(
+            VacancySharingConfiguration sharingConfiguration) {
+        this.sharingConfiguration = sharingConfiguration;
     }
 
 }

@@ -27,12 +27,6 @@ public class VacancySharingRecord implements Identifiable {
     private long id = DEFAULT_UNINITIALIZED_ID_VALUE;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "VACANCY_ID",
-            referencedColumnName = "ID",
-            nullable = false)
-    private Vacancy vacancy;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PARTNER_ID",
             referencedColumnName = "ID",
             nullable = true)
@@ -44,30 +38,27 @@ public class VacancySharingRecord implements Identifiable {
             nullable = false)
     private Workspace workspace;
 
+    @Column(name = "READONLY", nullable = false)
+    private boolean readonly;
+
+    private transient boolean checked;
+
     @Override
     public long getId() {
-        return id;
+        return this.id;
     }
 
     @Override
     public boolean isNew() {
-        return id == DEFAULT_UNINITIALIZED_ID_VALUE;
+        return this.id == DEFAULT_UNINITIALIZED_ID_VALUE;
     }
 
     public void setId(long id) {
         this.id = id;
     }
 
-    public Vacancy getVacancy() {
-        return vacancy;
-    }
-
-    public void setVacancy(Vacancy vacancy) {
-        this.vacancy = vacancy;
-    }
-
     public User getPartner() {
-        return partner;
+        return this.partner;
     }
 
     public void setPartner(User partner) {
@@ -75,10 +66,26 @@ public class VacancySharingRecord implements Identifiable {
     }
 
     public Workspace getWorkspace() {
-        return workspace;
+        return this.workspace;
     }
 
     public void setWorkspace(Workspace workspace) {
         this.workspace = workspace;
+    }
+
+    public boolean isReadonly() {
+        return this.readonly;
+    }
+
+    public void setReadonly(boolean readonly) {
+        this.readonly = readonly;
+    }
+
+    public boolean isChecked() {
+        return this.checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
     }
 }
