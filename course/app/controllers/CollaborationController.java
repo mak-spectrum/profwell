@@ -27,6 +27,7 @@ import play.mvc.Content;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
+import utils.UserUtils;
 
 @Security.Authenticated(Secured.class)
 public class CollaborationController extends Controller {
@@ -188,6 +189,20 @@ public class CollaborationController extends Controller {
 
         service.deleteCollaborationAgreement(agreement);
 
+        User currentUser = SessionUtility.getCurrentUser();
+
+        User receiver = null;
+        if (agreement.getPartner().getId() == currentUserId){
+            receiver = agreement.getOwner();
+        } else if (agreement.getOwner().getId() == currentUserId) {
+            receiver = agreement.getPartner();
+        }
+
+        noticeService.addNewNotice(
+                "User [" + UserUtils.getFullNameOrUUID(currentUser) + "] broke partnership.",
+                receiver,
+                SessionUtility.getCurrentUser());
+
         return redirect(routes.CollaborationController.partnerList());
     }
 
@@ -208,6 +223,13 @@ public class CollaborationController extends Controller {
         service.saveCollaborationAgreement(agreement);
 
         service.deleteCollaborationRequest(request);
+
+        User currentUser = SessionUtility.getCurrentUser();
+
+        noticeService.addNewNotice(
+                "User [" + UserUtils.getFullNameOrUUID(currentUser) + "] accepted your partnership request.",
+                request.getOwner(),
+                SessionUtility.getCurrentUser());
 
         return redirect(routes.CollaborationController.partnerList());
     }
@@ -269,6 +291,19 @@ public class CollaborationController extends Controller {
 
         service.deleteCollaborationRequest(request);
 
+        User currentUser = SessionUtility.getCurrentUser();
+        if (request.getPartner().getId() == currentUserId){
+            noticeService.addNewNotice(
+                    "User [" + UserUtils.getFullNameOrUUID(currentUser) + "] declined your partnership request.",
+                    request.getOwner(),
+                    SessionUtility.getCurrentUser());
+        } else if (request.getOwner().getId() == currentUserId) {
+            noticeService.addNewNotice(
+                    "User [" + UserUtils.getFullNameOrUUID(currentUser) + "] canceled partnership request.",
+                    request.getPartner(),
+                    SessionUtility.getCurrentUser());
+        }
+
         return redirect(routes.CollaborationController.partnerList());
     }
 
@@ -319,12 +354,18 @@ public class CollaborationController extends Controller {
         }
 
         if (valid) {
+
+            User currentUser = SessionUtility.getCurrentUser();
+
             CollaborationRequest request = new CollaborationRequest();
             request.setOwner(SessionUtility.getCurrentUser());
             request.setPartner(coworker);
             request.setType(connectionType);
             service.saveCollaborationRequest(request);
-            noticeService.addNewNotice("Test message", coworker, SessionUtility.getCurrentUser());
+            noticeService.addNewNotice(
+                    "User [" + UserUtils.getFullNameOrUUID(currentUser) + "] proposes partnership for you.",
+                    coworker,
+                    SessionUtility.getCurrentUser());
 
             context.add("message", "The request has been created successfully.");
         }

@@ -89,6 +89,12 @@ form: org.profwell.dashboard.domain.DashboardForm)
             <div class="col-half">
                 <div id="calendar" title="Sorry, this functionality has not been implemented yet."></div>
                 <ul id="messanger">
+                     <lh>
+                         <h5>Notifications</h5>
+                        <a href="/noticeList" title="Open new vacancy">
+                            <img src="@routes.Assets.at("images/icons/notice-arch.png")" alt="Open vacancy" />
+                        </a>
+                     </lh>
                     @for(m <- form.getMessages()) {
 	                    <li>@m</li>
                     }

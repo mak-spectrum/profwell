@@ -25,57 +25,68 @@ public class Notice implements Identifiable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="ID", unique = true, nullable = false)
     private long id = DEFAULT_UNINITIALIZED_ID_VALUE;
-    
+
     @Column(name="TEXT", nullable = true, length = ModelConstants.STANDARD_TEXT_PARAGRAPH_LIMIT, columnDefinition="TEXT")
     private String text;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SENDER_ID",
             referencedColumnName = "ID",
             nullable = true)
     private User sender;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "RECEIVER_ID",
             referencedColumnName = "ID",
             nullable = true)
     private User receiver;
-    
-   	@Override
-	public long getId() {
-		return id;
-	}
 
-	@Override
-	public boolean isNew() {
-        return id == DEFAULT_UNINITIALIZED_ID_VALUE;
-	}
+    @Column(name = "WAS_READ", nullable = false)
+    private boolean wasRead;
 
-	public String getText() {
-		return text;
-	}
+    @Override
+    public long getId() {
+        return this.id;
+    }
 
-	public void setText(String text) {
-		this.text = text;
-	}
+    @Override
+    public boolean isNew() {
+        return this.id == DEFAULT_UNINITIALIZED_ID_VALUE;
+    }
 
-	public User getSender() {
-		return sender;
-	}
+    public String getText() {
+        return this.text;
+    }
 
-	public void setSender(User sender) {
-		this.sender = sender;
-	}
+    public void setText(String text) {
+        this.text = text;
+    }
 
-	public void setId(long id) {
-		this.id = id;
-	}
+    public User getSender() {
+        return this.sender;
+    }
+
+    public void setSender(User sender) {
+        this.sender = sender;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public User getReceiver() {
-        return receiver;
+        return this.receiver;
     }
 
     public void setReceiver(User receiver) {
         this.receiver = receiver;
+    }
+
+    public boolean isWasRead() {
+        return this.wasRead;
+    }
+
+    public void setWasRead(boolean wasRead) {
+        this.wasRead = wasRead;
     }
 }
