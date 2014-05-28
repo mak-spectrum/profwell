@@ -15,13 +15,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.profwell.generic.model.Identifiable;
-import org.profwell.generic.model.ModelConstants;
-import org.profwell.person.model.Person;
 import org.profwell.security.model.Workspace;
 
 @Entity
@@ -42,20 +42,9 @@ public class Hookup implements Identifiable, HookupData {
     @Column(name="CONTACTED_ON", nullable = false)
     private Date contactedOn;
 
-    // TODO : it is necessary to edit person inplace on hookup
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CANDIDATE_ID",
-            referencedColumnName = "ID",
-            nullable = false)
-    private Person candidate;
-
-    @Column(name="CANDIDATE_CURRENT_POSITION", nullable = true,
-            length = ModelConstants.STANDARD_TEXT_LIMIT)
-    private String candidateCurrentPosition;
-
-    @Column(name="CANDIDATE_CURRENT_COMPANY", nullable = true,
-            length = ModelConstants.STANDARD_TEXT_LIMIT)
-    private String candidateCurrentCompany;
+    @OneToOne(fetch = FetchType.EAGER)
+    @PrimaryKeyJoinColumn
+    private HookupPerson candidate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "VACANCY_ID",
@@ -100,12 +89,12 @@ public class Hookup implements Identifiable, HookupData {
 
     @Override
     public boolean isNew() {
-        return id == DEFAULT_UNINITIALIZED_ID_VALUE;
+        return this.id == DEFAULT_UNINITIALIZED_ID_VALUE;
     }
 
     @Override
     public long getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(long id) {
@@ -113,7 +102,7 @@ public class Hookup implements Identifiable, HookupData {
     }
 
     public Vacancy getVacancy() {
-        return vacancy;
+        return this.vacancy;
     }
 
     public void setVacancy(Vacancy vacancy) {
@@ -122,7 +111,7 @@ public class Hookup implements Identifiable, HookupData {
 
     @Override
     public HookupStatus getStatus() {
-        return status;
+        return this.status;
     }
 
     public void setStatus(HookupStatus status) {
@@ -130,7 +119,7 @@ public class Hookup implements Identifiable, HookupData {
     }
 
     public EngagementSource getEngagementSource() {
-        return engagementSource;
+        return this.engagementSource;
     }
 
     public void setEngagementSource(EngagementSource engagementSource) {
@@ -138,7 +127,7 @@ public class Hookup implements Identifiable, HookupData {
     }
 
     public Date getLastActivityOn() {
-        return lastActivityOn;
+        return this.lastActivityOn;
     }
 
     public void setLastActivityOn(Date lastActivityOn) {
@@ -146,48 +135,24 @@ public class Hookup implements Identifiable, HookupData {
     }
 
     public Date getContactedOn() {
-        return contactedOn;
+        return this.contactedOn;
     }
 
     public void setContactedOn(Date contactedOn) {
         this.contactedOn = contactedOn;
     }
 
-    public Person getCandidate() {
-        return candidate;
-    }
-
-    public void setCandidate(Person candidate) {
-        this.candidate = candidate;
-    }
-
     public Workspace getWorkspace() {
-        return workspace;
+        return this.workspace;
     }
 
     public void setWorkspace(Workspace workspace) {
         this.workspace = workspace;
     }
 
-    public String getCandidateCurrentPosition() {
-        return candidateCurrentPosition;
-    }
-
-    public void setCandidateCurrentPosition(String candidateCurrentPosition) {
-        this.candidateCurrentPosition = candidateCurrentPosition;
-    }
-
-    public String getCandidateCurrentCompany() {
-        return candidateCurrentCompany;
-    }
-
-    public void setCandidateCurrentCompany(String candidateCurrentCompany) {
-        this.candidateCurrentCompany = candidateCurrentCompany;
-    }
-
     @Override
     public boolean isArchived() {
-        return archived;
+        return this.archived;
     }
 
     public void setArchived(boolean archived) {
@@ -196,7 +161,7 @@ public class Hookup implements Identifiable, HookupData {
 
     @Override
     public boolean isPassedTestTaskStatus() {
-        return passedTestTaskStatus;
+        return this.passedTestTaskStatus;
     }
 
     public void setPassedTestTaskStatus(boolean passedTestTaskStatus) {
@@ -204,11 +169,19 @@ public class Hookup implements Identifiable, HookupData {
     }
 
     public HookupDocuments getDocuments() {
-        return documents;
+        return this.documents;
     }
 
     public void setDocuments(HookupDocuments documents) {
         this.documents = documents;
+    }
+
+    public HookupPerson getCandidate() {
+        return this.candidate;
+    }
+
+    public void setCandidate(HookupPerson candidate) {
+        this.candidate = candidate;
     }
 
 }

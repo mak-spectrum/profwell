@@ -158,7 +158,7 @@ form: org.profwell.vacancy.domain.VacancyViewForm)
 
 
 
-
+                @if(form.isSharingTabAvailable()) {
                 <div id="vacancySharingTab" class="tab-content @form.getVacancySharingTabActivity()">
                     <h6>List of partners, whom the vacancy is shared to:</h6>
 
@@ -181,7 +181,7 @@ form: org.profwell.vacancy.domain.VacancyViewForm)
                         </li>
                     </ul>
                 </div>
-
+                }
 
 
 
@@ -194,17 +194,24 @@ form: org.profwell.vacancy.domain.VacancyViewForm)
                 } else {
                     <a href="/vacancyArchiveList" class="button">Back</a>
                 }
+
+                @if(form.isEditAvailable()) {
                 <a href="/vacancyEdit?id=@form.getId()" class="button">Edit Vacancy</a>
-                @if(form.isVacancyOpen()) {
-                <a id="vacancySuspendLink" href="/vacancySuspend?id=@form.getId()" class="button">Suspend Acquisition</a>
+
+                    @if(form.isVacancyOpen()) {
+                    <a id="vacancySuspendLink" href="/vacancySuspend?id=@form.getId()" class="button">Suspend Acquisition</a>
+                    }
+    
+                    @if(form.isVacancySuspended()) {
+                    <a href="/vacancyOpen?id=@form.getId()" class="button">Open Acquisition</a>
+                    }
+    
+                    @if(form.isVacancyActive()) {
+                    <a id="vacancyCloseLink" href="javascript:vacancyClose(@form.getId(), false);" class="button">Close Vacancy</a>
+                    }
+    
+                    <a id="deleteButton" href="/vacancyDelete?id=@form.getId()" class="button">Delete Vacancy</a>
                 }
-                @if(form.isVacancySuspended()) {
-                <a href="/vacancyOpen?id=@form.getId()" class="button">Open Acquisition</a>
-                }
-                @if(form.isVacancyActive()) {
-                <a id="vacancyCloseLink" href="javascript:vacancyClose(@form.getId(), false);" class="button">Close Vacancy</a>
-                }
-                <a id="deleteButton" href="/vacancyDelete?id=@form.getId()" class="button">Delete Vacancy</a>
             </div>
         </div>
 

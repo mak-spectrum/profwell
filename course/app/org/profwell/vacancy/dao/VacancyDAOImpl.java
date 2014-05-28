@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.persistence.Tuple;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.AbstractQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
@@ -15,8 +14,6 @@ import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
 
 import org.apache.commons.lang3.StringUtils;
-import org.profwell.collaboration.model.CollaborationAgreement;
-import org.profwell.collaboration.model.ConnectionType;
 import org.profwell.common.model.Country;
 import org.profwell.generic.dao.GenericDAOImpl;
 import org.profwell.security.model.User;
@@ -28,6 +25,7 @@ import org.profwell.vacancy.model.Hookup;
 import org.profwell.vacancy.model.HookupStatus;
 import org.profwell.vacancy.model.Vacancy;
 import org.profwell.vacancy.model.VacancySharingConfiguration;
+import org.profwell.vacancy.model.VacancySharingRecord;
 import org.profwell.vacancy.model.VacancyStatus;
 
 public class VacancyDAOImpl extends GenericDAOImpl<Vacancy> implements VacancyDAO {
@@ -39,7 +37,11 @@ public class VacancyDAOImpl extends GenericDAOImpl<Vacancy> implements VacancyDA
         CriteriaQuery<Vacancy> criteria = cb.createQuery(this.getEntityClass());
         Root<Vacancy> root = criteria.from(this.getEntityClass());
 
-        criteria.where(cb.in(root).value(this.listOwnVacancies(criteria, filter)));
+      criteria.where(
+      cb.or(
+              cb.in(root).value(this.listOwnVacancies(criteria, filter)),
+              cb.in(root).value(this.listSharedVacancies(criteria, filter))
+              ));
 
         return this.listPage(criteria, filter);
     }
@@ -74,17 +76,16 @@ public class VacancyDAOImpl extends GenericDAOImpl<Vacancy> implements VacancyDA
         Subquery<Vacancy> criteria = criteriaQuery.subquery(this.getEntityClass());
         Root<Vacancy> root = criteria.from(this.getEntityClass());
 
-        Join<Vacancy, Workspace> workspace = root.join("workspace");
-        Join<Workspace, User> user = workspace.join("owner");
+        Join<Vacancy, VacancySharingConfiguration> sharingConfiguration =
+                root.join("sharingConfiguration");
+        Join<VacancySharingConfiguration, VacancySharingRecord> sharingRecord =
+                sharingConfiguration.join("records");
 
         criteria.select(root);
 
         this.applyVacancyCommonFiltering(filter, cb, criterions, root);
 
-        criterions.add(cb.in(user).value(
-                this.getSharedVacanciesOwnerSubquery(criteria, filter.getWorkspaceId())));
-
-        criterions.add(cb.equal(workspace.<Long>get("id"),
+        criterions.add(cb.equal(sharingRecord.<User>get("partner").<Long>get("id"),
                 filter.getWorkspaceId()));
 
         if (criterions.size() > 0) {
@@ -131,31 +132,6 @@ public class VacancyDAOImpl extends GenericDAOImpl<Vacancy> implements VacancyDA
             criterions.add(cb.equal(root.<VacancyStatus>get("status"),
                     filter.getStatus()));
         }
-    }
-
-    private Subquery<User> getSharedVacanciesOwnerSubquery(AbstractQuery<Vacancy> criteriaQuery, Long currentUserId) {
-        CriteriaBuilder cb = this.getEM().getCriteriaBuilder();
-        List<Predicate> criterions = new ArrayList<>();
-
-        Subquery<User> subquery = criteriaQuery.subquery(User.class);
-
-        Root<CollaborationAgreement> root = subquery.from(CollaborationAgreement.class);
-
-        Join<CollaborationAgreement, User> owner = root.join("owner");
-        Join<CollaborationAgreement, User> partner = root.join("partner");
-
-        subquery.select(owner);
-
-        criterions.add(cb.in(root.<ConnectionType>get("type"))
-                .value(ConnectionType.FREELANCER_RECRUITER).value(ConnectionType.STAFF_RECRUITER));
-
-        criterions.add(cb.equal(partner.<Long>get("id"), currentUserId));
-
-        if (criterions.size() > 0) {
-            subquery.where(cb.and(criterions.toArray(new Predicate[0])));
-        }
-
-        return subquery;
     }
 
     @Override

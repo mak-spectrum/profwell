@@ -5,6 +5,9 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.profwell.collaboration.domain.PartnerDTO;
+import org.profwell.collaboration.model.ConnectionType;
+import org.profwell.collaboration.service.CollaborationService;
 import org.profwell.common.service.CityService;
 import org.profwell.common.service.CompanyService;
 import org.profwell.common.service.PositionService;
@@ -12,6 +15,8 @@ import org.profwell.common.service.SkillService;
 import org.profwell.conf.di.ServiceHolder;
 import org.profwell.generic.service.GenericServiceImpl;
 import org.profwell.security.model.Workspace;
+import org.profwell.security.service.UserService;
+import org.profwell.security.web.SessionUtility;
 import org.profwell.vacancy.auxiliary.VacancyFilter;
 import org.profwell.vacancy.dao.VacancyDAO;
 import org.profwell.vacancy.domain.HookupDTO;
@@ -20,39 +25,40 @@ import org.profwell.vacancy.model.HookupStatus;
 import org.profwell.vacancy.model.RequiredSkill;
 import org.profwell.vacancy.model.Vacancy;
 import org.profwell.vacancy.model.VacancySharingConfiguration;
+import org.profwell.vacancy.model.VacancySharingRecord;
 import org.profwell.vacancy.model.VacancyStatus;
 
 public class VacancyServiceImpl extends GenericServiceImpl<VacancyDAO, Vacancy>
         implements VacancyService {
 
     @Override
-    public void saveVacancyWithDictValues(Vacancy object, Workspace workspace) {
+    public void saveVacancyWithDictValues(Vacancy vacancy, Workspace workspace) {
 
-        if (object.isNew()) {
-            object.setOpeningDatetime(new Date());
-            object.setStatus(VacancyStatus.OPENED);
-            object.setWorkspace(workspace);
+        if (vacancy.isNew()) {
+            vacancy.setOpeningDatetime(new Date());
+            vacancy.setStatus(VacancyStatus.OPENED);
+            vacancy.setWorkspace(workspace);
 
-            if (StringUtils.isNotBlank(object.getPosition().getCaption())) {
+            if (StringUtils.isNotBlank(vacancy.getPosition().getCaption())) {
                 PositionService service = ServiceHolder
                         .getService(PositionService.class);
                 service.addUniqueDictionaryValue(
-                        object.getPosition().getCaption(),
+                        vacancy.getPosition().getCaption(),
                         workspace);
             }
 
-            if (StringUtils.isNotBlank(object.getCompany().getName())) {
+            if (StringUtils.isNotBlank(vacancy.getCompany().getName())) {
                 CompanyService service = ServiceHolder
                         .getService(CompanyService.class);
                 service.addUniqueDictionaryValue(
-                        object.getCompany().getName(),
-                        object.getCompany().getDetails(),
-                        object.getCompany().getSocialBenefits(),
+                        vacancy.getCompany().getName(),
+                        vacancy.getCompany().getDetails(),
+                        vacancy.getCompany().getSocialBenefits(),
                         workspace);
             }
 
             List<String> skillNames = new ArrayList<>();
-            for (RequiredSkill skill : object.getPosition().getRequiredSkills()) {
+            for (RequiredSkill skill : vacancy.getPosition().getRequiredSkills()) {
                 skillNames.add(skill.getName());
             }
 
@@ -60,33 +66,52 @@ public class VacancyServiceImpl extends GenericServiceImpl<VacancyDAO, Vacancy>
                     .getService(SkillService.class);
             skillService.addUniqueDictionaryValues(skillNames, workspace);
 
-            if (StringUtils.isNotBlank(object.getCompany().getName())) {
+            if (StringUtils.isNotBlank(vacancy.getCompany().getName())) {
                 CompanyService service = ServiceHolder
                         .getService(CompanyService.class);
                 service.addUniqueDictionaryValue(
-                        object.getCompany().getName(),
-                        object.getCompany().getDetails(),
-                        object.getCompany().getSocialBenefits(),
+                        vacancy.getCompany().getName(),
+                        vacancy.getCompany().getDetails(),
+                        vacancy.getCompany().getSocialBenefits(),
                         workspace);
             }
 
-            if (StringUtils.isNotBlank(object.getCity())
-                    && object.getCountry() != null) {
+            if (StringUtils.isNotBlank(vacancy.getCity())
+                    && vacancy.getCountry() != null) {
 
                 CityService service = ServiceHolder.getService(
                         CityService.class);
                 service.addUniqueDictionaryValue(
-                        object.getCountry(),
-                        object.getCity(),
+                        vacancy.getCountry(),
+                        vacancy.getCity(),
                         workspace);
             }
 
             VacancySharingConfiguration configuration = new VacancySharingConfiguration();
-            configuration.setVacancy(object);
-            object.setSharingConfiguration(configuration);
+            configuration.setVacancy(vacancy);
+            vacancy.setSharingConfiguration(configuration);
+
+            this.shareVacancyByDefault(vacancy);
         }
 
-        this.dao.save(object);
+        this.dao.save(vacancy);
+    }
+
+    private void shareVacancyByDefault(Vacancy vacancy) {
+        List<PartnerDTO> partners = ServiceHolder.getService(CollaborationService.class)
+                .getMyPartners(SessionUtility.getCurrentUserId());
+
+        for (PartnerDTO p : partners) {
+            if (p.isMy() && p.getType() == ConnectionType.STAFF_RECRUITER) {
+                VacancySharingRecord rec = new VacancySharingRecord();
+                rec.setWorkspace(vacancy.getWorkspace());
+                rec.setPartner(ServiceHolder.getService(UserService.class)
+                        .get(p.getPartnerId()));
+
+                vacancy.getSharingConfiguration().getRecords().add(rec);
+            }
+        }
+
     }
 
     @Override
@@ -108,25 +133,25 @@ public class VacancyServiceImpl extends GenericServiceImpl<VacancyDAO, Vacancy>
         if (hookup.isNew()) {
             hookup.setStatus(HookupStatus.CONTACTED);
             hookup.setWorkspace(workspace);
-        }
 
+            if (StringUtils.isNotBlank(hookup.getCandidate().getCurrentPosition())) {
+                PositionService service = ServiceHolder
+                        .getService(PositionService.class);
+                service.addUniqueDictionaryValue(
+                        hookup.getCandidate().getCurrentPosition(),
+                        workspace);
+            }
 
-        if (StringUtils.isNotBlank(hookup.getCandidateCurrentPosition())) {
-            PositionService service = ServiceHolder
-                    .getService(PositionService.class);
-            service.addUniqueDictionaryValue(
-                    hookup.getCandidateCurrentPosition(),
-                    workspace);
-        }
+            if (StringUtils.isNotBlank(hookup.getCandidate().getCurrentCompany())) {
+                CompanyService service = ServiceHolder
+                        .getService(CompanyService.class);
+                service.addUniqueDictionaryValue(
+                        hookup.getCandidate().getCurrentCompany(),
+                        "",
+                        "",
+                        workspace);
+            }
 
-        if (StringUtils.isNotBlank(hookup.getCandidateCurrentCompany())) {
-            CompanyService service = ServiceHolder
-                    .getService(CompanyService.class);
-            service.addUniqueDictionaryValue(
-                    hookup.getCandidateCurrentCompany(),
-                    "",
-                    "",
-                    workspace);
         }
 
         this.saveHookup(hookup);

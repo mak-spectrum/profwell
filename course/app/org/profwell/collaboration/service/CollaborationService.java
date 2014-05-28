@@ -6,10 +6,13 @@ import org.profwell.collaboration.domain.PartnerDTO;
 import org.profwell.collaboration.domain.PartnershipRequestDTO;
 import org.profwell.collaboration.model.CollaborationAgreement;
 import org.profwell.collaboration.model.CollaborationRequest;
+import org.profwell.collaboration.model.ConnectionType;
 
 public interface CollaborationService {
 
     CollaborationAgreement getCollaborationAgreement(Long agreementId);
+
+    CollaborationAgreement getCollaborationAgreement(Long firstPartnerId, Long secondPartnerId);
 
     CollaborationRequest getCollaborationRequest(Long requestId);
 
@@ -29,7 +32,7 @@ public interface CollaborationService {
 
     void saveCollaborationRequest(CollaborationRequest request);
 
-    boolean checkCollaborationAgreement(Long userId, Long partnerId);
+    boolean checkCollaborationAgreement(Long ownerId, Long partnerId, ConnectionType type);
 
     boolean checkCollaborationRequest(Long userId, Long partnerId);
 }

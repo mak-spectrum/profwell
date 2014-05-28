@@ -149,6 +149,10 @@ public class AbstractVacancyForm extends ValidationForm {
         return String.valueOf(this.id);
     }
 
+    public void setIdValue(String idvalue) {
+        this.id = Long.parseLong(idvalue);
+    }
+
     public String getSalaryFromValue() {
         return this.salaryFromValue;
     }
@@ -305,6 +309,14 @@ public class AbstractVacancyForm extends ValidationForm {
 
     public String getDueDateValue() {
         return dueDateValue;
+    }
+
+    public void setOpeningDate(Date openingDate) {
+        this.openingDate = openingDate;
+    }
+
+    public void setClosingDate(Date closingDate) {
+        this.closingDate = closingDate;
     }
 
 }

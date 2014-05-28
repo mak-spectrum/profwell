@@ -31,6 +31,7 @@ form: org.profwell.vacancy.domain.VacancyEditForm)
                                     form.getPriorityValue(),
                                     form.getPrioritySelectItems())
                                 @tags.forms.inputDate("dueDateId", "dueDateValue", "Due Date", form.getDueDateValue(), form.getVc())
+
                                 @tags.forms.outputSimple("Status", form.getStatus().getCaption())
                                 @tags.forms.outputSimple("Opening Date", form.getOpeningDatetimeFormatted())
                                 @if(form.isVacancyClosed()) {

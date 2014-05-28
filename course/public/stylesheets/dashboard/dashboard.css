@@ -26,6 +26,22 @@ ul.vacancies > li > span {
     height: auto;
 }
 
+li.vacancies-category > span {
+    font-weight: bold;
+}
+
+li.vacancies-category > span.overdue {
+    color: #e88;
+}
+
+li.vacancies-category > span.weeks {
+    color: #999;
+}
+
+li.vacancies-category > span.more-weeks {
+    color: #5c5;
+}
+
 li.vacancy > div {
     display: inline-block;
     margin: 0 auto;

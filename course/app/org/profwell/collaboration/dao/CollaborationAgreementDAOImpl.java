@@ -10,6 +10,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Subquery;
 
 import org.profwell.collaboration.domain.PartnerDTO;
 import org.profwell.collaboration.model.CollaborationAgreement;
@@ -64,6 +65,43 @@ public class CollaborationAgreementDAOImpl extends GenericDAOImpl<CollaborationA
     }
 
     @Override
+    public CollaborationAgreement getCollaborationAgreement(
+            Long firstPartnerId, Long secondPartnerId) {
+
+        CriteriaBuilder cb = this.getEM().getCriteriaBuilder();
+
+        CriteriaQuery<CollaborationAgreement> criteria = cb.createQuery(CollaborationAgreement.class);
+        Root<CollaborationAgreement> agreement = criteria.from(getEntityClass());
+
+        Subquery<CollaborationAgreement> directQuery = criteria.subquery(CollaborationAgreement.class);
+        Root<CollaborationAgreement> da = directQuery.from(getEntityClass());
+        criteria.where(
+                cb.equal(da.<User>get("owner").get("id"), firstPartnerId),
+                cb.equal(da.<User>get("partner").get("id"), secondPartnerId)
+                );
+
+        Subquery<CollaborationAgreement> backwardQuery = criteria.subquery(CollaborationAgreement.class);
+        Root<CollaborationAgreement> ba = directQuery.from(getEntityClass());
+        criteria.where(
+                cb.equal(ba.<User>get("owner").get("id"), secondPartnerId),
+                cb.equal(ba.<User>get("partner").get("id"), firstPartnerId)
+                );
+
+        criteria.where(
+                cb.or(
+                        cb.in(agreement).value(directQuery),
+                        cb.in(agreement).value(backwardQuery)
+                        )
+                        );
+
+        TypedQuery<CollaborationAgreement> resultQuery = this.getEM().createQuery(criteria);
+
+        List<CollaborationAgreement> result = resultQuery.getResultList();
+
+        return this.extractSingleFromList(result);
+    }
+
+    @Override
     public List<PartnerDTO> getWhereIisPartner(Long workspaceId) {
         CriteriaBuilder cb = this.getEM().getCriteriaBuilder();
         List<Predicate> criterions = new ArrayList<>();
@@ -107,7 +145,7 @@ public class CollaborationAgreementDAOImpl extends GenericDAOImpl<CollaborationA
     }
 
     @Override
-    public boolean checkCollaborationAgreement(Long userId, Long partnerId) {
+    public boolean checkCollaborationAgreement(Long ownerId, Long partnerId, ConnectionType type) {
         CriteriaBuilder cb = this.getEM().getCriteriaBuilder();
         List<Predicate> criterions = new ArrayList<>();
 
@@ -116,8 +154,12 @@ public class CollaborationAgreementDAOImpl extends GenericDAOImpl<CollaborationA
         Join<CollaborationAgreement, User> owner = agreement.join("owner");
         Join<CollaborationAgreement, User> partner = agreement.join("partner");
 
-        criterions.add(cb.equal(owner.<Long>get("id"), userId));
+        criterions.add(cb.equal(owner.<Long>get("id"), ownerId));
         criterions.add(cb.equal(partner.<Long>get("id"), partnerId));
+
+        if (type != null) {
+            criterions.add(cb.equal(agreement.<ConnectionType>get("type"), type));
+        }
 
         criteria.multiselect(agreement.get("id"));
 

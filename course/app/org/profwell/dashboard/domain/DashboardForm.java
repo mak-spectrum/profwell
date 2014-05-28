@@ -1,20 +1,15 @@
 package org.profwell.dashboard.domain;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-
-import org.profwell.vacancy.model.HookupStatus;
-import org.profwell.vacancy.model.VacancyPriority;
 
 public class DashboardForm {
 
-    private List<DashboardVacancyDTO> vacancyData = new ArrayList<>();
+    private List<DashboardCategoryDTO> vacancyData;
 
-    private List<String> messages = new ArrayList<>();
+    private List<String> messages;
 
-    public List<DashboardVacancyDTO> getVacancyData() {
-        vacancyData.clear();
+    public List<DashboardCategoryDTO> getVacancyData() {
+        /*vacancyData.clear();
 
         DashboardVacancyDTO dto;
         DashboardHookupDTO hdto;
@@ -119,17 +114,17 @@ public class DashboardForm {
         dto.setCompanyName("Team International");
         dto.setOpeningDate(new Date());
         dto.setPriority(VacancyPriority.BACKGROUND);
-        vacancyData.add(dto);
+        vacancyData.add(dto);*/
 
-        return vacancyData;
+        return this.vacancyData;
     }
 
-    public void setVacancyData(List<DashboardVacancyDTO> vacancyData) {
+    public void setVacancyData(List<DashboardCategoryDTO> vacancyData) {
         this.vacancyData = vacancyData;
     }
 
 	public List<String> getMessages() {
-		return messages;
+		return this.messages;
 	}
 
 	public void setMessages(List<String> messages) {

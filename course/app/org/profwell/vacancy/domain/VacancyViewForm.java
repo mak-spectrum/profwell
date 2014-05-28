@@ -17,6 +17,10 @@ public class VacancyViewForm extends AbstractVacancyForm {
      */
     private String activeTab = MAIN_TAB;
 
+    private boolean sharingTabAvailable;
+
+    private boolean editAvailable;
+
     private List<HookupDTO> hookups = new ArrayList<>();
 
     public String getVacancyInfoTabActivity() {
@@ -65,6 +69,22 @@ public class VacancyViewForm extends AbstractVacancyForm {
 
     public void setHookups(List<HookupDTO> hookups) {
         this.hookups = hookups;
+    }
+
+    public boolean isSharingTabAvailable() {
+        return sharingTabAvailable;
+    }
+
+    public void setSharingTabAvailable(boolean sharingTabAvailable) {
+        this.sharingTabAvailable = sharingTabAvailable;
+    }
+
+    public boolean isEditAvailable() {
+        return editAvailable;
+    }
+
+    public void setEditAvailable(boolean editAvailable) {
+        this.editAvailable = editAvailable;
     }
 
 }
