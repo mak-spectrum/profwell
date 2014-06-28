@@ -26,15 +26,15 @@ form: org.profwell.dashboard.domain.DashboardForm)
                         </a>
                     </lh>
                     @if(form.getVacancyData().isEmpty()) {
-                        <li>
-                            <span>- There is no opened Vacancies -</span>
-                        </li>
+                    <li>
+                        <span>- There is no opened Vacancies -</span>
+                    </li>
                     } else {
                         @for(category <- form.getVacancyData()) {
                             @if(category.isNotEmpty()) {
-                            <li class="vacancies-category">
-                                <span class="@category.getStyle()">@category.getCaption()</span>
-                            </li>
+                    <li class="vacancies-category">
+                        <span class="@category.getStyle()">@category.getCaption()</span>
+                    </li>
                                 @for(vacancy <- category.getVacancies()) {
                     <li class="vacancy">
                         <div>

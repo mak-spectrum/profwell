@@ -132,15 +132,19 @@ public class DashboardController extends Controller {
             });
         }
 
-        List<DashboardCategoryDTO> result = new ArrayList<>(5);
+        List<DashboardCategoryDTO> categories = new ArrayList<>(5);
 
-        result.add(transformCategory("Overdue", "overdue", map.get(SUDDENLY)));
-        result.add(transformCategory("Less than Two weeks", "weeks", map.get(LESS_THAN_IN_TWO_WEEKS)));
-        result.add(transformCategory("Less than Four weeks", "weeks", map.get(LESS_THAN_IN_FOUR_WEEKS)));
-        result.add(transformCategory("Less than Eight weeks", "weeks", map.get(LESS_THAN_IN_EIGHT_WEEKS)));
-        result.add(transformCategory("Eight Weeks", "more-weeks", map.get(MORE_THAN_EIGHT_WEEKS)));
+        categories.add(transformCategory("Overdue", "overdue", map.get(SUDDENLY)));
+        categories.add(transformCategory("Less than Two weeks", "weeks", map.get(LESS_THAN_IN_TWO_WEEKS)));
+        categories.add(transformCategory("Less than Four weeks", "weeks", map.get(LESS_THAN_IN_FOUR_WEEKS)));
+        categories.add(transformCategory("Less than Eight weeks", "weeks", map.get(LESS_THAN_IN_EIGHT_WEEKS)));
+        categories.add(transformCategory("Eight Weeks", "more-weeks", map.get(MORE_THAN_EIGHT_WEEKS)));
 
-        return result;
+        if (checkIfEmpty(categories)) {
+            categories.clear();
+        }
+
+        return categories;
     }
 
     private static DashboardCategoryDTO transformCategory(
@@ -177,6 +181,15 @@ public class DashboardController extends Controller {
         }
 
         return categoryDTO;
+    }
+
+    private static boolean checkIfEmpty(List<DashboardCategoryDTO> categories) {
+        for (DashboardCategoryDTO dto : categories) {
+            if (dto.isNotEmpty()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @play.db.jpa.Transactional(readOnly = true)
