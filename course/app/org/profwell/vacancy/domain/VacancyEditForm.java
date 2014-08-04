@@ -193,10 +193,10 @@ public class VacancyEditForm extends AbstractVacancyForm {
     }
 
     public String getPriorityValue() {
-        if (this.country == null) {
+        if (this.priority == null) {
             return VacancyPriority.LOW.getName();
         } else {
-            return this.country.getName();
+            return this.priority.getName();
         }
     }
 

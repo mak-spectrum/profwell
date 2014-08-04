@@ -4,10 +4,11 @@ import java.util.List;
 
 import org.profwell.collaboration.dao.CollaborationAgreementDAO;
 import org.profwell.collaboration.dao.CollaborationRequestDAO;
-import org.profwell.collaboration.domain.PartnershipRequestDTO;
 import org.profwell.collaboration.domain.PartnerDTO;
+import org.profwell.collaboration.domain.PartnershipRequestDTO;
 import org.profwell.collaboration.model.CollaborationAgreement;
 import org.profwell.collaboration.model.CollaborationRequest;
+import org.profwell.collaboration.model.ConnectionType;
 
 public class CollaborationServiceImpl implements CollaborationService {
 
@@ -41,6 +42,11 @@ public class CollaborationServiceImpl implements CollaborationService {
     }
 
     @Override
+    public CollaborationAgreement getCollaborationAgreement(Long firstPartnerId, Long secondPartnerId) {
+        return agreementDAO.getCollaborationAgreement(firstPartnerId, secondPartnerId);
+    }
+
+    @Override
     public CollaborationRequest getCollaborationRequest(Long requestId) {
         return requestDAO.get(requestId);
     }
@@ -66,8 +72,8 @@ public class CollaborationServiceImpl implements CollaborationService {
     }
 
     @Override
-    public boolean checkCollaborationAgreement(Long userId, Long partnerId) {
-        return agreementDAO.checkCollaborationAgreement(userId, partnerId);
+    public boolean checkCollaborationAgreement(Long ownerId, Long partnerId, ConnectionType type) {
+        return agreementDAO.checkCollaborationAgreement(ownerId, partnerId, type);
     }
 
     @Override

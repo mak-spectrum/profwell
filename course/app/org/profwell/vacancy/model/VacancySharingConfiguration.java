@@ -56,6 +56,16 @@ public class VacancySharingConfiguration implements Identifiable {
             targetEntity = VacancySharingRecord.class)
     private Set<VacancySharingRecord> records = new HashSet<>();
 
+    public VacancySharingRecord getRecordForPartner(Long partnerId) {
+        for (VacancySharingRecord record : this.records) {
+            if (record.getPartner().getId() == partnerId) {
+                return record;
+            }
+        }
+
+        return null;
+    }
+
     @Override
     public long getId() {
         return this.id;

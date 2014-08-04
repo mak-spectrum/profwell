@@ -12,6 +12,8 @@ import org.profwell.ui.select.DictionaryConversionUtils;
 import org.profwell.vacancy.model.EngagementSource;
 import org.profwell.vacancy.model.EngagementType;
 import org.profwell.vacancy.model.Hookup;
+import org.profwell.vacancy.model.HookupPerson;
+import org.profwell.vacancy.model.HookupPersonLink;
 import org.profwell.vacancy.model.HookupStatus;
 import org.profwell.vacancy.model.Vacancy;
 import org.slf4j.Logger;
@@ -58,8 +60,8 @@ public class HookupForm extends ValidationForm {
 
         this.candidateId = hookup.getCandidate().getId();
         this.candidateName = PersonUtils.getFullName(hookup.getCandidate());
-        this.candidateCurrentPosition = hookup.getCandidateCurrentPosition();
-        this.candidateCurrentCompany = hookup.getCandidateCurrentCompany();
+        this.candidateCurrentPosition = hookup.getCandidate().getCurrentPosition();
+        this.candidateCurrentCompany = hookup.getCandidate().getCurrentCompany();
 
         this.vacancyId = hookup.getVacancy().getId();
 
@@ -88,9 +90,13 @@ public class HookupForm extends ValidationForm {
 
         Person candidate = new Person();
         candidate.setId(this.candidateId);
-        hookup.setCandidate(candidate);
-        hookup.setCandidateCurrentPosition(this.candidateCurrentPosition);
-        hookup.setCandidateCurrentCompany(this.candidateCurrentCompany);
+
+        HookupPersonLink link = new HookupPersonLink();
+        link.setPerson(candidate);
+
+        hookup.setCandidate(new HookupPerson());
+        hookup.getCandidate().setCurrentPosition(this.candidateCurrentPosition);
+        hookup.getCandidate().setCurrentCompany(this.candidateCurrentCompany);
 
         if (this.recommenderId >
                 Identifiable.DEFAULT_UNINITIALIZED_ID_VALUE) {
@@ -110,14 +116,14 @@ public class HookupForm extends ValidationForm {
     }
 
     public boolean isEngagementSectionExpanded() {
-        if (isNew()) {
+        if (this.isNew()) {
             return true;
         }
 
-        if (getVc().isEmpty()) {
+        if (this.getVc().isEmpty()) {
             return false;
         } else {
-            return isBlockHasValidationMessages(
+            return this.isBlockHasValidationMessages(
                     "engagementTypeValue",
                     "engagementPerson",
                     "engagementSourceNote");
@@ -203,7 +209,7 @@ public class HookupForm extends ValidationForm {
     /* SIMPLE SETTERS/GETTERS */
 
     public long getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(long id) {
@@ -211,7 +217,7 @@ public class HookupForm extends ValidationForm {
     }
 
     public long getVacancyId() {
-        return vacancyId;
+        return this.vacancyId;
     }
 
     public void setVacancyId(long vacancyId) {
@@ -219,7 +225,7 @@ public class HookupForm extends ValidationForm {
     }
 
     public long getRecommenderId() {
-        return recommenderId;
+        return this.recommenderId;
     }
 
     public void setRecommenderId(long recommenderId) {
@@ -227,7 +233,7 @@ public class HookupForm extends ValidationForm {
     }
 
     public HookupStatus getStatus() {
-        return status;
+        return this.status;
     }
 
     public void setStatus(HookupStatus status) {
@@ -235,7 +241,7 @@ public class HookupForm extends ValidationForm {
     }
 
     public String getEngagementSourceNote() {
-        return engagementSourceNote;
+        return this.engagementSourceNote;
     }
 
     public void setEngagementSourceNote(String engagementSourceNote) {
@@ -243,15 +249,15 @@ public class HookupForm extends ValidationForm {
     }
 
     public String getContactedOnValue() {
-        return contactedOnValue;
+        return this.contactedOnValue;
     }
 
     public Date getContactedOn() {
-        return contactedOn;
+        return this.contactedOn;
     }
 
     public long getCandidateId() {
-        return candidateId;
+        return this.candidateId;
     }
 
     public void setContactedOn(Date contactedOn) {
@@ -259,7 +265,7 @@ public class HookupForm extends ValidationForm {
     }
 
     public String getCandidateName() {
-        return candidateName;
+        return this.candidateName;
     }
 
     public void setCandidateName(String candidateName) {
@@ -267,7 +273,7 @@ public class HookupForm extends ValidationForm {
     }
 
     public String getRecommenderName() {
-        return recommenderName;
+        return this.recommenderName;
     }
 
     public void setRecommenderName(String recommenderName) {
@@ -275,7 +281,7 @@ public class HookupForm extends ValidationForm {
     }
 
     public String getCandidateCurrentPosition() {
-        return candidateCurrentPosition;
+        return this.candidateCurrentPosition;
     }
 
     public void setCandidateCurrentPosition(String candidateCurrentPosition) {
@@ -283,7 +289,7 @@ public class HookupForm extends ValidationForm {
     }
 
     public String getCandidateCurrentCompany() {
-        return candidateCurrentCompany;
+        return this.candidateCurrentCompany;
     }
 
     public void setCandidateCurrentCompany(String candidateCurrentCompany) {

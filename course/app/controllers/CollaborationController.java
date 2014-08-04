@@ -340,8 +340,8 @@ public class CollaborationController extends Controller {
         }
 
         if (valid) {
-            if (service.checkCollaborationAgreement(SessionUtility.getCurrentUserId(), coworker.getId())
-                    || service.checkCollaborationAgreement(coworker.getId(), SessionUtility.getCurrentUserId())) {
+            if (service.checkCollaborationAgreement(SessionUtility.getCurrentUserId(), coworker.getId(), null)
+                    || service.checkCollaborationAgreement(coworker.getId(), SessionUtility.getCurrentUserId(), null)) {
                 context.add("message", "You already have partnership with the specified user."
                         + " Please break existing partnership first.");
                 valid = false;

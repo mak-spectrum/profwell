@@ -111,7 +111,7 @@ public class DashboardHookupDTO implements PersonInfoHolder {
     }
 
 
-    public void setLastUpdateDate(Date lastUpdateDate) {
+    public void setLastActivityOn(Date lastUpdateDate) {
         this.lastUpdateDate = lastUpdateDate;
     }
 

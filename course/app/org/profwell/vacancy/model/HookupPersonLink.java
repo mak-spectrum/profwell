@@ -14,12 +14,12 @@ import javax.persistence.Table;
 
 import org.profwell.generic.model.Identifiable;
 import org.profwell.person.model.Person;
-import org.profwell.security.model.User;
+import org.profwell.security.model.Workspace;
 
 @Entity
-@Table(name="HOOKUP_CANDIDATE_SUBSTITUTION")
+@Table(name = "HOOKUP_PERSON_LINK")
 @Access(AccessType.FIELD)
-public class HookupCandidateSubstitution implements Identifiable {
+public class HookupPersonLink implements Identifiable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -27,45 +27,44 @@ public class HookupCandidateSubstitution implements Identifiable {
     private long id = DEFAULT_UNINITIALIZED_ID_VALUE;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CANDIDATE_ID",
+    @JoinColumn(name = "PERSON_ID",
             referencedColumnName = "ID",
             nullable = false)
-    private Person candidate;
+    private Person person;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PARTNER_ID",
+    @JoinColumn(name = "WORKSPACE_ID",
             referencedColumnName = "ID",
-            nullable = true)
-    private User partner;
+            nullable = false)
+    private Workspace workspace;
 
     @Override
     public boolean isNew() {
-        return id == DEFAULT_UNINITIALIZED_ID_VALUE;
+        return this.id == DEFAULT_UNINITIALIZED_ID_VALUE;
     }
 
     @Override
     public long getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(long id) {
         this.id = id;
     }
 
-    public Person getCandidate() {
-        return candidate;
+    public Person getPerson() {
+        return this.person;
     }
 
-    public void setCandidate(Person candidate) {
-        this.candidate = candidate;
+    public void setPerson(Person person) {
+        this.person = person;
     }
 
-    public User getPartner() {
-        return partner;
+    public Workspace getWorkspace() {
+        return this.workspace;
     }
 
-    public void setPartner(User partner) {
-        this.partner = partner;
+    public void setWorkspace(Workspace workspace) {
+        this.workspace = workspace;
     }
-
 }

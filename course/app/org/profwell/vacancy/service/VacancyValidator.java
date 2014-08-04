@@ -1,7 +1,5 @@
 package org.profwell.vacancy.service;
 
-import java.util.Date;
-
 import org.apache.commons.lang3.StringUtils;
 import org.profwell.generic.model.ModelConstants;
 import org.profwell.generic.validation.ValidationContext;
@@ -154,10 +152,6 @@ public class VacancyValidator {
             if (form.getDueDate() == null) {
                 context.add("dueDateValue",
                         "Please input date in format mm/dd/yyy (month/day/year).");
-                result = false;
-            } else if (form.getDueDate().getTime() < new Date().getTime()) {
-                context.add("dueDateValue",
-                        "Due date cannot be before today.");
                 result = false;
             }
 

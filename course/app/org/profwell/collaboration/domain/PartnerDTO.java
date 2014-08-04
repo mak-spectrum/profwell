@@ -32,7 +32,7 @@ public class PartnerDTO {
         if (this.type == ConnectionType.COMPANION) {
             return "";
         } else {
-            if (my) {
+            if (this.my) {
                 return "";
             } else {
                 if (this.type == ConnectionType.STAFF_RECRUITER) {
@@ -45,7 +45,7 @@ public class PartnerDTO {
     }
 
     public String getPartnershipDescription() {
-        if (my) {
+        if (this.my) {
             return this.type.getCaption();
         } else {
             return this.type.getOppositeCaption();
@@ -53,7 +53,7 @@ public class PartnerDTO {
     }
 
     public String getPartnerFirstName() {
-        return partnerFirstName;
+        return this.partnerFirstName;
     }
 
     public void setPartnerFirstName(String partnerFirstName) {
@@ -61,7 +61,7 @@ public class PartnerDTO {
     }
 
     public String getPartnerLastName() {
-        return partnerLastName;
+        return this.partnerLastName;
     }
 
     public void setPartnerLastName(String partnerLastName) {
@@ -77,7 +77,7 @@ public class PartnerDTO {
     }
 
     public Long getRecordId() {
-        return recordId;
+        return this.recordId;
     }
 
     public void setRecordId(Long recordId) {
@@ -85,7 +85,7 @@ public class PartnerDTO {
     }
 
     public Long getPartnerId() {
-        return partnerId;
+        return this.partnerId;
     }
 
     public void setPartnerId(Long partnerId) {
@@ -93,11 +93,19 @@ public class PartnerDTO {
     }
 
     public String getPartnerUuid() {
-        return partnerUuid;
+        return this.partnerUuid;
     }
 
     public void setPartnerUuid(String partnerUuid) {
         this.partnerUuid = partnerUuid;
+    }
+
+    public ConnectionType getType() {
+        return this.type;
+    }
+
+    public boolean isMy() {
+        return this.my;
     }
 
 }

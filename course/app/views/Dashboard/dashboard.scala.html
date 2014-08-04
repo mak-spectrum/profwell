@@ -26,62 +26,69 @@ form: org.profwell.dashboard.domain.DashboardForm)
                         </a>
                     </lh>
                     @if(form.getVacancyData().isEmpty()) {
-                        <li>
-                            <span>- There is no opened Vacancies -</span>
-                        </li>
+                    <li>
+                        <span>- There is no opened Vacancies -</span>
+                    </li>
                     } else {
-                        @for(vacancy <- form.getVacancyData()) {
-                            <li class="vacancy">
-                                <div>
-                                    <div class="caption">
-                                        <a href="/vacancyView?id=@vacancy.getId()&fd=true">@vacancy.getPositionCaption()</a>
-                                        @vacancy.getPriority().name() match {
-                                            case "URGENT" => {
-                                                <img class="priority-icon" src="@routes.Assets.at("images/icons/highest-priority.png")" alt="Urgent" title="Urgent vacancy" />
-                                            }
-                                            case "HIGH" => {
-                                                <img class="priority-icon" src="@routes.Assets.at("images/icons/high-priority.png")" alt="High" title="High priority vacancy" />
-                                            }
-                                            case "LOW" => {
-                                                <img class="priority-icon" src="@routes.Assets.at("images/icons/low-priority.png")" alt="Low" title="Low priority vacancy" />
-                                            }
-                                            case "BACKGROUND" => {
-                                                <img class="priority-icon" src="@routes.Assets.at("images/icons/lowest-priority.png")" alt="Background" title="Background priority vacancy" />
-                                            }
-                                        }
-                                        <span class="subcaption"><strong>@vacancy.getProjectName()</strong></span>
-                                        <span class="subcaption">at <strong>@vacancy.getCompanyName()</strong></span>
-                                        <span class="subcaption">since <strong>@vacancy.getOpeningDateFormatted()</strong></span>
-                                        @if(vacancy.getDueDate() != null) {
-                                            <span class="subcaption">due date <strong>@vacancy.getDueDateFormatted()</strong></span>
-                                        }
-                                    </div>
-                                    <div class="hookups collapsed">
-                                        <div class="icon-holder">
-                                            <a href="/vacancyAttachPerson?id=@vacancy.getId()" class="attach" title="Staff person">
-                                                <img src="@routes.Assets.at("images/icons/staff-person.png")" alt="Staff" />
-                                            </a>
-                                        </div>
-                                        @if(vacancy.getHookups().isEmpty()) {
-                                            <div class="person empty">
-                                                - empty list -
-                                            </div>
-                                        } else {
-                                            @for(hookup <- vacancy.getHookups()) {
-                                                <div class="person">
-                                                    <span><a href="/hookupView?id=@hookup.getId()">@(utils.PersonUtils.getFullName(hookup))</a></span>
-                                                    <span class="subcaption"><strong>@hookup.getCurrentPosition()</strong></span>
-                                                    <span class="subcaption">at <strong>@hookup.getCurrentCompany()</strong></span>
-                                                    <span class="subcaption">status <strong>@hookup.getStatus().getCaption()</strong></span>
-                                                    <span class="subcaption">last update <strong>@hookup.getLastUpdateDateFormatted()</strong></span>
-                                                </div>
-                                            }
-                                            <a href="#" class="expand-hookups more-icon"></a>
-                                        }
-                                        <div class="hookups-count">@vacancy.getHookups().size()</div>
-                                    </div>
+                        @for(category <- form.getVacancyData()) {
+                            @if(category.isNotEmpty()) {
+                    <li class="vacancies-category">
+                        <span class="@category.getStyle()">@category.getCaption()</span>
+                    </li>
+                                @for(vacancy <- category.getVacancies()) {
+                    <li class="vacancy">
+                        <div>
+                            <div class="caption">
+                                <a href="/vacancyView?id=@vacancy.getId()&fd=true">@vacancy.getPositionCaption()</a>
+                                @vacancy.getPriority().name() match {
+                                    case "URGENT" => {
+                                        <img class="priority-icon" src="@routes.Assets.at("images/icons/highest-priority.png")" alt="Urgent" title="Urgent vacancy" />
+                                    }
+                                    case "HIGH" => {
+                                        <img class="priority-icon" src="@routes.Assets.at("images/icons/high-priority.png")" alt="High" title="High priority vacancy" />
+                                    }
+                                    case "LOW" => {
+                                        <img class="priority-icon" src="@routes.Assets.at("images/icons/low-priority.png")" alt="Low" title="Low priority vacancy" />
+                                    }
+                                    case "BACKGROUND" => {
+                                        <img class="priority-icon" src="@routes.Assets.at("images/icons/lowest-priority.png")" alt="Background" title="Background priority vacancy" />
+                                    }
+                                }
+                                <span class="subcaption"><strong>@vacancy.getProjectName()</strong></span>
+                                <span class="subcaption">at <strong>@vacancy.getCompanyName()</strong></span>
+                                <span class="subcaption">since <strong>@vacancy.getOpeningDateFormatted()</strong></span>
+                                @if(vacancy.getDueDate() != null) {
+                                    <span class="subcaption">due date <strong>@vacancy.getDueDateFormatted()</strong></span>
+                                }
+                            </div>
+                            <div class="hookups collapsed">
+                                <div class="icon-holder">
+                                    <a href="/vacancyAttachPerson?id=@vacancy.getId()" class="attach" title="Staff person">
+                                        <img src="@routes.Assets.at("images/icons/staff-person.png")" alt="Staff" />
+                                    </a>
                                 </div>
-                            </li>
+                                @if(vacancy.getHookups().isEmpty()) {
+                                    <div class="person empty">
+                                        - empty list -
+                                    </div>
+                                } else {
+                                    @for(hookup <- vacancy.getHookups()) {
+                                        <div class="person">
+                                            <span><a href="/hookupView?id=@hookup.getId()">@(utils.PersonUtils.getFullName(hookup))</a></span>
+                                            <span class="subcaption"><strong>@hookup.getCurrentPosition()</strong></span>
+                                            <span class="subcaption">at <strong>@hookup.getCurrentCompany()</strong></span>
+                                            <span class="subcaption">status <strong>@hookup.getStatus().getCaption()</strong></span>
+                                            <span class="subcaption">last update <strong>@hookup.getLastUpdateDateFormatted()</strong></span>
+                                        </div>
+                                    }
+                                    <a href="#" class="expand-hookups more-icon"></a>
+                                }
+                                <div class="hookups-count">@vacancy.getHookups().size()</div>
+                            </div>
+                        </div>
+                    </li>
+                                }
+                            }
                         }
                     }
                 </ul>

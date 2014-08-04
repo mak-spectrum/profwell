@@ -24,10 +24,10 @@ public class VacancyFilter extends GenericFilter {
     private Long workspaceId;
 
     public String getStatusValue() {
-        if (status == null) {
+        if (this.status == null) {
             return DictionaryConversionUtils.EMPTY_DROP_DOWN_VALUE;
         } else {
-            return String.valueOf(status);
+            return String.valueOf(this.status);
         }
     }
 
@@ -42,10 +42,10 @@ public class VacancyFilter extends GenericFilter {
     }
 
     public String getCountryValue() {
-        if (country == null) {
+        if (this.country == null) {
             return DictionaryConversionUtils.EMPTY_DROP_DOWN_VALUE;
         } else {
-            return String.valueOf(country);
+            return String.valueOf(this.country);
         }
     }
 
@@ -68,7 +68,7 @@ public class VacancyFilter extends GenericFilter {
     }
 
     public VacancyStatus getStatus() {
-        return status;
+        return this.status;
     }
 
     public void setStatus(VacancyStatus status) {
@@ -76,7 +76,7 @@ public class VacancyFilter extends GenericFilter {
     }
 
     public Long getAssigneeId() {
-        return assigneeId;
+        return this.assigneeId;
     }
 
     public void setAssigneeId(Long assigneeId) {
@@ -84,7 +84,7 @@ public class VacancyFilter extends GenericFilter {
     }
 
     public Country getCountry() {
-        return country;
+        return this.country;
     }
 
     public void setCountry(Country country) {
@@ -92,7 +92,7 @@ public class VacancyFilter extends GenericFilter {
     }
 
     public String getCity() {
-        return city;
+        return this.city;
     }
 
     public void setCity(String city) {
@@ -100,7 +100,7 @@ public class VacancyFilter extends GenericFilter {
     }
 
     public String getCompany() {
-        return company;
+        return this.company;
     }
 
     public void setCompany(String company) {
@@ -108,7 +108,7 @@ public class VacancyFilter extends GenericFilter {
     }
 
     public String getProject() {
-        return project;
+        return this.project;
     }
 
     public void setProject(String project) {
@@ -116,7 +116,7 @@ public class VacancyFilter extends GenericFilter {
     }
 
     public String getPosition() {
-        return position;
+        return this.position;
     }
 
     public void setPosition(String position) {
@@ -124,7 +124,7 @@ public class VacancyFilter extends GenericFilter {
     }
 
     public Long getWorkspaceId() {
-        return workspaceId;
+        return this.workspaceId;
     }
 
     public void setWorkspaceId(Long workspaceId) {

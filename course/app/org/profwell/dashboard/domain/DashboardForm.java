@@ -1,21 +1,31 @@
 package org.profwell.dashboard.domain;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+<<<<<<< HEAD
 
 import org.profwell.notification.model.Notice;
 import org.profwell.vacancy.model.HookupStatus;
 import org.profwell.vacancy.model.VacancyPriority;
+=======
+>>>>>>> branch 'master' of https://github.com/mak-spectrum/profwell.git
 
 public class DashboardForm {
 
-    private List<DashboardVacancyDTO> vacancyData = new ArrayList<>();
+    private List<DashboardCategoryDTO> vacancyData;
 
+<<<<<<< HEAD
     private List<Notice> messages = new ArrayList<>();
+=======
+    private List<String> messages;
+>>>>>>> branch 'master' of https://github.com/mak-spectrum/profwell.git
 
+<<<<<<< HEAD
     public List<DashboardVacancyDTO> getVacancyData() {
         this.vacancyData.clear();
+=======
+    public List<DashboardCategoryDTO> getVacancyData() {
+        /*vacancyData.clear();
+>>>>>>> branch 'master' of https://github.com/mak-spectrum/profwell.git
 
         DashboardVacancyDTO dto;
         DashboardHookupDTO hdto;
@@ -120,16 +130,24 @@ public class DashboardForm {
         dto.setCompanyName("Team International");
         dto.setOpeningDate(new Date());
         dto.setPriority(VacancyPriority.BACKGROUND);
+<<<<<<< HEAD
         this.vacancyData.add(dto);
+=======
+        vacancyData.add(dto);*/
+>>>>>>> branch 'master' of https://github.com/mak-spectrum/profwell.git
 
         return this.vacancyData;
     }
 
-    public void setVacancyData(List<DashboardVacancyDTO> vacancyData) {
+    public void setVacancyData(List<DashboardCategoryDTO> vacancyData) {
         this.vacancyData = vacancyData;
     }
 
+<<<<<<< HEAD
 	public List<Notice> getMessages() {
+=======
+	public List<String> getMessages() {
+>>>>>>> branch 'master' of https://github.com/mak-spectrum/profwell.git
 		return this.messages;
 	}
 

@@ -12,8 +12,8 @@ jQuery(document).ready(function() {
 
     errorListItem.hide();
 
-    jQuery("div#partner-save-success").tooltip()
-    jQuery("div#partner-save-error").tooltip()
+    jQuery("div#partner-save-success").tooltip();
+    jQuery("div#partner-save-error").tooltip();
 
     function loadPartners() {
 
@@ -161,8 +161,6 @@ jQuery(document).ready(function() {
     });
 
     function processSharingConfiguration() {
-        saveSharing.hide();
-
         var postData = {
                 vacancyId: idValueField.val()
                 };
@@ -182,11 +180,15 @@ jQuery(document).ready(function() {
                 }
         ).done(
                 function(responseMsg) {
-                    jQuery("div#partner-save-success").show();
+                    jQuery("div#partner-save-success").tooltip("open");
+                    setTimeout(function() {
+                        jQuery("div#partner-save-success").tooltip("close");
+                        saveSharing.hide(400);
+                    }, 2000)
                 }
         ).fail(
                 function(response) {
-                    jQuery("div#partner-save-error").show();
+                    jQuery("div#partner-save-error").tooltip("open");
                 }
         );
     }

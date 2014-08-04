@@ -80,10 +80,45 @@ public class Global extends GlobalSettings {
 
                 admin.setUsername("hradmin@gmail.com");
                 admin.setEmail("hradmin@gmail.com");
+                admin.setFirstName("Admin");
+                admin.setLastName("Adminchenko");
                 admin.setPassword("secret1@");
                 admin.setRole(Role.ADMINISTRATOR);
 
                 ServiceHolder.getService(UserService.class).addNewUser(admin);
+
+                User ivan = new User();
+
+                ivan.setUsername("ivanchenko");
+                ivan.setEmail("hradmin@gmail.com");
+                ivan.setFirstName("Ivan");
+                ivan.setLastName("Ivanchenko");
+                ivan.setPassword("!2qwaszx");
+                ivan.setRole(Role.HR_MANAGER);
+
+                ServiceHolder.getService(UserService.class).addNewUser(ivan);
+
+                User petr = new User();
+
+                petr.setUsername("petrenko");
+                petr.setEmail("hradmin@gmail.com");
+                petr.setFirstName("Petr");
+                petr.setLastName("Petrenko");
+                petr.setPassword("!2qwaszx");
+                petr.setRole(Role.HR_MANAGER);
+
+                ServiceHolder.getService(UserService.class).addNewUser(petr);
+
+                User vasiliy = new User();
+
+                vasiliy.setUsername("vasilchenko");
+                vasiliy.setEmail("hradmin@gmail.com");
+                vasiliy.setFirstName("Vasiliy");
+                vasiliy.setLastName("Vasilchenko");
+                vasiliy.setPassword("!2qwaszx");
+                vasiliy.setRole(Role.HR_MANAGER);
+
+                ServiceHolder.getService(UserService.class).addNewUser(vasiliy);
             }
         }
 

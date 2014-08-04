@@ -9,7 +9,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -18,6 +17,7 @@ import org.codehaus.jackson.node.ArrayNode;
 import org.codehaus.jackson.node.JsonNodeFactory;
 import org.codehaus.jackson.node.ObjectNode;
 import org.profwell.collaboration.domain.PartnerDTO;
+import org.profwell.collaboration.model.ConnectionType;
 import org.profwell.collaboration.service.CollaborationService;
 import org.profwell.conf.di.ServiceHolder;
 import org.profwell.file.service.FileService;
@@ -38,6 +38,7 @@ import org.profwell.vacancy.model.Hookup;
 import org.profwell.vacancy.model.HookupDocuments;
 import org.profwell.vacancy.model.HookupStatus;
 import org.profwell.vacancy.model.Vacancy;
+import org.profwell.vacancy.model.VacancySharingConfiguration;
 import org.profwell.vacancy.model.VacancySharingRecord;
 import org.profwell.vacancy.model.VacancyStatus;
 import org.profwell.vacancy.service.HookupLifecycle;
@@ -163,6 +164,13 @@ public class VacancyController extends Controller {
                     );
         } else {
 
+            if (!form.isNew()) {
+                Vacancy v = service.get(form.getId());
+                form.setStatus(v.getStatus());
+                form.setOpeningDate(v.getOpeningDatetime());
+                form.setClosingDate(v.getClosingDatetime());
+            }
+
             Content html = views.html.Vacancy.vacancyEdit.render(
                     getMenuConfiguration(),
                     form);
@@ -211,6 +219,9 @@ public class VacancyController extends Controller {
         form.setActiveTab(activeTab);
         form.transferFrom(vacancy);
 
+        form.setEditAvailable(vacancy.getWorkspace().getId() == SessionUtility.getCurrentUserId());
+        form.setSharingTabAvailable(form.isEditAvailable());
+
         if (form.isHookupsTabActive()) {
             List<HookupDTO> list = service.loadHookupsForVacancy(
                     form.getId(),
@@ -232,6 +243,25 @@ public class VacancyController extends Controller {
                 form);
 
         return ok(html);
+    }
+
+    // TODO : reuse in the future
+    @SuppressWarnings("unused")
+    private static boolean isSharingTabAvailable(Vacancy vacancy) {
+        Long currentUserId = SessionUtility.getCurrentUserId();
+
+        if (vacancy.getWorkspace().getId() == currentUserId) {
+            return true;
+        } else {
+            VacancySharingRecord rec = vacancy.getSharingConfiguration()
+                    .getRecordForPartner(currentUserId);
+
+            return rec != null && !rec.isReadonly()
+                    && collaborationService.checkCollaborationAgreement(
+                            vacancy.getWorkspace().getId(),
+                            currentUserId,
+                            ConnectionType.RECRUITMENT_AGENCY );
+        }
     }
 
     @play.db.jpa.Transactional(readOnly = true)
@@ -840,14 +870,13 @@ public class VacancyController extends Controller {
         List<PartnerDTO> partners = collaborationService
                 .getMyPartners(SessionUtility.getCurrentUserId());
 
-        Set<VacancySharingRecord> sharingRecords = service
-                .getVacancySharingConfiguration(vacancyId).getRecords();
+        VacancySharingConfiguration sharingConfig = service
+                .getVacancySharingConfiguration(vacancyId);
 
         List<Long> hookupsWspsIds = service.listHookupsOwnersIds(vacancyId);
 
         ArrayNode result = new ArrayNode(JsonNodeFactory.instance);
 
-        int i = 0;
         for (PartnerDTO p : partners) {
             ObjectNode partner = result.addObject();
 
@@ -861,13 +890,9 @@ public class VacancyController extends Controller {
                 partner.put("name", name.toString());
             }
 
-            VacancySharingRecord rec = findPartnerSharingRecord(sharingRecords, p.getPartnerId());
+            VacancySharingRecord rec =
+                    sharingConfig.getRecordForPartner(p.getPartnerId());
 
-//            if (i == 1) {
-//                partner.put("enabled", true);
-//                partner.put("readonly", false);
-//                partner.put("canBeDisabled", true);
-//            } else
             if (rec != null) {
                 partner.put("enabled", !rec.isReadonly());
                 partner.put("readonly", rec.isReadonly());
@@ -877,22 +902,10 @@ public class VacancyController extends Controller {
                 partner.put("readonly", false);
                 partner.put("canBeDisabled", true);
             }
-            i++;
         }
 
         return ok(result);
     }
-
-    private static VacancySharingRecord findPartnerSharingRecord(Set<VacancySharingRecord> sharingRecords, Long partnerId) {
-        for (VacancySharingRecord rec : sharingRecords) {
-            if (rec.getPartner().getId() == partnerId.longValue()) {
-                return rec;
-            }
-        }
-
-        return null;
-    }
-
 
     private static boolean checkIfThereIsHookup(List<Long> workspaceIds, Long partnerId) {
         for (Long id : workspaceIds) {
@@ -923,15 +936,14 @@ public class VacancyController extends Controller {
         List<PartnerDTO> partners = collaborationService
                 .getMyPartners(SessionUtility.getCurrentUserId());
 
-        Set<VacancySharingRecord> sharingRecords =
-                vacancy.getSharingConfiguration().getRecords();
-
         List<Long> hookupsWspsIds = service.listHookupsOwnersIds(vacancyId);
 
         for (PartnerDTO p : partners) {
+
+            VacancySharingRecord rec = vacancy.getSharingConfiguration()
+                    .getRecordForPartner(p.getPartnerId());
+
             if (isSharedForPartner(requestParams, p.getPartnerId())) {
-                VacancySharingRecord rec =
-                        getRecordIfExists(sharingRecords, p.getPartnerId());
 
                 if (rec != null) {
                     rec.setReadonly(false);
@@ -944,9 +956,6 @@ public class VacancyController extends Controller {
                     vacancy.getSharingConfiguration().getRecords().add(rec);
                 }
             } else {
-
-                VacancySharingRecord rec =
-                        getRecordIfExists(sharingRecords, p.getPartnerId());
 
                 if (rec != null) {
                     boolean readonly = checkIfThereIsHookup(hookupsWspsIds, p.getPartnerId());
@@ -983,19 +992,6 @@ public class VacancyController extends Controller {
         }
 
         return false;
-    }
-
-    private static VacancySharingRecord getRecordIfExists(
-            Set<VacancySharingRecord> sharingRecords,
-            Long partnerId) {
-
-        for (VacancySharingRecord record : sharingRecords) {
-            if (record.getPartner().getId() == partnerId) {
-                return record;
-            }
-        }
-
-        return null;
     }
 
     static MenuConfiguration getMenuConfiguration() {
