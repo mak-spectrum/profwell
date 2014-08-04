@@ -16,4 +16,6 @@ public interface NoticeService extends GenericService<Notice> {
     List<Notice> listNotice(NoticeFilter filter);
 
     void noticeRead(Long noticeId);
+
+    void markAllAsRead(Long userId);
 }

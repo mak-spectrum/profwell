@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.profwell.notification.model.Notice;
 import org.profwell.vacancy.model.HookupStatus;
 import org.profwell.vacancy.model.VacancyPriority;
 
@@ -11,10 +12,10 @@ public class DashboardForm {
 
     private List<DashboardVacancyDTO> vacancyData = new ArrayList<>();
 
-    private List<String> messages = new ArrayList<>();
+    private List<Notice> messages = new ArrayList<>();
 
     public List<DashboardVacancyDTO> getVacancyData() {
-        vacancyData.clear();
+        this.vacancyData.clear();
 
         DashboardVacancyDTO dto;
         DashboardHookupDTO hdto;
@@ -25,7 +26,7 @@ public class DashboardForm {
         dto.setCompanyName("AgileEngine");
         dto.setOpeningDate(new Date());
         dto.setPriority(VacancyPriority.URGENT);
-        vacancyData.add(dto);
+        this.vacancyData.add(dto);
 
         dto = new DashboardVacancyDTO();
         dto.setPositionCaption("Junior Quality Engineer");
@@ -33,7 +34,7 @@ public class DashboardForm {
         dto.setCompanyName("AgileEngine");
         dto.setOpeningDate(new Date());
         dto.setPriority(VacancyPriority.HIGH);
-        vacancyData.add(dto);
+        this.vacancyData.add(dto);
 
         hdto = new DashboardHookupDTO();
         hdto.setCurrentCompany("- No company -");
@@ -71,7 +72,7 @@ public class DashboardForm {
         dto.setCompanyName("AgileEngine");
         dto.setOpeningDate(new Date());
         dto.setPriority(VacancyPriority.LOW);
-        vacancyData.add(dto);
+        this.vacancyData.add(dto);
 
         hdto = new DashboardHookupDTO();
         hdto.setCurrentCompany("Profitsoft");
@@ -119,20 +120,20 @@ public class DashboardForm {
         dto.setCompanyName("Team International");
         dto.setOpeningDate(new Date());
         dto.setPriority(VacancyPriority.BACKGROUND);
-        vacancyData.add(dto);
+        this.vacancyData.add(dto);
 
-        return vacancyData;
+        return this.vacancyData;
     }
 
     public void setVacancyData(List<DashboardVacancyDTO> vacancyData) {
         this.vacancyData = vacancyData;
     }
 
-	public List<String> getMessages() {
-		return messages;
+	public List<Notice> getMessages() {
+		return this.messages;
 	}
 
-	public void setMessages(List<String> messages) {
+	public void setMessages(List<Notice> messages) {
 		this.messages = messages;
 	}
 

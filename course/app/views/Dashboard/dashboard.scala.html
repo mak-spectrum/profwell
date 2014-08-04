@@ -5,8 +5,8 @@ form: org.profwell.dashboard.domain.DashboardForm)
     <link rel="stylesheet" href="@routes.Assets.at("stylesheets/dashboard/dashboard.css")"></link>
 } {
     <script src="@routes.Assets.at("javascripts/dashboard/dashboard.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.at("javascripts/dashboard/dashboardNotify.js")" type="text/javascript"></script>
 } {
-
 <div class="main">
     <section class="grid-wrap">
 
@@ -91,13 +91,20 @@ form: org.profwell.dashboard.domain.DashboardForm)
                 <ul id="messanger">
                      <lh>
                          <h5>Notifications</h5>
-                        <a href="/noticeList" title="Open new vacancy">
-                            <img src="@routes.Assets.at("images/icons/notice-arch.png")" alt="Open vacancy" />
+                        <a href="/noticeList" title="Open archive">
+                            <img src="@routes.Assets.at("images/icons/notice-arch.png")" alt="Open archive" />
                         </a>
                      </lh>
                     @for(m <- form.getMessages()) {
-	                    <li>@m</li>
-                    }
+	                    <li>
+                            <div>
+                                <span>@m.getText()</span>
+                                <a href="javascript:void(0);" onclick="javascript:window.messageRead(this, @m.getId());">
+                                    <img src="@routes.Assets.at("images/icons/read-mess.png")" />
+                                </a>
+                            </div>
+                        </li>
+                        }
                 </ul>
             </div>
         </div>

@@ -23,7 +23,7 @@ public class NoticeServiceImpl extends GenericServiceImpl<NoticeDAO, Notice>
 
     @Override
     public List<Notice> loadMessages(User user){
-        return this.dao.loadMessages(user);
+        return this.dao.makeQueryAndLoadMessages(user);
     }
 
     @Override
@@ -37,4 +37,10 @@ public class NoticeServiceImpl extends GenericServiceImpl<NoticeDAO, Notice>
         notice.setWasRead(true);
         this.dao.save(notice);
     }
+
+    @Override
+    public void markAllAsRead(Long userId) {
+        this.dao.markAllAsRead(userId);
+    }
+
 }

@@ -190,6 +190,14 @@ ul#messanger {
     border-radius: 0.8em;
 
     list-style-type: disc;
+
+    font-size:10px;
+}
+
+ul#messanger > lh {
+    margin-bottom: 0.5em;
+    width: 100%;
+    display: inline-block;
 }
 
 ul#messanger > lh > h5 {
@@ -204,4 +212,14 @@ ul#messanger > lh > a {
 
 ul#messanger > lh > a:hover {
     opacity: 1;
+}
+
+ul#messanger > li > div {
+    margin-bottom: 0.1em;
+    width: 100%;
+    display: inline-block;
+}
+
+ul#messanger > li > div > a {
+    float: right;
 }

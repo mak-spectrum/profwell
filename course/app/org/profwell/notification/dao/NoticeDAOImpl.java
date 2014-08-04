@@ -3,6 +3,7 @@ package org.profwell.notification.dao;
 
 import java.util.List;
 
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -22,7 +23,7 @@ public class NoticeDAOImpl extends GenericDAOImpl<Notice> implements NoticeDAO {
     }
 
     @Override
-    public List<Notice> loadMessages(User user) {
+    public List<Notice> makeQueryAndLoadMessages(User user) {
         CriteriaBuilder cb = this.getEM().getCriteriaBuilder();
 
         CriteriaQuery<Notice> cq = cb.createQuery(this.getEntityClass());
@@ -30,7 +31,12 @@ public class NoticeDAOImpl extends GenericDAOImpl<Notice> implements NoticeDAO {
         Root<Notice> noticeRoot = cq.from(this.getEntityClass());
         cq.select(noticeRoot);
 
-        cq.where(cb.equal(noticeRoot.<String>get("receiver"), user));
+        cq.where(
+                cb.and(
+                        cb.equal(noticeRoot.get("receiver"), user),
+                        cb.equal(noticeRoot.get("wasRead"), false)
+                )
+                );
 
         cq.orderBy(cb.desc(noticeRoot.get("id")));
 
@@ -56,5 +62,13 @@ public class NoticeDAOImpl extends GenericDAOImpl<Notice> implements NoticeDAO {
 
         return this.listPage(cq, filter);
     }
+
+    @Override
+    public void markAllAsRead(Long userId) {
+        Query markerQuery = this.getEM().createNativeQuery("UPDATE notice SET was_read = 1 WHERE receiver_id = :recId");
+        markerQuery.setParameter("recId", userId);
+        markerQuery.executeUpdate();
+    }
+
 
 }

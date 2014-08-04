@@ -12,6 +12,7 @@ GET     /logout                             controllers.Application.logout()
 GET     /dashboard                          controllers.DashboardController.open()
 GET     /noticeList                         controllers.DashboardController.noticeList()
 POST    /noticeList                         controllers.DashboardController.noticeList()
+GET     /noticeMarkAllAsRead                controllers.DashboardController.noticeMarkAllAsRead()
 GET     /noticeReadAsync                    controllers.DashboardController.noticeReadAsync(noticeId: Long)
 
 # Contact Book pages

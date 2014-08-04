@@ -1,3 +1,33 @@
 span.notice-text-style {
     font-weight:bold;
 }
+
+
+
+div.message-icon {
+    float: right;
+    display: inline-block;
+    height: 100%;
+    margin-top: 4px;
+    margin-right: 3px;
+}
+
+div.message-selection img.message-read {
+    float: right;
+    width: 20px;
+    height: 20px;
+    background: url("/assets/images/icons/message-read.png") 0 0;
+}
+
+div.message-selection img.message-unread {
+    float: right;
+    width:20px;
+    height:20px;
+    background: url("/assets/images/icons/message-unread.png") 0 0;
+}
+
+div.grid-table-cell img.mark-all-as-read {
+    float: right;
+    margin-right: 4px;
+    margin-bottom: 5px;
+}

@@ -26,8 +26,9 @@ public class DashboardController extends Controller {
     public static Result open() {
         List<Notice> messages = noticeService.loadMessages(SessionUtility.getCurrentUser());
         DashboardForm form = new DashboardForm();
-        for(Notice notice : messages) {
-            form.getMessages().add(notice.getText());
+        for(int i = 0; i < messages.size(); i++) {
+            Notice notice = messages.get(i);
+            form.getMessages().add(notice);
         }
 
         return ok(views.html.Dashboard.dashboard.render(
@@ -78,6 +79,12 @@ public class DashboardController extends Controller {
 
     static MenuConfiguration getMenuConfiguration() {
         return new MenuConfiguration("Dashboard");
+    }
+
+    @play.db.jpa.Transactional
+    public static Result noticeMarkAllAsRead() {
+        noticeService.markAllAsRead(SessionUtility.getCurrentUserId());
+        return ok();
     }
 
 }

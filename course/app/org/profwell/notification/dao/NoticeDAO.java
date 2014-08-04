@@ -9,8 +9,10 @@ import org.profwell.security.model.User;
 
 public interface NoticeDAO extends GenericDAO<Notice> {
 
-    List<Notice> loadMessages(User user);
+    List<Notice> makeQueryAndLoadMessages(User user);
 
     List<Notice> listNotice(NoticeFilter filter);
+
+    void markAllAsRead(Long userId);
 
 }
