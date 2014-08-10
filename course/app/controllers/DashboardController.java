@@ -59,16 +59,12 @@ public class DashboardController extends Controller {
 
         List<Notice> messages = noticeService.loadMessages(SessionUtility.getCurrentUser());
         DashboardForm form = new DashboardForm();
-<<<<<<< HEAD
         for(int i = 0; i < messages.size(); i++) {
             Notice notice = messages.get(i);
             form.getMessages().add(notice);
-=======
-        form.setMessages(new ArrayList<String>());
-        for(Notice notice : messages) {
-            form.getMessages().add(notice.getText());
->>>>>>> branch 'master' of https://github.com/mak-spectrum/profwell.git
+            form.setMessages(new ArrayList<Notice>());
         }
+
 
         VacancyFilter filter = new VacancyFilter();
         filter.setWorkspaceId(SessionUtility.getCurrentUserId());
@@ -83,7 +79,7 @@ public class DashboardController extends Controller {
         return ok(views.html.Dashboard.dashboard.render(
                 getMenuConfiguration(),
                 form));
-    }
+        }
 
     private static List<DashboardCategoryDTO> transformVacanciesData(
             List<Vacancy> vacancies) {
